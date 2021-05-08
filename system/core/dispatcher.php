@@ -6,7 +6,7 @@
 \define('HANDLER', 'handler');
 
 function route(string $method, string $url_or_pattern, callable $handler = null): void {
-
+    echo __FUNCTION__;
 }
 
 function get(string $pattern, callable $handler): void {

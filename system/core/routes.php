@@ -1,3 +1,5 @@
 <?php declare(strict_types=1);
 
-get('/index', function() {});
+get('/index', function() {
+    render('main.html');
+});
