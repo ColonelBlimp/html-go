@@ -1,0 +1,24 @@
+{
+	"name" : "html-go/html-go",
+	"description" : "Databaseless, flat-file, blogging system",
+	"type" : "project",
+	"homepage" : "https://html-go",
+	"license" : "MIT",
+	"authors" : [{
+			"name" : "Marc L. Veary"
+		}
+	],
+	"require" : {
+		"php" : ">=8.0"
+	},
+	"config" : {
+		"vendor-dir" : "system/vendor"
+	},
+	"autoload" : {
+		"files" : [
+			"system/core/dispatcher.php",
+			"system/core/routes.php",
+			"system/core/functions.php"
+		]
+	}
+}
