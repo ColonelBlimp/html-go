@@ -1,3 +1,5 @@
 /.settings/
 /composer.phar
 /.buildpath
+/.phpunit.result.cache
+/cache.properties

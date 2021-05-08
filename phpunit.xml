@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<phpunit
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	bootstrap="./tests/bootstrap.php"
+	processIsolation="true"
+	verbose="true"
+	colors="true">
+
+  <coverage includeUncoveredFiles="true"
+          processUncoveredFiles="true"
+          pathCoverage="false"
+          ignoreDeprecatedCodeUnits="true"
+          disableCodeCoverageIgnore="false">
+    <include>
+        <directory>system/core</directory>
+    </include>
+    <report>
+      <html outputDirectory="./build/coverage" lowUpperBound="50" highLowerBound="80"/>
+    </report>
+  </coverage>
+  
+  <testsuites>
+    <testsuite name="HTML-go Unit Tests">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>
