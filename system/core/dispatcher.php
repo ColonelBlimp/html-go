@@ -28,7 +28,8 @@ function route(string $method, string $uri_or_pattern, callable $handler = null)
     if ($handler === null) {
         foreach ($routeMap[$method] as $def => $data) {
             $matches = [];
-            if (!\preg_match($data[REGEX], $uri_or_pattern, $matches)) {
+            $result = \preg_match($data[REGEX], $uri_or_pattern, $matches);
+            if ($result === 0 || $result === false) {
                 continue;
             }
 
