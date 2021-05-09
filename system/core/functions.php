@@ -7,5 +7,14 @@
  * @return string
  */
 function render(string $template, array $vars = []): string {
-    return __FUNCTION__;
+    return "render template [$template]";
+}
+
+/**
+ * Helper function for 404 page.
+ * @param string $title
+ * @return string
+ */
+function not_found(string $title = '404 Not Found'): string {
+    return render('404.html');
 }

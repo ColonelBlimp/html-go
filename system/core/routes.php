@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
 
-get('/index', function() {
-    render('main.html');
+get('index', function(): string {
+    return render('main.html');
 });

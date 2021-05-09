@@ -6,11 +6,17 @@ use PHPUnit\Framework\TestCase;
 class RouteFuncTest extends TestCase
 {
     function testIndexRoute(): void {
-        route('GET', '/index', function(): string {
-            return render('main.html');
-        });
+        $this->assertIsString(route('GET', '/index'));
+    }
 
-        $retval = route('GET', '/index');
-        $this->assertIsString($retval);
+    function testUnknownRoute(): void {
+        $this->assertStringContainsString('404', route('GET', '/unknown'));
+    }
+
+    function testRegisterTokenizedGetRoute(): void {
+        get('/:static', function(string $static): string {
+            return $static . '.html';
+        });
+        $this->assertStringContainsString('testing.html', route('GET', '/testing'));
     }
 }

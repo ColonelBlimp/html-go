@@ -23,7 +23,7 @@ function route(string $method, string $uri_or_pattern, callable $handler = null)
 
     $retval = null;
 
-    $uri_or_pattern = \trim($uri_or_pattern);
+    $uri_or_pattern = \trim($uri_or_pattern, '/');
 
     if ($handler === null) {
         foreach ($routeMap[$method] as $def => $data) {
@@ -51,6 +51,11 @@ function route(string $method, string $uri_or_pattern, callable $handler = null)
             }
 
             break;
+        }
+
+        // No matching route was found, so send a 404
+        if ($retval === null) {
+            $retval = not_found();
         }
     } else {
         $routeMap[$method][$uri_or_pattern] = [
@@ -93,6 +98,7 @@ function dispatch(string $uri = null): string {
 }
 
 function parse_uri(string $uri): string {
+    //TODO: can this be speeded up with array_filter(explode())?
     $_uri = \strtok($uri, '?');
     if ($_uri === false) {
         return $uri;
@@ -105,8 +111,7 @@ function parse_uri(string $uri): string {
 }
 
 /**
- * @param string $query (Optional). Call with this with a parameter set will populate
- * the returned data array.
+ * @param string $query (Optional). Calling with this parameter set will populate the returned data array.
  * @return array<string, string>
  */
 function parse_query(string $query = null): array {
@@ -117,6 +122,11 @@ function parse_query(string $query = null): array {
     return $data;
 }
 
+/**
+ * Return the query string value for the given key.
+ * @param string $key
+ * @return string|NULL <code>null</code> if the key is not found
+ */
 function get_query_parameter(string $key): ?string {
     $params = parse_query();
     if (isset($params[$key])) {
