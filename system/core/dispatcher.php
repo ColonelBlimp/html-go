@@ -5,6 +5,15 @@
 \define('REGEX', 'regex');
 \define('HANDLER', 'handler');
 
+/**
+ * Registers a route or processes a request (uri) for a route.
+ * @param string $method the HTTP method
+ * @param string $uri_or_pattern the requested URI to be processed or route pattern to be registered
+ * @param callable $handler when registering a route a callback must be provided to process the
+ *                          the request for that route.
+ * @return string|NULL <code>string</code> when processing a route request, otherwise
+ *                     <code>null</code> when registering a route
+ */
 function route(string $method, string $uri_or_pattern, callable $handler = null): ?string {
 
     static $routeMap = [
@@ -60,10 +69,57 @@ function route_to_regex(string $route): string {
         return '@^' . $route . '$@i';
 }
 
+/**
+ * Helper function to register a HTTP GET route.
+ * @param string $pattern
+ * @param callable $handler an anonymous function which will process the request for the registered
+ *                          route.
+ */
 function get(string $pattern, callable $handler): void {
     route(GET, $pattern, $handler);
 }
 
-function dispatch(): string {
-    route(\strtoupper($_SERVER['REQUEST_METHOD']), '/index');
+function dispatch(string $uri = null): string {
+    if ($uri === null) {
+        $uri = parse_uri($_SERVER['REQUEST_URI']);
+        $uri = \trim($uri, '/');
+        $uri = empty($uri) ? 'index' : $uri;
+    }
+    if (($retval = route(\strtoupper($_SERVER['REQUEST_METHOD']), $uri)) === null) {
+        throw new RuntimeException("The route() function returned null!");
+    }
+    return $retval;
+}
+
+function parse_uri(string $uri): string {
+    $_uri = \strtok($uri, '?');
+    if ($_uri === false) {
+        return $uri;
+    }
+    $query = \strtok('?');
+    if ($query !== false) {
+        parse_query($query);
+    }
+    return $_uri;
+}
+
+/**
+ * @param string $query (Optional). Call with this with a parameter set will populate
+ * the returned data array.
+ * @return array<string, string>
+ */
+function parse_query(string $query = null): array {
+    static $data = [];
+    if (empty($data) && $query !== null) {
+        \parse_str($query, $data);
+    }
+    return $data;
+}
+
+function get_query_parameter(string $key): ?string {
+    $params = parse_query();
+    if (isset($params[$key])) {
+        return $params[$key];
+    }
+    return null;
 }

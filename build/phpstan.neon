@@ -1,9 +1,9 @@
 parameters:
     level: max
     paths:
-        - ../src
+        - ../system/core
     bootstrapFiles:
         - phpstan_constants.php
     excludes_analyse:
         - ../tests
-        - ../vendor
+        - ../system/vendor
