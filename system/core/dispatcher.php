@@ -23,7 +23,7 @@ function route(string $method, string $uri_or_pattern, callable $handler = null)
 
     $retval = null;
 
-    $uri_or_pattern = \trim($uri_or_pattern, '/');
+    $uri_or_pattern = \trim($uri_or_pattern, FWD_SLASH);
 
     if ($handler === null) {
         foreach ($routeMap[$method] as $def => $data) {
@@ -85,10 +85,13 @@ function get(string $pattern, callable $handler): void {
     route(GET, $pattern, $handler);
 }
 
+/**
+ * The main entry point. Called from <code>index.php</code> in the application root.
+ */
 function dispatch(string $uri = null): string {
     if ($uri === null) {
         $uri = parse_uri($_SERVER['REQUEST_URI']);
-        $uri = \trim($uri, '/');
+        $uri = \trim($uri, FWD_SLASH);
         $uri = empty($uri) ? 'index' : $uri;
     }
     if (($retval = route(\strtoupper($_SERVER['REQUEST_METHOD']), $uri)) === null) {
