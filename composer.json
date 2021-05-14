@@ -20,7 +20,10 @@
 			"system/core/dispatcher.php",
 			"system/core/routes.php",
 			"system/core/functions.php"
-		]
+		],
+		"psr-4" : {
+			"html_go\\" : "system/core/classes"
+		}
 	},
 	"autoload-dev" : {
 		"psr-4" : {
