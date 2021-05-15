@@ -30,8 +30,12 @@ function not_found(string $title = '404 Not Found'): string {
 function get_template_engine(): TemplateEngine {
     static $engine = null;
     if (empty($engine)) {
-        $options = [];
-        $templateDirs = [];
+        $themeName = config('', 'default');
+        $engineName = config('template.engine', 'twig');
+        $options = [
+            'strict_variables' => \boolval(config('template.engine.twig.strict_variables', "true"))
+        ];
+        $templateDirs = [THEMES_ROOT.DS.$engineName.DS.$themeName];
         $engine = new TwigTemplateEngine($templateDirs, $options);
     }
     return $engine;
@@ -53,6 +57,9 @@ function config(string $key, string $default = null): string {
         $config = \parse_ini_file(CONFIG_ROOT.DS.'config.ini');
     }
     if (!\array_key_exists($key, $config)) {
+        if (!empty($default)) {
+            return $default;
+        }
         throw new \RuntimeException("Configuration key does not exist [$key]");
     }
     return $config[$key];
