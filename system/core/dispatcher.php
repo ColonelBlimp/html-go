@@ -90,7 +90,8 @@ function get(string $pattern, callable $handler): void {
  */
 function dispatch(string $uri = null): string {
     if ($uri === null) {
-        $uri = parse_uri($_SERVER['REQUEST_URI']);
+//        $uri = parse_uri($_SERVER['REQUEST_URI']);
+        $uri = strip_url_parameters($_SERVER['REQUEST_URI']);
         $uri = \trim($uri, FWD_SLASH);
         $uri = empty($uri) ? 'index' : $uri;
     }
@@ -100,17 +101,17 @@ function dispatch(string $uri = null): string {
     return $retval;
 }
 
-function parse_uri(string $uri): string {
-    //TODO: can this be speeded up with array_filter(explode())?
-    $_uri = \strtok($uri, '?');
-    if ($_uri === false) {
-        return $uri;
+/**
+ * Strips parameters from the given URL.
+ * @param string $url
+ * @return string returns the URL without the parameters.
+ */
+function strip_url_parameters(string $url): string {
+    if (($pos = \strpos($url, '?')) === false) {
+        return $url;
     }
-    $query = \strtok('?');
-    if ($query !== false) {
-        parse_query($query);
-    }
-    return $_uri;
+    parse_query(\substr($url, $pos + 1));
+    return \substr($url, 0, $pos);
 }
 
 /**
