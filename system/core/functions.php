@@ -19,7 +19,7 @@ function render(string $template, array $vars = []): string {
  * @return string
  */
 function not_found(string $title = '404 Not Found'): string {
-    return render('404.html');
+    return render('404.html', ['title' => $title]);
 }
 
 /**
@@ -44,6 +44,19 @@ function get_template_engine(): TemplateEngine {
         $engine = new TwigTemplateEngine($templateDirs, $options);
     }
     return $engine;
+}
+
+/**
+ * Returns all the variables to be placed into a template's context.
+ * @param array<mixed> $vars user defined variables to be added
+ * @return array<mixed>
+ */
+function get_template_vars(array $vars = []): array {
+    static $site_vars = [];
+    if (empty($site_vars)) {
+
+    }
+    return \array_merge($site_vars, $vars);
 }
 
 /**
