@@ -33,12 +33,16 @@ function get_template_engine(): TemplateEngine {
         $engineName = config('template.engine', 'twig');
 
         $caching = false;
-        if (\boolval(config('template.engine.caching', "false"))) {
+        $strict_vars = true;
+        if (config('template.engine.caching', 'false') === 'true') {
             $caching = CACHE_ROOT.DS.'template_cache';
+        }
+        if (config('template.engine.twig.strict_variables', 'true') === 'false') {
+            $strict_vars = false;
         }
         $options = [
             'cache' => $caching,
-            'strict_variables' => \boolval(config('template.engine.twig.strict_variables', "true"))
+            'strict_variables' => $strict_vars
         ];
         $templateDirs = [THEMES_ROOT.DS.$engineName.DS.$themeName];
         $engine = new TwigTemplateEngine($templateDirs, $options);
