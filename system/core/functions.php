@@ -58,7 +58,10 @@ function get_template_engine(): TemplateEngine {
 function get_template_vars(array $vars = []): array {
     static $site_vars = [];
     if (empty($site_vars)) {
-
+        $site_vars = [
+            'site_title' => config('site.title', "HTML-go"),
+            'site_description' => config('site.description', "Another HTML-go website")
+        ];
     }
     return \array_merge($site_vars, $vars);
 }
