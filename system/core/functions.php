@@ -10,8 +10,7 @@ use html_go\templating\TwigTemplateEngine;
  * @return string
  */
 function render(string $template, array $vars = []): string {
-    $engine = get_template_engine();
-    return $engine->render("render template [$template]", $vars);
+    return get_template_engine()->render($template, $vars);
 }
 
 /**
@@ -32,7 +31,13 @@ function get_template_engine(): TemplateEngine {
     if (empty($engine)) {
         $themeName = config('', 'default');
         $engineName = config('template.engine', 'twig');
+
+        $caching = false;
+        if (\boolval(config('template.engine.caching', "false"))) {
+            $caching = CACHE_ROOT.DS.'template_cache';
+        }
         $options = [
+            'cache' => $caching,
             'strict_variables' => \boolval(config('template.engine.twig.strict_variables', "true"))
         ];
         $templateDirs = [THEMES_ROOT.DS.$engineName.DS.$themeName];
