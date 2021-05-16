@@ -19,7 +19,9 @@ function render(string $template, array $vars = []): string {
  * @return string
  */
 function not_found(string $title = '404 Not Found'): string {
-    return render('404.html', ['title' => $title]);
+    $vars = get_template_vars();
+    $vars['site_title'] = $title . $vars['site_title'];
+    return render('404.html', $vars);
 }
 
 /**
