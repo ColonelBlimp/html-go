@@ -2,6 +2,7 @@
 
 use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
+use html_go\i18n\i18n;
 
 /**
  * Render the given template placing the given variables into the template context.
@@ -61,6 +62,7 @@ function get_template_vars(array $vars = []): array {
     static $site_vars = [];
     if (empty($site_vars)) {
         $site_vars = [
+            'i18n' => new i18n(LANG_ROOT.DS.config('site.language', 'en').'.messages.php'),
             'site_title' => config('site.title', "HTML-go"),
             'site_description' => config('site.description', "Another HTML-go website"),
             'site_copyright' => config('site.copyright', "&#169; Copyright ????.")
