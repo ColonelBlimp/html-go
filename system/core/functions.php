@@ -62,7 +62,8 @@ function get_template_vars(array $vars = []): array {
     if (empty($site_vars)) {
         $site_vars = [
             'site_title' => config('site.title', "HTML-go"),
-            'site_description' => config('site.description', "Another HTML-go website")
+            'site_description' => config('site.description', "Another HTML-go website"),
+            'site_copyright' => config('site.copyright', "&#169; Copyright ????.")
         ];
     }
     return \array_merge($site_vars, $vars);
