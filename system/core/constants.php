@@ -6,5 +6,6 @@
 \define('CONFIG_ROOT', APP_ROOT.DS.'config');
 \define('THEMES_ROOT', APP_ROOT.DS.'themes');
 \define('CACHE_ROOT', APP_ROOT.DS.'cache');
+\define('LANG_ROOT', APP_ROOT.DS.'lang');
 
 \define('FWD_SLASH', '/');
