@@ -2,4 +2,8 @@
 
 include __DIR__.DIRECTORY_SEPARATOR.'system'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'autoload.php';
 
-echo dispatch();
+if (\getenv('CLI_ENV') !== null) {
+    echo dispatch('/test/testing');
+} else {
+    echo dispatch();
+}

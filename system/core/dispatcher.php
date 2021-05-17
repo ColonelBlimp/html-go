@@ -47,6 +47,10 @@ function route(string $method, string $uri_or_pattern, callable $handler = null)
             }
 
             if (\is_callable($data[HANDLER])) {
+                // Add the originally requested URI so it can be passed to
+                // the called function (if it wants it).
+                $argv['uri'] = $uri_or_pattern;
+//                print_r($argv);
                 $retval = \call_user_func_array($data[HANDLER], $argv);
             }
 
@@ -54,7 +58,10 @@ function route(string $method, string $uri_or_pattern, callable $handler = null)
         }
 
         // No matching route was found, so send a 404
-        if ($retval === null) {
+        //TODO: change this to handle errors only (false). The catch-all
+        // route should send the user to not_found() if there is no matching
+        // static page.
+        if ($retval === null || $retval === false) {
             $retval = not_found();
         }
     } else {
@@ -72,7 +79,10 @@ function route_to_regex(string $route): string {
         $token = \str_replace(':', '', $matches[0]);
         return '(?P<' . $token . '>[a-z0-9_\0-\.]+)';
     }, $route);
-        return '@^' . $route . '$@i';
+    //TODO: refactor
+    $regex = '@^' . $route . '$@i';
+    echo $regex . PHP_EOL;
+    return $regex;
 }
 
 /**
@@ -88,14 +98,15 @@ function get(string $pattern, callable $handler): void {
 /**
  * The main entry point. Called from <code>index.php</code> in the application root.
  */
-function dispatch(string $uri = null): string {
+function dispatch(string $uri = null, string $method = GET): string {
     if ($uri === null) {
 //        $uri = parse_uri($_SERVER['REQUEST_URI']);
         $uri = strip_url_parameters($_SERVER['REQUEST_URI']);
         $uri = \trim($uri, FWD_SLASH);
         $uri = empty($uri) ? 'index' : $uri;
+        $method = \strtoupper($_SERVER['REQUEST_METHOD']);
     }
-    if (($retval = route(\strtoupper($_SERVER['REQUEST_METHOD']), $uri)) === null) {
+    if (($retval = route($method, $uri)) === null) {
         throw new RuntimeException("The route() function returned null!");
     }
     return $retval;

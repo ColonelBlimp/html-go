@@ -3,6 +3,8 @@
 use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
 use html_go\i18n\i18n;
+use html_go\model\ContentInterface;
+use html_go\model\Content;
 
 /**
  * Render the given template placing the given variables into the template context.
@@ -93,4 +95,8 @@ function config(string $key, string $default = null): string {
         throw new \RuntimeException("Configuration key does not exist [$key]");
     }
     return $config[$key];
+}
+
+function get_page(string $slug): ?ContentInterface {
+    return new Content();
 }
