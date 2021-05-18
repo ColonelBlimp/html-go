@@ -42,15 +42,17 @@ function route(string $method, string $uri_or_pattern, callable $handler = null)
             foreach ($keys as $id) {
                 $id = \substr($id, 1);
                 if (isset($matches[$id])) {
-                    \array_push($argv, \trim(\urldecode($matches[$id])));
+//                    \array_push($argv, \trim(\urldecode($matches[$id])));
+                    $argv[] = \trim(\urldecode($matches[$id]));
                 }
             }
 
             if (\is_callable($data[HANDLER])) {
                 // Add the originally requested URI so it can be passed to
-                // the called function (if it wants it).
-                $argv['uri'] = $uri_or_pattern;
+                // the called function. Therefore, the anon function MUST
+                // specify this parameter!!!
 //                print_r($argv);
+                $argv[] = $uri_or_pattern;
                 $retval = \call_user_func_array($data[HANDLER], $argv);
             }
 
@@ -81,7 +83,7 @@ function route_to_regex(string $route): string {
     }, $route);
     //TODO: refactor
     $regex = '@^' . $route . '$@i';
-    echo $regex . PHP_EOL;
+//    echo $regex . PHP_EOL;
     return $regex;
 }
 

@@ -98,5 +98,6 @@ function config(string $key, string $default = null): string {
 }
 
 function get_page(string $slug): ?ContentInterface {
+    echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
     return new Content();
 }
