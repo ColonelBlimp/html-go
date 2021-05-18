@@ -2,22 +2,19 @@
 
 // main index of the site
 get('index', function(string $uri): string {
-//    echo __FUNCTION__ . 'index: ' . $uri;
     $vars = get_template_vars();
     $vars['site_title'] = config('site.title', 'HTML-go') . $vars['site_title'];
     return render('main.html', $vars);
 });
 
-// static pages
-
-get('category/:name', function(string $static): string {
-//    echo __FUNCTION__ . '/category/' . $static;
+// Categories
+get('category/:name', function(string $uri, string $name): string {
     $template = 'main.html';
     $vars = get_template_vars();
 
-    switch($static) {
+    switch($name) {
         default:
-            $model = get_page($static);
+            $model = get_category($name);
             if (!$model) {
                 not_found();
                 exit;
@@ -27,21 +24,13 @@ get('category/:name', function(string $static): string {
 
     return render($template, $vars);
 });
-/*
-get(':parent/:child', function(string $parent, string $child): string {
-    return static_page_handler($parent, $child);
-});
-*/
-function static_page_handler(string $parent, string $child): string {
+
+// Tags
+get('tag/:name', function(string $uri, string $name): string {
     $template = 'main.html';
     $vars = get_template_vars();
-
-    $slug = $parent . FWD_SLASH . $child;
-    $model = get_page($slug);
-    $vars['content'] = $model;
-
     return render($template, $vars);
-}
+});
 
 // Catch-all route. If a static page is not found for the URI, then
 // the user is routed to not_found()

@@ -97,7 +97,22 @@ function config(string $key, string $default = null): string {
     return $config[$key];
 }
 
+/**
+ * Get a post.
+ * @param string $slug
+ * @return ContentInterface|NULL
+ */
 function get_page(string $slug): ?ContentInterface {
+    echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
+    return new Content();
+}
+
+function get_category(string $slug): ?ContentInterface {
+    echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
+    return new Content();
+}
+
+function get_tag(string $slug): ?ContentInterface {
     echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
     return new Content();
 }
