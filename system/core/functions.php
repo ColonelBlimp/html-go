@@ -132,7 +132,6 @@ function get_category(string $slug): ?Content {
     }
     $element = $manager->getElementFromSlugIndex($slug);
 
-
     return new Content();
 }
 

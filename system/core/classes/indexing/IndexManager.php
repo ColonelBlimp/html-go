@@ -245,14 +245,13 @@ final class IndexManager
      * @return array<mixed>
      */
     private function loadIndex(string $filepath): array {
-        if (!\file_exists($filepath)) {
+        if (\file_exists($filepath) === false) {
             throw new \InvalidArgumentException("Cannot load index file. Does not exist [$filepath]"); // @codeCoverageIgnore
         }
-        if (!($data = \file_get_contents($filepath))) {
+        if (($data = \file_get_contents($filepath)) === false) {
             throw new \ErrorException("file_get_contents() failed [$filepath]"); // @codeCoverageIgnore
         }
-        if (!($data = \unserialize($data, [true]))) {
-            print_r($data);
+        if (($data = \unserialize($data)) === false) {
             throw new \ErrorException("unserialize() failed [$filepath]"); // @codeCoverageIgnore
         }
         return $data;
