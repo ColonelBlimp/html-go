@@ -5,6 +5,7 @@ use html_go\indexing\IndexManager;
 use html_go\model\Content;
 use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
+use html_go\model\Config;
 
 /**
  * Render the given template placing the given variables into the template context.
@@ -39,7 +40,7 @@ function get_template_engine(): TemplateEngine {
 
         $caching = false;
         $strict_vars = true;
-        if (config('template.engine.caching', 'false') === 'true') {
+        if (config('template.engine.caching', "bool") === 'true') {
             $caching = CACHE_ROOT.DS.'template_cache';
         }
         if (config('template.engine.twig.strict_variables', 'true') === 'false') {
@@ -85,28 +86,24 @@ function get_index_manager(): IndexManager {
     return $manager;
 }
 
-/**
- * Fetch a configuration value associated with the given key.
- * @param string $key
- * @param string $default
- * @throws \RuntimeException
- * @return string
- */
-function config(string $key, string $default = null): string {
-    static $config = [];
+function get_config(): Config {
+    static $config = null;
     if (empty($config)) {
-        if (!\file_exists(CONFIG_ROOT.DS.'config.ini')) {
-            throw new \RuntimeException('file_exists() failed'); // @codeCoverageIgnore
-        }
-        $config = \parse_ini_file(CONFIG_ROOT.DS.'config.ini');
+        $config = new Config(CONFIG_ROOT);
     }
-    if (!\array_key_exists($key, $config)) {
-        if (!empty($default)) {
-            return $default;
-        }
-        throw new \RuntimeException("Configuration key does not exist [$key]");
-    }
-    return $config[$key];
+    return $config;
+}
+
+function get_config_string(string $key, string $default = null): string {
+    return get_config()->getString($key, $default);
+}
+
+function get_config_int(string $key, int $default = -1): string {
+    return get_config()->getInt($key, $default);
+}
+
+function get_config_bool(string $key, bool $default = false): string {
+    return get_config()->getBool($key, $default);
 }
 
 function get_post(string $year, string $month, string $title): ?Content {
@@ -126,8 +123,7 @@ function get_page(string $slug): ?Content {
 
 function get_category(string $slug): ?Content {
     echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
-    $manager = get_index_manager();
-    if (!$manager->elementExists($slug)) {
+    if (slug_exists($slug) === false) {
         return null;
     }
     $element = $manager->getElementFromSlugIndex($slug);
@@ -140,3 +136,6 @@ function get_tag(string $slug): ?Content {
     return new Content();
 }
 
+function slug_exists(string $slug): bool {
+    return get_index_manager()->elementExists($slug);
+}

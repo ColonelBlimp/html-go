@@ -10,18 +10,19 @@ class RouteFuncTest extends TestCase
     }
 
     function testGetStaticPage(): void {
-        $this->assertIsString(route('GET', '/test/unknown'));
+        $this->assertStringContainsString('404', route('GET', '/test/unknown'));
     }
 
     function testGetCategory(): void {
         $this->assertIsString(route('GET', '/category/uncategorized'));
+        $this->assertStringContainsString('404', route('GET', '/category/unknown'));
     }
 
     function testGetTag(): void {
-        $this->assertIsString(route('GET', '/tag/android-development'));
+        $this->assertStringContainsString('404', route('GET', '/tag/android-development'));
     }
 
     function testGetPost(): void {
-        $this->assertIsString(route('GET', '/2021/04/honey-processing'));
+        $this->assertStringContainsString('404', route('GET', '/2021/04/honey-processing'));
     }
 }
