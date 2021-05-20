@@ -434,6 +434,6 @@ final class IndexManager
             if (!empty($tagList)) {
                 $tags = \explode(',', $tagList);
             }
-        return new ElementImpl($key, $path, $section, $category, $type, $username, $date, $tags);
+        return new Element($key, $path, $section, $category, $type, $username, $date, $tags);
     }
 }
