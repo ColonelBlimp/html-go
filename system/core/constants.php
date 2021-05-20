@@ -9,3 +9,4 @@
 \define('LANG_ROOT', APP_ROOT.DS.'lang');
 
 \define('FWD_SLASH', '/');
+\define('CONTENT_FILE_EXT', '.md');

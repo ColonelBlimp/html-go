@@ -42,7 +42,6 @@ function route(string $method, string $uri_or_pattern, callable $handler = null)
             foreach ($keys as $id) {
                 $id = \substr($id, 1);
                 if (isset($matches[$id])) {
-//                    \array_push($argv, \trim(\urldecode($matches[$id])));
                     $argv[] = \trim(\urldecode($matches[$id]));
                 }
             }
@@ -98,7 +97,11 @@ function get(string $pattern, callable $handler): void {
 }
 
 /**
- * The main entry point. Called from <code>index.php</code> in the application root.
+ * The main entry point. Called from <code>index.php</code> in the application
+ * root. The parameters are provided for testing thus they have default values.
+ * @param string $uri
+ * @param string $method
+ * @return string The html to be rendered.
  */
 function dispatch(string $uri = null, string $method = GET): string {
     if ($uri === null) {

@@ -9,12 +9,16 @@ class RouteFuncTest extends TestCase
         $this->assertIsString(route('GET', 'index'));
     }
 
-    function testCatchAllRoute(): void {
+    function testGetStaticPage(): void {
         $this->assertIsString(route('GET', '/test/unknown'));
     }
 
-    function testTokenizedGetRoute(): void {
+    function testGetCategory(): void {
         $this->assertIsString(route('GET', '/category/uncategorized'));
+    }
+
+    function testGetTag(): void {
+        $this->assertIsString(route('GET', '/tag/android-development'));
     }
 
     function testGetPost(): void {
