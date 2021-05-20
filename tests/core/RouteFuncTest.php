@@ -16,4 +16,8 @@ class RouteFuncTest extends TestCase
     function testTokenizedGetRoute(): void {
         $this->assertIsString(route('GET', '/category/uncategorized'));
     }
+
+    function testGetPost(): void {
+        $this->assertIsString(route('GET', '/2021/04/honey-processing'));
+    }
 }

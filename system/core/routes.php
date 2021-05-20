@@ -7,56 +7,54 @@ get('index', function(string $uri): string {
     return render('main.html', $vars);
 });
 
-// Categories
+// Single Category
 get('category/:name', function(string $uri, string $name): string {
     $template = 'main.html';
     $vars = get_template_vars();
 
-    switch($name) {
-        default:
-            $model = get_category($name);
-            if (!$model) {
-                not_found();
-                exit;
-            }
-            $vars['content'] = $model;
+    if (($model = get_category($name)) === null) {
+        return not_found();
     }
+    $vars['content'] = $model;
 
     return render($template, $vars);
 });
 
-// Tags
+// Single Tag
 get('tag/:name', function(string $uri, string $name): string {
     $template = 'main.html';
     $vars = get_template_vars();
+
+    if (($model = get_tag($name)) === null) {
+        return not_found();
+    }
+    $vars['content'] = $model;
+
     return render($template, $vars);
 });
 
 // Catch-all route. If a static page is not found for the URI, then
 // the user is routed to not_found()
-get('.*', function (string $uri) {
-//    $template = 'main.html';
-//    $vars = get_template_vars();
+get('.*', function (string $uri): string {
+    echo 'Catch-all: ' . $uri . PHP_EOL;
 
-//    $found = true;
-// echo __FUNCTION__ . '.*: ' . $uri;
-    switch ($uri) {
-        default:
-            $model = get_page($uri);
-//            $vars['content'] = $model;
+    $template = 'main.html';
+    $vars = get_template_vars();
+
+    $matches = [];
+    if (\preg_match('/(\d{4})\/(\d{2})\/(.+)/i', $uri, $matches) === false) {
+        throw new RuntimeException("preg_match() failed checking [$uri]");
     }
-    /*
-    switch($uri) {
-        default:
-            $model = get_page($uri);
-            if (!$model) {
-                not_found();
-                exit;
-            }
-            $vars['content'] = $model;
+
+    if (\count($matches) !== 4) {
+        $model = get_page($uri);
+    } else {
+        $model = get_post($matches[1], $matches[2], $matches[3]);
+        $template = 'post.html';
+    }
+    if ($model === null) {
+        return not_found();
     }
 
     return render($template, $vars);
-    */
-    not_found();
 });

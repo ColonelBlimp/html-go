@@ -97,8 +97,13 @@ function config(string $key, string $default = null): string {
     return $config[$key];
 }
 
+function get_post(string $year, string $month, string $title): ?ContentInterface {
+    echo __FUNCTION__ . ': ' . $title . PHP_EOL;
+    return new Content();
+}
+
 /**
- * Get a post.
+ * Get a page.
  * @param string $slug
  * @return ContentInterface|NULL
  */
