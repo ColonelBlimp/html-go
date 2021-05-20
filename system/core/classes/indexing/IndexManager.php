@@ -252,7 +252,8 @@ final class IndexManager
             throw new \ErrorException("file_get_contents() failed [$filepath]"); // @codeCoverageIgnore
         }
         if (!($data = \unserialize($data, [true]))) {
-            throw new \ErrorException("unserialize() failed"); // @codeCoverageIgnore
+            print_r($data);
+            throw new \ErrorException("unserialize() failed [$filepath]"); // @codeCoverageIgnore
         }
         return $data;
     }

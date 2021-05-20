@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
+use html_go\i18n\i18n;
+use html_go\indexing\IndexManager;
+use html_go\model\Content;
 use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
-use html_go\i18n\i18n;
-use html_go\model\ContentInterface;
-use html_go\model\Content;
 
 /**
  * Render the given template placing the given variables into the template context.
@@ -74,6 +74,18 @@ function get_template_vars(array $vars = []): array {
 }
 
 /**
+ * Returns the index manager.
+ * @return IndexManager
+ */
+function get_index_manager(): IndexManager {
+    static $manager = null;
+    if ($manager === null) {
+        $manager = new IndexManager(APP_ROOT);
+    }
+    return $manager;
+}
+
+/**
  * Fetch a configuration value associated with the given key.
  * @param string $key
  * @param string $default
@@ -97,7 +109,7 @@ function config(string $key, string $default = null): string {
     return $config[$key];
 }
 
-function get_post(string $year, string $month, string $title): ?ContentInterface {
+function get_post(string $year, string $month, string $title): ?Content {
     echo __FUNCTION__ . ': ' . $title . PHP_EOL;
     return new Content();
 }
@@ -105,19 +117,27 @@ function get_post(string $year, string $month, string $title): ?ContentInterface
 /**
  * Get a page.
  * @param string $slug
- * @return ContentInterface|NULL
+ * @return Content|NULL
  */
-function get_page(string $slug): ?ContentInterface {
+function get_page(string $slug): ?Content {
     echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
     return new Content();
 }
 
-function get_category(string $slug): ?ContentInterface {
+function get_category(string $slug): ?Content {
+    echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
+    $manager = get_index_manager();
+    if (!$manager->elementExists($slug)) {
+        return null;
+    }
+    $element = $manager->getElementFromSlugIndex($slug);
+
+
+    return new Content();
+}
+
+function get_tag(string $slug): ?Content {
     echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
     return new Content();
 }
 
-function get_tag(string $slug): ?ContentInterface {
-    echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
-    return new Content();
-}

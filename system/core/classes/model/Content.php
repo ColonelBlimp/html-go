@@ -2,7 +2,7 @@
 
 namespace html_go\model;
 
-final class Content implements ContentInterface
+final class Content
 {
     function __construct() {
     }
