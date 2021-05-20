@@ -1,20 +1,30 @@
 <?php declare(strict_types=1);
 namespace html_go\indexing;
 
+
 class IndexManagerTest extends IndexingTestCase
 {
+    /**
+     * @runInSeparateProcess
+     */
     function testConstructorAppRootException(): void {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Unable to validate the application root [');
         new IndexManager(IndexingTestCase::APP_ROOT.DIRECTORY_SEPARATOR.'content.md');
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     function testConstructorCategoryDirException(): void {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Content directory format is invalid. Directory does not exist [');
         new IndexManager(__DIR__);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     function testInitialization(): void {
         $manager = new IndexManager(IndexingTestCase::APP_ROOT);
         $this->assertNotNull($manager);
@@ -27,6 +37,7 @@ class IndexManagerTest extends IndexingTestCase
 
     /**
      * @depends testInitialization
+     * @runInSeparateProcess
      */
     function testElementExists(): void {
         $manager = new IndexManager(IndexingTestCase::APP_ROOT);
@@ -37,6 +48,7 @@ class IndexManagerTest extends IndexingTestCase
 
     /**
      * @depends testInitialization
+     * @runInSeparateProcess
      */
     function testSlugIndex(): void {
         $manager = new IndexManager(IndexingTestCase::APP_ROOT);
@@ -110,6 +122,9 @@ class IndexManagerTest extends IndexingTestCase
         $this->assertCount(2, $elem->getTags());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     function testPostsForCategory(): void {
         $manager = new IndexManager(IndexingTestCase::APP_ROOT);
         $this->assertNotNull($manager);
@@ -133,6 +148,9 @@ class IndexManagerTest extends IndexingTestCase
         $this->assertNull($manager->getPostsForCategory('unknown'));
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     function testCategoryIndex(): void {
         $manager = new IndexManager(IndexingTestCase::APP_ROOT);
         $this->assertNotNull($manager);
@@ -143,6 +161,9 @@ class IndexManagerTest extends IndexingTestCase
         }
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     function testPageIndex(): void {
         $manager = new IndexManager(IndexingTestCase::APP_ROOT);
         $this->assertNotNull($manager);
@@ -153,6 +174,9 @@ class IndexManagerTest extends IndexingTestCase
         }
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     function testPostIndex(): void {
         $manager = new IndexManager(IndexingTestCase::APP_ROOT);
         $this->assertNotNull($manager);
@@ -163,18 +187,27 @@ class IndexManagerTest extends IndexingTestCase
         }
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     function testShortFilenameException(): void {
         $this->assertTrue(touch(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'harvesting'.DS.'regular'.DS.'2021010100000__s.md'));
         $this->expectException(\InvalidArgumentException::class);
         new IndexManager(IndexingTestCase::APP_ROOT);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     function testSyntaxFilenameException(): void {
         $this->assertTrue(touch(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'harvesting'.DS.'regular'.DS.'20210101000000_wibble.md'));
         $this->expectException(\InvalidArgumentException::class);
         new IndexManager(IndexingTestCase::APP_ROOT);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     function testTagIndex(): void {
         $manager = new IndexManager(IndexingTestCase::APP_ROOT);
         $this->assertNotNull($manager);
@@ -185,6 +218,9 @@ class IndexManagerTest extends IndexingTestCase
         }
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     function testPostsForTag(): void {
         $manager = new IndexManager(IndexingTestCase::APP_ROOT);
         $this->assertNotNull($manager);
