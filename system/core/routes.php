@@ -42,7 +42,7 @@ get('.*', function (string $uri): string {
 
     $matches = [];
     if (\preg_match('/(\d{4})\/(\d{2})\/(.+)/i', $uri, $matches) === false) {
-        throw new RuntimeException("preg_match() failed checking [$uri]");
+        throw new RuntimeException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
     }
 
     if (\count($matches) !== 4) {

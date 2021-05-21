@@ -109,7 +109,7 @@ function dispatch(string $uri = null, string $method = GET): string {
         $method = \strtoupper($_SERVER['REQUEST_METHOD']);
     }
     if (($retval = route($method, $uri)) === null) {
-        throw new RuntimeException("The route() function returned null!");
+        throw new \RuntimeException("The route() function returned null!"); // @codeCoverageIgnore
     }
     return $retval;
 }
