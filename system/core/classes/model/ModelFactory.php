@@ -22,8 +22,13 @@ final class ModelFactory
         $this->config = $config;
     }
 
-    function create(Element $element): Content {
+    function createFromElement(Element $element): Content {
         return new Content($this->createSiteObject(), $element, $this->parseData($element));
+    }
+
+    function createFromData(array $data): Content {
+        $element = Element::empty();
+        return new Content($this->createSiteObject(), $element, $data);
     }
 
     /**
@@ -66,6 +71,7 @@ final class ModelFactory
             throw new \RuntimeException("SplFileObject::fread() failed."); // @codeCoverageIgnore
         }
         $data['body'] = $body;
+        $data['list'] = [];
         $file = null;
         return $data;
     }

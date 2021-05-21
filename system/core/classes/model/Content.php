@@ -60,6 +60,6 @@ final class Content
      * @return array<Content>
      */
     function getContentList(): array {
-        return [];
+        return $this->fileData['list'];
     }
 }

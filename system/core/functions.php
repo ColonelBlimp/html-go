@@ -7,6 +7,7 @@ use html_go\model\ModelFactory;
 use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
 use html_go\i18n\i18n;
+use Twig\Error\RuntimeError;
 
 /**
  * Build and return the template context.
@@ -160,7 +161,22 @@ function get_content_object(string $slug): ?Content {
     if (slug_exists($slug) === false) {
         return null;
     }
-    return get_model_factory()->create(get_index_manager()->getElementFromSlugIndex($slug));
+    return get_model_factory()->createFromElement(get_index_manager()->getElementFromSlugIndex($slug));
+}
+
+function get_content_list_object(int $type, int $page_number = 1, int $per_page = 5): array {
+    $list = [];
+    switch ($type) {
+        case POST_LIST_TYPE:
+            break;
+        case CAT_LIST_TYPE:
+            break;
+        case TAG_LIST_TYPE:
+            break;
+        default:
+            throw new RuntimeException("Unknown list type [$type]");
+    }
+    return $list;
 }
 
 /**
