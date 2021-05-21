@@ -12,10 +12,10 @@ get('category/:name', function(string $uri, string $name): string {
     $template = 'main.html';
     $vars = get_template_vars();
 
-    if (($model = get_category($name)) === null) {
+    if (($content = get_content_object($name)) === null) {
         return not_found();
     }
-    $vars['content'] = $model;
+    $vars['content'] = $content;
 
     return render($template, $vars);
 });
@@ -25,7 +25,7 @@ get('tag/:name', function(string $uri, string $name): string {
     $template = 'main.html';
     $vars = get_template_vars();
 
-    if (($model = get_tag($name)) === null) {
+    if (($model = get_content_object($name)) === null) {
         return not_found();
     }
     $vars['content'] = $model;
@@ -33,8 +33,11 @@ get('tag/:name', function(string $uri, string $name): string {
     return render($template, $vars);
 });
 
-// Catch-all route. If a static page is not found for the URI, then
-// the user is routed to not_found()
+/*
+ * Catch-all route. It does a regex check on the given URI, if it matches,
+ * then the request is processed as a request for a blog post, otherwise
+ * the request is processed as a request for a static page.
+ */
 get('.*', function (string $uri): string {
     echo 'Catch-all: ' . $uri . PHP_EOL;
 
@@ -47,7 +50,7 @@ get('.*', function (string $uri): string {
     }
 
     if (\count($matches) !== 4) {
-        $model = get_page($uri);
+        $model = get_content_object($uri);
     } else {
         $model = get_post($matches[1], $matches[2], $matches[3]);
         $template = 'post.html';

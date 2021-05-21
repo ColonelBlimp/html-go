@@ -133,10 +133,14 @@ final class IndexManager
      * If two files define the same slug one will overwrite the other.
      *
      * @param string $key The slug
-     * @return Element|NULL if the $key (slug) does not exist in the system
+     * @return Element
+     * @throws \RuntimeException if the given key is not found in the slug index
      */
-    function getElementFromSlugIndex(string $key): ?Element {
-        return isset($this->slugIndex[$key]) ? $this->slugIndex[$key] : null;
+    function getElementFromSlugIndex(string $key): Element {
+        if (!isset($this->slugIndex[$key])) {
+            throw new \RuntimeException("Key [$key] does not exist in the index. Use 'elementExists(...) before calling this method!");
+        }
+        return  $this->slugIndex[$key];
     }
 
     /**
@@ -161,9 +165,11 @@ final class IndexManager
         $postList = [];
         $postKeys = $this->categoryToPostIndex[$key];
         foreach ($postKeys as $key) {
-            if (($elem = $this->getElementFromSlugIndex($key)) === null) {
-                throw new \OutOfBoundsException("Indexes are inconsistent. The category key [$key] cannot be found in the slug index."); // @codeCoverageIgnore
-            }
+//            if (($elem = $this->getElementFromSlugIndex($key)) === null) {
+//                throw new \OutOfBoundsException("Indexes are inconsistent. The category key [$key] cannot be found in the slug index."); // @codeCoverageIgnore
+//            }
+//TODO: Refactor
+            $elem = $this->getElementFromSlugIndex($key);
             $postList[$elem->getKey()] = $elem;
         }
         return $postList;
@@ -182,9 +188,11 @@ final class IndexManager
         $postList = [];
         $postKeys = $this->tagToPostIndex[$key];
         foreach ($postKeys as $key) {
-            if (($elem = $this->getElementFromSlugIndex($key)) === null) {
-                throw new \OutOfBoundsException("Indexes are inconsistent. The tag key [$key] cannot be found in the slug index."); // @codeCoverageIgnore
-            }
+            //            if (($elem = $this->getElementFromSlugIndex($key)) === null) {
+            //                throw new \OutOfBoundsException("Indexes are inconsistent. The category key [$key] cannot be found in the slug index."); // @codeCoverageIgnore
+            //            }
+            //TODO: Refactor
+            $elem = $this->getElementFromSlugIndex($key);
             $postList[$elem->getKey()] = $elem;
         }
         return $postList;

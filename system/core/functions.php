@@ -142,11 +142,11 @@ function get_post(string $year, string $month, string $title): ?Content {
 }
 
 /**
- * Get a page (if any) associated with the given slug.
+ * Get a content object (if any) associated with the given slug.
  * @param string $slug
  * @return Content|NULL if no content was found associated with the given slug <code>null</code> is returned.
  */
-function get_page(string $slug): ?Content {
+function get_content_object(string $slug): ?Content {
     echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
     if (slug_exists($slug) === false) {
         return null;
@@ -154,21 +154,11 @@ function get_page(string $slug): ?Content {
     return get_model_factory()->create(get_index_manager()->getElementFromSlugIndex($slug));
 }
 
-function get_category(string $slug): ?Content {
-    echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
-    if (slug_exists($slug) === false) {
-        return null;
-    }
-//    $element = $manager->getElementFromSlugIndex($slug);
-
-    return null;
-}
-
-function get_tag(string $slug): ?Content {
-    echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
-    return null;
-}
-
+/**
+ * Checks if the given slug exists in the index manager (alias for <code>IndexManager::elementExists()</code>).
+ * @param string $slug
+ * @return bool
+ */
 function slug_exists(string $slug): bool {
     return get_index_manager()->elementExists($slug);
 }
