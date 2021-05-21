@@ -1,13 +1,12 @@
 <?php declare(strict_types=1);
 
+use html_go\i18n\i18n;
 use html_go\indexing\IndexManager;
 use html_go\model\Config;
 use html_go\model\Content;
 use html_go\model\ModelFactory;
 use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
-use html_go\i18n\i18n;
-use Twig\Error\RuntimeError;
 
 /**
  * Build and return the template context.
@@ -164,7 +163,17 @@ function get_content_object(string $slug): ?Content {
     return get_model_factory()->createFromElement(get_index_manager()->getElementFromSlugIndex($slug));
 }
 
+/**
+ * Get a near empty <code>Content</code> which does hold a list of <code>Content</code> objects
+ * which might be a list of posts, categories or tags.
+ * @param int $type See constants: <code>POST_LIST_TYPE, CAT_LIST_TYPE, TAG_LIST_TYPE</code>
+ * @param int $page_number
+ * @param int $per_page
+ * @throws RuntimeException
+ * @return Content
+ */
 function get_content_list_object(int $type, int $page_number = 1, int $per_page = 5): Content {
+    echo __FUNCTION__ . PHP_EOL;
     $data = [];
     switch ($type) {
         case POST_LIST_TYPE:
