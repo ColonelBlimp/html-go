@@ -2,10 +2,11 @@
 
 use html_go\i18n\i18n;
 use html_go\indexing\IndexManager;
+use html_go\model\Config;
 use html_go\model\Content;
+use html_go\model\ModelFactory;
 use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
-use html_go\model\Config;
 
 /**
  * Render the given template placing the given variables into the template context.
@@ -94,14 +95,43 @@ function get_config(): Config {
     return $config;
 }
 
+/**
+ * Returns the instance of the ModelFactory.
+ * @return ModelFactory
+ */
+function get_model_factory(): ModelFactory {
+    static $factory = null;
+    if (empty($factory)) {
+        $factory = new ModelFactory(get_config());
+    }
+    return $factory;
+}
+
+/**
+ * Returns an string configuration option value.
+ * @param string $key the key of the configuration value to return.
+ * @param string $default an empty string
+ * @return string the value
+ */
 function get_config_string(string $key, string $default = ''): string {
     return get_config()->getString($key, $default);
 }
-
+/**
+ * Returns an integer configuration option value.
+ * @param string $key the key of the configuration value to return.
+ * @param int $default minus one (-1)
+ * @return int
+ */
 function get_config_int(string $key, int $default = -1): int {
     return get_config()->getInt($key, $default);
 }
 
+/**
+ * Returns a boolean configuration option value.
+ * @param string $key the key of the configuration value to return.
+ * @param bool $default <code>false</code>
+ * @return bool
+ */
 function get_config_bool(string $key, bool $default = false): bool {
     return get_config()->getBool($key, $default);
 }
@@ -112,13 +142,16 @@ function get_post(string $year, string $month, string $title): ?Content {
 }
 
 /**
- * Get a page.
+ * Get a page (if any) associated with the given slug.
  * @param string $slug
- * @return Content|NULL
+ * @return Content|NULL if no content was found associated with the given slug <code>null</code> is returned.
  */
 function get_page(string $slug): ?Content {
     echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
-    return null;
+    if (slug_exists($slug) === false) {
+        return null;
+    }
+    return get_model_factory()->create(get_index_manager()->getElementFromSlugIndex($slug));
 }
 
 function get_category(string $slug): ?Content {

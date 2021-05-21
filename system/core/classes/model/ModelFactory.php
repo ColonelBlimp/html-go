@@ -40,7 +40,7 @@ final class ModelFactory
             throw new \RuntimeException("A content file must begin with '" . FM_DELIM ."'"); // @codeCoverageIgnore
         }
         $fmProcess = true;
-        while (!$file->eof()) {
+        while ($file->eof() === false) {
             if (($line = $file->fgets()) === false) {
                 throw new \RuntimeException("SplFileObject::fgets() failed."); // @codeCoverageIgnore
             }
@@ -94,27 +94,6 @@ final class ModelFactory
         static $site = null;
         if (empty($site)) {
             $site = new Site($this->config);
-            /* anony class impl
-            $site = new class($this->config) implements Site {
-                function __construct(private Config $config) {
-                }
-                function getUrl(): string {
-                    return $this->config->getString(Config::KEY_SITE_URL);
-                }
-                function getTitle(): string {
-                    return '';
-                }
-                function getDescription(): string {
-                    return '';
-                }
-                function getTagline(): string {
-                    return '';
-                }
-                function getCopyright(): string {
-                    return '';
-                }
-            };
-            */
         }
         return $site;
     }
