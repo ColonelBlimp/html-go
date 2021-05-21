@@ -93,7 +93,7 @@ final class ModelFactory
     private function createSiteObject(): Site {
         static $site = null;
         if (empty($site)) {
-            $site = new SiteImpl($this->config);
+            $site = new Site($this->config);
             /* anony class impl
             $site = new class($this->config) implements Site {
                 function __construct(private Config $config) {

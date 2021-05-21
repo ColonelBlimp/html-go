@@ -35,15 +35,15 @@ function not_found(string $title = '404 Not Found'): string {
 function get_template_engine(): TemplateEngine {
     static $engine = null;
     if (empty($engine)) {
-        $themeName = config('', 'default');
-        $engineName = config('template.engine', 'twig');
+        $themeName = get_config_string('theme.name', 'default');
+        $engineName = get_config_string('template.engine', 'twig');
 
         $caching = false;
         $strict_vars = true;
-        if (config('template.engine.caching', "bool") === 'true') {
+        if (get_config_bool('template.engine.caching', false)) {
             $caching = CACHE_ROOT.DS.'template_cache';
         }
-        if (config('template.engine.twig.strict_variables', 'true') === 'false') {
+        if (get_config_bool('template.engine.twig.strict_variables', true) === false) {
             $strict_vars = false;
         }
         $options = [
@@ -65,10 +65,10 @@ function get_template_vars(array $vars = []): array {
     static $site_vars = [];
     if (empty($site_vars)) {
         $site_vars = [
-            'i18n' => new i18n(LANG_ROOT.DS.config('site.language', 'en').'.messages.php'),
-            'site_title' => config('site.title', "HTML-go"),
-            'site_description' => config('site.description', "Another HTML-go website"),
-            'site_copyright' => config('site.copyright', "&#169; Copyright ????.")
+            'i18n' => new i18n(LANG_ROOT.DS.get_config_string('site.language', 'en').'.messages.php'),
+            'site_title' => get_config_string('site.title', "HTML-go"),
+            'site_description' => get_config_string('site.description', "Another HTML-go website"),
+            'site_copyright' => get_config_string('site.copyright', "&#169; Copyright ????.")
         ];
     }
     return \array_merge($site_vars, $vars);
@@ -94,21 +94,21 @@ function get_config(): Config {
     return $config;
 }
 
-function get_config_string(string $key, string $default = null): string {
+function get_config_string(string $key, string $default = ''): string {
     return get_config()->getString($key, $default);
 }
 
-function get_config_int(string $key, int $default = -1): string {
+function get_config_int(string $key, int $default = -1): int {
     return get_config()->getInt($key, $default);
 }
 
-function get_config_bool(string $key, bool $default = false): string {
+function get_config_bool(string $key, bool $default = false): bool {
     return get_config()->getBool($key, $default);
 }
 
 function get_post(string $year, string $month, string $title): ?Content {
     echo __FUNCTION__ . ': ' . $title . PHP_EOL;
-    return new Content();
+    return null;
 }
 
 /**
@@ -118,7 +118,7 @@ function get_post(string $year, string $month, string $title): ?Content {
  */
 function get_page(string $slug): ?Content {
     echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
-    return new Content();
+    return null;
 }
 
 function get_category(string $slug): ?Content {
@@ -126,14 +126,14 @@ function get_category(string $slug): ?Content {
     if (slug_exists($slug) === false) {
         return null;
     }
-    $element = $manager->getElementFromSlugIndex($slug);
+//    $element = $manager->getElementFromSlugIndex($slug);
 
-    return new Content();
+    return null;
 }
 
 function get_tag(string $slug): ?Content {
     echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
-    return new Content();
+    return null;
 }
 
 function slug_exists(string $slug): bool {

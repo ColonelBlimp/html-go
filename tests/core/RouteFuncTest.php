@@ -8,7 +8,7 @@ class RouteFuncTest extends TestCase
     function testIndexRoute(): void {
         $this->assertIsString(route('GET', 'index'));
     }
-
+/*
     function testGetStaticPage(): void {
         $this->assertStringContainsString('404', route('GET', '/test/unknown'));
     }
@@ -25,4 +25,5 @@ class RouteFuncTest extends TestCase
     function testGetPost(): void {
         $this->assertStringContainsString('404', route('GET', '/2021/04/honey-processing'));
     }
+*/
 }

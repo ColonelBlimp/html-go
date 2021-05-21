@@ -66,7 +66,8 @@ final class IndexManager
 
     /**
      * IndexManager constructor.
-     * @param string $appRoot
+     * @param string $appRoot The application's root. This class requires a particular
+     * directory layout, thus the application root is passed in.
      * @throws \InvalidArgumentException
      */
     function __construct(string $appRoot) {

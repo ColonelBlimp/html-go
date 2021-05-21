@@ -3,7 +3,7 @@
 // main index of the site
 get('index', function(string $uri): string {
     $vars = get_template_vars();
-    $vars['site_title'] = config('site.title', 'HTML-go') . $vars['site_title'];
+    $vars['site_title'] = get_config_string('site.title', 'HTML-go') . $vars['site_title'];
     return render('main.html', $vars);
 });
 
