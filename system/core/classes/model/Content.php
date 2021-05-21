@@ -54,4 +54,12 @@ final class Content
     function getMenus(): array {
         return $this->fileData['menus'];
     }
+
+    /**
+     * Returns an array of <code>Content</code> object associated with this content.
+     * @return array<Content>
+     */
+    function getContentList(): array {
+        return [];
+    }
 }

@@ -150,11 +150,6 @@ function get_config_bool(string $key, bool $default = false): bool {
     return get_config()->getBool($key, $default);
 }
 
-function get_post(string $year, string $month, string $title): ?Content {
-    echo __FUNCTION__ . ': ' . $title . PHP_EOL;
-    return null;
-}
-
 /**
  * Get a <code>Content</code> object (if any) associated with the given slug.
  * @param string $slug

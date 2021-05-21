@@ -29,6 +29,7 @@ final class ModelFactory
     /**
      * @return array<string, mixed>
      */
+    //FIXME: Content array within a Content object (e.g. posts list, category list, etc)
     private function parseData(Element $element): array {
         $data = [];
         $file = new \SplFileObject($element->getPath());

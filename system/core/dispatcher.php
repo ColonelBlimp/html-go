@@ -80,10 +80,7 @@ function route_to_regex(string $route): string {
         $token = \str_replace(':', '', $matches[0]);
         return '(?P<' . $token . '>[a-z0-9_\0-\.]+)';
     }, $route);
-    //TODO: refactor
-    $regex = '@^' . $route . '$@i';
-//    echo $regex . PHP_EOL;
-    return $regex;
+    return '@^' . $route . '$@i';
 }
 
 /**

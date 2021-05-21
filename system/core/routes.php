@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 use html_go\model\Config;
+use html_go\model\Content;
 
 // main index of the site
 get('home', function(string $uri): string {
@@ -7,7 +8,7 @@ get('home', function(string $uri): string {
     if (get_config_bool(Config::KEY_STATIC_INDEX)) {
         $content = get_content_object('home');
     } else {
-        $content = null;
+        $content = new Content();
         $template = 'posts_list.html';
     }
     return render($template, get_template_context($content));
@@ -47,7 +48,7 @@ get('.*', function (string $uri): string {
     if (\count($matches) !== 4) {
         $content = get_content_object($uri);
     } else {
-        $content = get_post($matches[1], $matches[2], $matches[3]);
+        $content = get_content_object($matches[1].FWD_SLASH.$matches[2].FWD_SLASH.$matches[3]);
         $template = 'post.html';
     }
     if ($content === null) {
