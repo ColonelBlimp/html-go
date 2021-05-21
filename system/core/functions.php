@@ -164,19 +164,22 @@ function get_content_object(string $slug): ?Content {
     return get_model_factory()->createFromElement(get_index_manager()->getElementFromSlugIndex($slug));
 }
 
-function get_content_list_object(int $type, int $page_number = 1, int $per_page = 5): array {
-    $list = [];
+function get_content_list_object(int $type, int $page_number = 1, int $per_page = 5): Content {
+    $data = [];
     switch ($type) {
         case POST_LIST_TYPE:
+            $data['list'] = [];
             break;
         case CAT_LIST_TYPE:
+            $data['list'] = [];
             break;
         case TAG_LIST_TYPE:
+            $data['list'] = [];
             break;
         default:
             throw new RuntimeException("Unknown list type [$type]");
     }
-    return $list;
+    return get_model_factory()->createFromData($data);
 }
 
 /**

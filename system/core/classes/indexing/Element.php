@@ -10,12 +10,20 @@ final class Element
     private string $type;
     private string $username;
     private string $date;
+
+    /**
+     * @var array<int, string> $tagList
+     */
     private array $tagList;
 
+    /**
+     * Private constructor. Objects are instantiated using <code>fromData</code> or <code>empty</code>.
+     */
     private function __construct() {
     }
 
     /**
+     * Static function used to create an instance.
      * @param string $key
      * @param string $path
      * @param string $section
@@ -31,10 +39,24 @@ final class Element
         return $instance;
     }
 
+    /**
+     * Static function used to create an empty instance. Generally used for list content objects.
+     * @return Element
+     */
     static function empty(): Element {
         return new self();
     }
 
+    /**
+     * @param string $key
+     * @param string $path
+     * @param string $section
+     * @param string $category
+     * @param string $type
+     * @param string $username
+     * @param string $date
+     * @param array<int, string> $tagList
+     */
     private function loadFromData(string $key, string $path, string $section, string $category, string $type, string $username, string $date, array $tagList): void {
         $this->key = $key;
         $this->path = $path;

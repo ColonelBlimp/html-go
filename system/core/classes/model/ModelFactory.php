@@ -26,15 +26,18 @@ final class ModelFactory
         return new Content($this->createSiteObject(), $element, $this->parseData($element));
     }
 
+    /**
+     * Create a <code>Content</code> object from a data array.
+     * @param array<mixed> $data
+     * @return Content
+     */
     function createFromData(array $data): Content {
-        $element = Element::empty();
-        return new Content($this->createSiteObject(), $element, $data);
+        return new Content($this->createSiteObject(), Element::empty(), $data);
     }
 
     /**
      * @return array<string, mixed>
      */
-    //FIXME: Content array within a Content object (e.g. posts list, category list, etc)
     private function parseData(Element $element): array {
         $data = [];
         $file = new \SplFileObject($element->getPath());

@@ -6,7 +6,7 @@ use html_go\indexing\Element;
 final class Content
 {
     /**
-     * ContentImpl constructor.
+     * Content constructor.
      * @param Site $site
      * @param Element $element
      * @param array <string, mixed> $fileData

@@ -1,6 +1,5 @@
 <?php declare(strict_types=1);
 use html_go\model\Config;
-use html_go\model\Content;
 
 // main index of the site
 get('home', function(string $uri): string {
@@ -8,8 +7,11 @@ get('home', function(string $uri): string {
     if (get_config_bool(Config::KEY_STATIC_INDEX)) {
         $content = get_content_object('home');
     } else {
-        $content = new Content();
+        $content = get_content_list_object(POST_LIST_TYPE);
         $template = 'posts_list.html';
+    }
+    if ($content === null) {
+        return not_found();
     }
     return render($template, get_template_context($content));
 });
