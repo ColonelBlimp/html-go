@@ -13,6 +13,7 @@ final class Config
     const KEY_TPL_CACHING = 'template.engine.caching';
     const KEY_TPL_FILE_EXT = 'template.engine.file.ext';
     const KEY_TPL_STRICT_VARS_TWIG = 'template.engine.twig.strict_variables';
+    const KEY_STATIC_INDEX = 'static.index';
     const KEY_THEME_NAME = 'theme.name';
 
     /**
@@ -106,6 +107,9 @@ final class Config
         }
         if (isset($config[Config::KEY_THEME_NAME]) === false) {
             $config[Config::KEY_THEME_NAME] = 'default';
+        }
+        if (isset($config[Config::KEY_STATIC_INDEX]) === false) {
+            $config[Config::KEY_STATIC_INDEX] = true;
         }
         return $config;
     }

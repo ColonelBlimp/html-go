@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 class RouteFuncTest extends TestCase
 {
     function testIndexRoute(): void {
-        $this->assertIsString(route('GET', 'index'));
+        $this->assertIsString(route('GET', 'home'));
     }
 
     function testGetStaticPage(): void {
