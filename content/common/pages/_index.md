@@ -1,6 +1,6 @@
 +++
 title = "Welcome"
-description = "About us description"
+description = "Home page description"
 +++
 
 Welcome to our new website.
