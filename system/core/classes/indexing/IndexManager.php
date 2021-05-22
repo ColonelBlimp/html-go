@@ -443,6 +443,6 @@ final class IndexManager
             if (!empty($tagList)) {
                 $tags = \explode(',', $tagList);
             }
-        return Element::fromData($key, $path, $section, $category, $type, $username, $date, $tags);
+        return Element::createFromData($key, $path, $section, $category, $type, $username, $date, $tags);
     }
 }

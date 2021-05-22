@@ -229,4 +229,15 @@ class IndexManagerTest extends IndexingTestCase
         $this->assertCount(3, $posts);
         $this->assertNull($manager->getPostsForTag('unknown'));
     }
+
+    /**
+     * @runInSeparateProcess
+     */
+    function testSlugNotFoundException(): void {
+        $manager = new IndexManager(IndexingTestCase::APP_ROOT);
+        $this->assertNotNull($manager);
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage("Key [unknown] does not exist in the index. Use 'elementExists(...) before calling this method!");
+        $manager->getElementFromSlugIndex('unknown');
+    }
 }

@@ -9,6 +9,12 @@ if (!\defined('FM_DELIM')) {
 
 final class ModelFactory
 {
+    const KEY_MENUS_DATA = 'menus';
+    const KEY_BODY_DATA = 'body';
+    const KEY_LIST_DATA = 'list';
+    const KEY_TITLE_DATA = 'title';
+    const KEY_DESC_DATA = 'description';
+
     /**
      * @var Config $config
      */
@@ -32,14 +38,15 @@ final class ModelFactory
      * @return Content
      */
     function createFromData(array $data): Content {
-        return new Content($this->createSiteObject(), Element::empty(), $data);
+        return new Content($this->createSiteObject(), Element::createEmpty(),
+            \array_merge($this->getInitializedData(), $data));
     }
 
     /**
      * @return array<string, mixed>
      */
     private function parseData(Element $element): array {
-        $data = [];
+        $data = $this->getInitializedData();
         $file = new \SplFileObject($element->getPath());
         $file->setFlags(\SplFileObject::DROP_NEW_LINE);
         if (($line = $file->fgets()) === false) {
@@ -60,9 +67,9 @@ final class ModelFactory
             $parts = \explode('=', $line);
             $menus = $this->extractMenuAndWeight($parts);
             if (!empty($menus)) {
-                $data['menus'] = $menus;
+                $data[self::KEY_MENUS_DATA] = $menus;
             } else {
-                $data['menus'] = [];
+                $data[self::KEY_MENUS_DATA] = [];
                 $data[\trim($parts[0])] = \trim($parts[1], " \n\r\t\v\0\"\'");
             }
         }
@@ -73,8 +80,7 @@ final class ModelFactory
         if (($body = $file->fread($len)) === false) {
             throw new \RuntimeException("SplFileObject::fread() failed."); // @codeCoverageIgnore
         }
-        $data['body'] = $body;
-        $data['list'] = [];
+        $data[self::KEY_BODY_DATA] = $body;
         $file = null;
         return $data;
     }
@@ -106,5 +112,15 @@ final class ModelFactory
             $site = new Site($this->config);
         }
         return $site;
+    }
+
+    private function getInitializedData(): array {
+        return [
+            self::KEY_MENUS_DATA => [],
+            self::KEY_LIST_DATA => [],
+            self::KEY_BODY_DATA => '',
+            self::KEY_TITLE_DATA => '',
+            self::KEY_DESC_DATA => ''
+        ];
     }
 }

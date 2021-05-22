@@ -32,8 +32,9 @@ final class Element
      * @param string $username
      * @param string $date
      * @param array<int, string> $tagList
+     * @return Element
      */
-    static function fromData(string $key, string $path, string $section, string $category, string $type, string $username, string $date, array $tagList): Element {
+    static function createFromData(string $key, string $path, string $section, string $category, string $type, string $username, string $date, array $tagList): Element {
         $instance = new self();
         $instance->loadFromData($key, $path, $section, $category, $type, $username, $date, $tagList);
         return $instance;
@@ -43,7 +44,7 @@ final class Element
      * Static function used to create an empty instance. Generally used for list content objects.
      * @return Element
      */
-    static function empty(): Element {
+    static function createEmpty(): Element {
         return new self();
     }
 

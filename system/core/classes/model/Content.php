@@ -27,7 +27,7 @@ final class Content
      * @return string
      */
     function getTitle(): string {
-        return $this->fileData['title'];
+        return $this->fileData[ModelFactory::KEY_TITLE_DATA];
     }
 
     /**
@@ -35,7 +35,7 @@ final class Content
      * @return string
      */
     function getDescription(): string {
-        return $this->fileData['description'];
+        return $this->fileData[ModelFactory::KEY_DESC_DATA];
     }
 
     /**
@@ -43,7 +43,7 @@ final class Content
      * @return string
      */
     function getRawBody(): string {
-        return $this->fileData['body'];
+        return $this->fileData[ModelFactory::KEY_BODY_DATA];
     }
 
     /**
@@ -52,7 +52,7 @@ final class Content
      * @return array<string, int>
      */
     function getMenus(): array {
-        return $this->fileData['menus'];
+        return $this->fileData[ModelFactory::KEY_MENUS_DATA];
     }
 
     /**
@@ -60,6 +60,6 @@ final class Content
      * @return array<Content>
      */
     function getContentList(): array {
-        return $this->fileData['list'];
+        return $this->fileData[ModelFactory::KEY_LIST_DATA];
     }
 }
