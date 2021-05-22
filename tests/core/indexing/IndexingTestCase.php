@@ -5,7 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 abstract class IndexingTestCase extends TestCase
 {
-    const APP_ROOT = __DIR__.DS.'..';
+    const APP_ROOT = __DIR__.DS.'..'.DS.'test-data';
 
     static function setUpBeforeClass(): void {
         @unlink(\realpath(IndexingTestCase::APP_ROOT).DS.'cache'.DS.'indexes'.DS.'slugindex.inx');
