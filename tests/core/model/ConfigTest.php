@@ -23,7 +23,7 @@ class ConfigTest extends TestCase
     function testGetString(): void {
         $cfg = new Config(TEST_APP_ROOT.DS.'core'.DS.'config');
         $this->assertEmpty($cfg->getString('unknown'));
-        $this->assertSame("http://localhost:8080", $cfg->getString('site.url'));
+        $this->assertSame("http://localhost:8000", $cfg->getString('site.url'));
     }
 
     function testGetInt(): void {
@@ -34,7 +34,7 @@ class ConfigTest extends TestCase
 
     function testGetBool(): void {
         $cfg = new Config(TEST_APP_ROOT.DS.'core'.DS.'config');
-        $this->assertSame(false, $cfg->getInt('unknown'));
-        $this->assertSame(true, $cfg->getInt('var.bool'));
+        $this->assertSame(false, $cfg->getBool('unknown'));
+        $this->assertSame(true, $cfg->getBool('var.bool'));
     }
 }
