@@ -33,7 +33,7 @@ final class Config
             throw new \InvalidArgumentException("Configuration INI file not found [$configFile]");
         }
         if (($config = \parse_ini_file($configFile, false, INI_SCANNER_TYPED)) === false) {
-            throw new \RuntimeException("parse_ini_file() failed [$configFile]");
+            throw new \RuntimeException("parse_ini_file() failed [$configFile]"); // @codeCoverageIgnore
         }
         $this->config = $this->validateConfig($config);
     }

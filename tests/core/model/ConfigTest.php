@@ -13,4 +13,28 @@ class ConfigTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         new Config('');
     }
+
+    function testInvalidConfigException(): void {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage("Configuration option 'site.url' not set.");
+        new Config(TEST_APP_ROOT.DS.'core'.DS.'config'.DS.'bad');
+    }
+
+    function testGetString(): void {
+        $cfg = new Config(TEST_APP_ROOT.DS.'core'.DS.'config');
+        $this->assertEmpty($cfg->getString('unknown'));
+        $this->assertSame("http://localhost:8080", $cfg->getString('site.url'));
+    }
+
+    function testGetInt(): void {
+        $cfg = new Config(TEST_APP_ROOT.DS.'core'.DS.'config');
+        $this->assertSame(-1, $cfg->getInt('unknown'));
+        $this->assertSame(8000, $cfg->getInt('var.int'));
+    }
+
+    function testGetBool(): void {
+        $cfg = new Config(TEST_APP_ROOT.DS.'core'.DS.'config');
+        $this->assertSame(false, $cfg->getInt('unknown'));
+        $this->assertSame(true, $cfg->getInt('var.bool'));
+    }
 }
