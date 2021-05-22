@@ -114,6 +114,10 @@ final class ModelFactory
         return $site;
     }
 
+    /**
+     * Initialize the data array used in <code>createFromData(...)</code> and <code>parseData()</code>.
+     * @return array<string, mixed>
+     */
     private function getInitializedData(): array {
         return [
             self::KEY_MENUS_DATA => [],
