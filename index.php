@@ -6,6 +6,7 @@ include __DIR__.DIRECTORY_SEPARATOR.'system'.DIRECTORY_SEPARATOR.'vendor'.DIRECT
 
 if (\getenv('CLI_ENV') !== null) {
     new IndexManager(APP_ROOT.DS.'tests'.DS.'test-data');
+    echo 'Success!';
 } else {
     echo dispatch();
 }
