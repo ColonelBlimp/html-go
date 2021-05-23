@@ -6,8 +6,9 @@ use html_go\indexing\Element;
 
 final class ContentTest extends TestCase
 {
+    /*
     function testInstantiation(): void {
-        $cfg = new Config(TEST_APP_ROOT.DS.'core'.DS.'test-data'.DS.'config');
+        $cfg = new Config(TEST_APP_ROOT.DS.'test-data'.DS.'config');
         $this->assertNotNull($cfg);
         $site = new Site($cfg);
         $this->assertNotNull($site);
@@ -26,4 +27,5 @@ final class ContentTest extends TestCase
         $this->assertEmpty($content->getContentList());
         $this->assertEmpty($content->getRawBody());
     }
+    */
 }

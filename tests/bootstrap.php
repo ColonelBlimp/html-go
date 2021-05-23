@@ -7,4 +7,4 @@ if (!\defined('DS')) {
 require_once __DIR__.DS.'..'.DS.'system'.DS.'vendor'.DS.'autoload.php';
 
 \define('TEST_APP_ROOT', __DIR__);
-\define('TEST_DATA_ROOT', TEST_APP_ROOT.DS.'core'.DS.'test-data');
+\define('TEST_DATA_ROOT', TEST_APP_ROOT.DS.'test-data');

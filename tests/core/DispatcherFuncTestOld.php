@@ -3,7 +3,7 @@ namespace html_go;
 
 use PHPUnit\Framework\TestCase;
 
-class DispatcherFuncTest extends TestCase
+class DispatcherFuncTestOld extends TestCase
 {
     function testParseUrlWithQuery(): void {
         $this->assertStringContainsString("http://localhost", strip_url_parameters('http://localhost?test=1&next=wibble&id=none'));

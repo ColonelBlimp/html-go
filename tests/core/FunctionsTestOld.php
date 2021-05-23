@@ -3,7 +3,7 @@ namespace html_go;
 
 use PHPUnit\Framework\TestCase;
 
-class FunctionsTest extends TestCase
+class FunctionsTestOld extends TestCase
 {
     function testGetPostContentListObject(): void {
         $content = get_content_list_object(POST_LIST_TYPE);

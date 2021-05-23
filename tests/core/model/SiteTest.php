@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 class SiteTest extends TestCase
 {
     function testInstantiation(): Site {
-        $cfg = new Config(TEST_APP_ROOT.DS.'core'.DS.'test-data'.DS.'config');
+        $cfg = new Config(TEST_APP_ROOT.DS.'test-data'.DS.'config');
         $this->assertNotNull($cfg);
         $site = new Site($cfg);
         $this->assertNotNull($site);
