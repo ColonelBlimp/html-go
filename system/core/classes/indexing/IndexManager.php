@@ -19,8 +19,48 @@ final class IndexManager
     private const PAGES_DIR = 'content'.DS.'common'.DS.'pages';
     private const INDEX_DIR = 'cache'.DS.'indexes';
     private const USER_DATA_DIR = 'content'.DS.'user-data';
+    private const SLUG_INDEX_FILE = self::INDEX_DIR.DS.'slugindex.inx';
+    private const PAGE_INDEX_FILE = self::INDEX_DIR.DS.'pages.inx';
+    private const POST_INDEX_FILE = self::INDEX_DIR.DS.'posts.inx';
+    private const CAT_INDEX_FILE = self::INDEX_DIR.DS.'categories.inx';
+    private const TAG_INDEX_FILE = self::INDEX_DIR.DS.'tags.inx';
 
     private string $root;
+
+    /**
+     * @var array<string, Element> $slugIndex
+     */
+    private array $slugIndex;
+
+    /**
+     * @var array<string, array<int, string>> $categoryToPostIndex
+     */
+    private array $categoryToPostIndex;
+
+    /**
+     * @var array<string, array<int, string>> $tagToPostIndex
+     */
+    private array $tagToPostIndex;
+
+    /**
+     * @var array<string, Element> $postIndex
+     */
+    private array $postIndex;
+
+    /**
+     * @var array<string, Element> $pageIndex
+     */
+    private array $pageIndex;
+
+    /**
+     * @var array<string, Element> $categoryIndex
+     */
+    private array $categoryIndex;
+
+    /**
+     * @var array<string, Element> $tagIndex
+     */
+    private array $tagIndex;
 
     /**
      * IndexManager constructor.
@@ -56,52 +96,87 @@ final class IndexManager
     }
 
     /**
-     * Initialize the indexing system and create the indexes if needed.
+     * Initialize the indexing system and create the indexes files if needed.
      */
     private function Initialize(): void {
-        if (\file_exists($this->root.DS.self::INDEX_DIR.DS.'slugindex.inx') === false) {
-            $this->buildCategoryIndex();
-            $this->buildPageIndex();
-            $this->buildPostsIndex();
+        if (\file_exists($this->root.DS.self::SLUG_INDEX_FILE) === false) {
+            $this->categoryIndex = $this->buildCategoryIndex();
+            $this->pageIndex = $this->buildPageIndex();
+            $this->postIndex = $this->buildPostsIndex();
+            $this->buildTagIndex();
+            return;
         }
+
+        $this->categoryIndex = $this->loadIndex($this->root.DS.self::CAT_INDEX_FILE);
+        $this->postIndex = $this->loadIndex($this->root.DS.self::POST_INDEX_FILE);
+        $this->pageIndex = $this->loadIndex($this->root.DS.self::PAGE_INDEX_FILE);
+        $this->tagIndex = $this->loadIndex($this->root.DS.self::TAG_INDEX_FILE);
+        $this->slugIndex = \array_merge($this->postIndex, $this->categoryIndex, $this->pageIndex);
     }
 
     /**
      * Scans the <i>content/common/categories</i> folder creating and indexing all the files.
+     * When the index is built, it is also loaded.
+     * @return array<int, object>
      */
-    private function buildCategoryIndex(): void {
+    private function buildCategoryIndex(): array {
         $index = [];
         foreach ($this->parseDirectory($this->root.DS.self::CATEGORIES_DIR.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
             $key = 'category'.FWD_SLASH.\pathinfo($filepath, PATHINFO_FILENAME);
             $index[] = $this->createElement($filepath, $key);
         }
-        $this->writeIndex($this->root.DS.self::INDEX_DIR.DS.'categories.inx', $index);
+        $this->writeIndex($this->root.DS.self::CAT_INDEX_FILE, $index);
+        return $index;
     }
 
     /**
      * Scans the <i>content/pages</i> folder creating and indexing all the files and folders.
+     * When the index is built, it is also loaded.
+     * @return array<int, object>
      */
-    private function buildPageIndex(): void {
+    private function buildPageIndex(): array {
         $index = [];
         $pagesRoot = $this->root.DS.self::PAGES_DIR;
         $len = \strlen($pagesRoot) + 1;
         $pages = $this->scanDirectory($pagesRoot);
         \sort($pages);
         foreach ($pages as $filepath) {
-            $key = \substr(\substr($filepath, $len), 0, -3);
-            $index[] = $this->createElement($filepath, $key);
+            $index[] = $this->createElement($filepath, \substr(\substr($filepath, $len), 0, -3));
         }
         $this->writeIndex($this->root.DS.self::INDEX_DIR.DS.'pages.inx', $index);
+        return $index;
     }
 
     /**
      * Scans the <i>content/user-data/[username]/posts</i> folder creating and indexing all files.
+     * When the index is built, it is also loaded.
+     * @return array<int, object>
      */
-    private function buildPostsIndex(): void {
+    private function buildPostsIndex(): array {
         $index = [];
         foreach ($this->parseDirectory($this->root.DS.self::USER_DATA_DIR.DS.'*'.DS.'posts'.DS.'*'.DS.'*'.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
-            echo $filepath . PHP_EOL;
+            $index[] = $this->createElement($filepath, \pathinfo($filepath, PATHINFO_FILENAME));
         }
+        $this->writeIndex($this->root.DS.self::INDEX_DIR.DS.'posts.inx', $index);
+        return $index;
+    }
+
+    /**
+     * Scans through all the posts extracting the tags.
+     * When the index is built, it is also loaded.
+     * @return array<int, object>
+     */
+    private function buildTagIndex(): array {
+        $index = [];
+        foreach ($this->postIndex as $post) {
+            $tags = $post->tags;
+            foreach ($tags as $tag) {
+                $title = \ucfirst(\str_replace('-', ' ', $tag));
+                $index[$tag] = $this->createElementClass($tag, $title, ENUM_TAG);
+            }
+        }
+        $this->writeIndex($this->root.DS.self::INDEX_DIR.DS.'tags.inx', $index);
+        return $index;
     }
 
     /**
@@ -140,11 +215,12 @@ final class IndexManager
      * Parses the given filepath parameter and creates a <code>stdClass</code> object to represent
      * an index element.
      * @param string $filepath
-     * @param string $key
+     * @param string $key Default is <code>null</code> and used with processing a post, otherwise
+     * the key should be provided.
      * @throws \InvalidArgumentException
      * @return object
      */
-    private function createElement(string $filepath, string $key): object {
+    private function createElement(string $filepath, string $key = null): object {
         $pathinfo = \pathinfo($filepath);
         if ($key === null) {
             $key = $pathinfo['filename'];
@@ -164,7 +240,10 @@ final class IndexManager
             throw new \InvalidArgumentException("Content filename syntax error [$key]");
         }
         $tagList = \substr($key, $start, $end-$start);
-        $key = \substr($key, $end + 1);
+        $title = \substr($key, $end + 1);
+        $year = \substr($dateString, 0, 4);
+        $month = \substr($dateString, 5, 2);
+        $key = $year.FWD_SLASH.$month.FWD_SLASH.$title;
         $parts = \explode(DS, $pathinfo['dirname']);
         $cnt = \count($parts);
         return $this->createElementClass($key, $filepath, ENUM_POST, $parts[$cnt - 2], $parts[$cnt - 1], $parts[$cnt - 4], $dateString, $tagList);
@@ -208,5 +287,22 @@ final class IndexManager
         if (\file_put_contents($filepath, print_r($index, true)) === false) {
             throw new \RuntimeException("file_put_contents() failed [$filepath]"); // @codeCoverageIgnore
         }
+    }
+
+    /**
+     * Reads the given index file and returns it as an array.
+     * @return array<mixed>
+     */
+    private function loadIndex(string $filepath): array {
+        if (\file_exists($filepath) === false) {
+            throw new \InvalidArgumentException("Cannot load index file. Does not exist [$filepath]"); // @codeCoverageIgnore
+        }
+        if (($data = \file_get_contents($filepath)) === false) {
+            throw new \ErrorException("file_get_contents() failed [$filepath]"); // @codeCoverageIgnore
+        }
+        if (($data = \unserialize($data)) === false) {
+            throw new \ErrorException("unserialize() failed [$filepath]"); // @codeCoverageIgnore
+        }
+        return $data;
     }
 }
