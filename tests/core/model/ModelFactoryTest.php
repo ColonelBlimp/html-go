@@ -14,6 +14,10 @@ class ModelFactoryTest extends TestCase
         $obj->type = 'post';
         $obj->tags = [];
 
-        ModelFactory::create($obj);
+        $cfg = new Config(TEST_APP_ROOT.DS.'test-data'.DS.'config');
+        $factory = new ModelFactory($cfg);
+        $this->assertNotNull($factory);
+        $content = $factory->create($obj);
+        print_r($content);
     }
 }

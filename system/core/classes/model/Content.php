@@ -24,7 +24,7 @@ final class Content
      * @return string
      */
     function getTitle(): string {
-        return $this->fileData[ModelFactory::KEY_TITLE_DATA];
+        return $this->fileData['key'];
     }
 
     /**
@@ -32,7 +32,7 @@ final class Content
      * @return string
      */
     function getDescription(): string {
-        return $this->fileData[ModelFactory::KEY_DESC_DATA];
+        return $this->fileData['description'];
     }
 
     /**
@@ -40,7 +40,7 @@ final class Content
      * @return string
      */
     function getRawBody(): string {
-        return $this->fileData[ModelFactory::KEY_BODY_DATA];
+        return $this->fileData['body'];
     }
 
     /**
@@ -49,7 +49,7 @@ final class Content
      * @return array<string, int>
      */
     function getMenus(): array {
-        return $this->fileData[ModelFactory::KEY_MENUS_DATA];
+        return $this->fileData['menus'];
     }
 
     /**
@@ -57,6 +57,14 @@ final class Content
      * @return array<Content>
      */
     function getContentList(): array {
-        return $this->fileData[ModelFactory::KEY_LIST_DATA];
+        return $this->fileData['list'];
+    }
+
+    /**
+     * Returns an array of <code>Content</code> tag object associated with this content.
+     * @return array<Content>
+     */
+    function getTags(): array {
+        return $this->fileData['tags'];
     }
 }
