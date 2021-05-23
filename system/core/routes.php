@@ -8,7 +8,7 @@ get('index', function(string $uri): string {
         $content = get_content_object('index');
     } else {
         $content = get_content_object('posts/index');
-        $template = 'posts_list.html';
+        $template = 'listing.html';
     }
     if ($content === null) {
         return not_found();
