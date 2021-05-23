@@ -15,6 +15,7 @@
     <target name="prepare">
         <mkdir dir="${build.dir}/logs" />
         <delete dir="${basedir}/cache/indexes" />
+        <delete dir="${basedir}/tests/core/test-data/cache/indexes" />
     </target>
 
     <target name="full" depends="prepare, php-lint, phpcs, phpmd, phpcpd, phploc, pdepend, phpstan, phpunit, phpcb">

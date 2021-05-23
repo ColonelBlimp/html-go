@@ -2,7 +2,7 @@
 namespace html_go\indexing;
 
 
-class IndexManagerTest extends IndexingTestCase
+class IndexManagerTestOld extends IndexingTestCase
 {
     /**
      * @runInSeparateProcess

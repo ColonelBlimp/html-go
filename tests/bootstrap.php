@@ -1,4 +1,10 @@
 <?php declare(strict_types=1);
-require_once __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'system'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'autoload.php';
+
+if (!\defined('DS')) {
+    \define('DS', DIRECTORY_SEPARATOR);
+}
+
+require_once __DIR__.DS.'..'.DS.'system'.DS.'vendor'.DS.'autoload.php';
 
 \define('TEST_APP_ROOT', __DIR__);
+\define('TEST_DATA_ROOT', TEST_APP_ROOT.DS.'core'.DS.'test-data');
