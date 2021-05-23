@@ -3,6 +3,13 @@ namespace html_go\model;
 
 final class Content
 {
+    const KEY_TITLE = 'title';
+    const KEY_DESC = 'description';
+    const KEY_BODY = 'body';
+    const KEY_LISTING = 'listing';
+    const KEY_MENUS = 'menus';
+    const KEY_TAGS = 'tags';
+
     private Site $site;
 
     /**
@@ -13,19 +20,28 @@ final class Content
     /**
      * Content constructor.
      * @param Site $site
-     * @param array <string, mixed> $fileData
+     * @param object $dataClass
      */
-    function __construct(Site $site, array $fileData) {
+    function __construct(Site $site, object $dataClass) {
         $this->site = $site;
-        $this->fileData = [
-            'key' => '',
-            'description' => '',
-            'body' => '',
-            'menus' => [],
-            'list' => [],
-            'tags' => []
+        $this->fileData = $this->initDataArray();
+        $this->fileData = \array_merge($this->fileData, (array)$dataClass);
+//        print_r($this->fileData);
+    }
+
+    /**
+     * Initialize the internal data array.
+     * @return array<string, mixed>
+     */
+    private function initDataArray(): array {
+        return [
+            self::KEY_TITLE => EMPTY_VALUE,
+            self::KEY_DESC => EMPTY_VALUE,
+            self::KEY_BODY => EMPTY_VALUE,
+            self::KEY_LISTING => [],
+            self::KEY_MENUS => [],
+            self::KEY_TAGS => []
         ];
-        $this->fileData = \array_merge($this->fileData, $fileData);
     }
 
     /**
@@ -41,7 +57,7 @@ final class Content
      * @return string
      */
     function getTitle(): string {
-        return $this->fileData['key'];
+        return $this->fileData[self::KEY_TITLE];
     }
 
     /**
@@ -49,7 +65,7 @@ final class Content
      * @return string
      */
     function getDescription(): string {
-        return $this->fileData['description'];
+        return $this->fileData[self::KEY_DESC];
     }
 
     /**
@@ -57,7 +73,7 @@ final class Content
      * @return string
      */
     function getRawBody(): string {
-        return $this->fileData['body'];
+        return $this->fileData[self::KEY_BODY];
     }
 
     /**
@@ -66,15 +82,15 @@ final class Content
      * @return array<string, int>
      */
     function getMenus(): array {
-        return $this->fileData['menus'];
+        return $this->fileData[self::KEY_MENUS];
     }
 
     /**
      * Returns an array of <code>Content</code> object associated with this content.
      * @return array<Content>
      */
-    function getContentList(): array {
-        return $this->fileData['list'];
+    function getListing(): array {
+        return $this->fileData[self::KEY_LISTING];
     }
 
     /**
@@ -82,6 +98,6 @@ final class Content
      * @return array<Content>
      */
     function getTags(): array {
-        return $this->fileData['tags'];
+        return $this->fileData[self::KEY_TAGS];
     }
 }

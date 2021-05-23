@@ -13,3 +13,4 @@
 \define('POST_LIST_TYPE', 0);
 \define('CAT_LIST_TYPE', 1);
 \define('TAG_LIST_TYPE', 2);
+\define('EMPTY_VALUE', '<empty>');

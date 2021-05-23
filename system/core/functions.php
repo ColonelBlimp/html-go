@@ -157,12 +157,12 @@ function get_config_bool(string $key, bool $default = false): bool {
  */
 function get_content_object(string $slug): ?Content {
     if ($slug === 'posts/index') {
-        return get_model_factory()->createPostList(get_posts());
+        return get_model_factory()->createListContentObject(listing: get_posts(), title: 'Latest Posts');
     }
     if (slug_exists($slug) === false) {
         return null;
     }
-    return get_model_factory()->create(get_index_manager()->getElementFromSlugIndex($slug));
+    return get_model_factory()->createSingleContentObject(get_index_manager()->getElementFromSlugIndex($slug));
 }
 
 /**
@@ -178,7 +178,7 @@ function get_posts(int $page_number = 1, int $per_page = 5): array {
     $list = [];
     $factory = get_model_factory();
     foreach ($posts as $post) {
-        $list[] = $factory->create($post);
+        $list[] = $factory->createSingleContentObject($post);
     }
 
     return $list;

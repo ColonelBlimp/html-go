@@ -10,13 +10,13 @@ final class ContentTest extends TestCase
         $this->assertNotNull($cfg);
         $site = new Site($cfg);
         $this->assertNotNull($site);
-        $content = new Content($site, []);
+        $content = new Content($site, new \stdClass());
         $this->assertNotNull($content);
 
         $this->assertIsArray($content->getMenus());
         $this->assertEmpty($content->getMenus());
-        $this->assertIsArray($content->getContentList());
-        $this->assertEmpty($content->getContentList());
-        $this->assertEmpty($content->getRawBody());
+        $this->assertIsArray($content->getListing());
+        $this->assertEmpty($content->getListing());
+        $this->assertSame(EMPTY_VALUE, $content->getRawBody());
     }
 }
