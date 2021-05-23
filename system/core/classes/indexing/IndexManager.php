@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace html_go\indexing;
 
+
 if (!\defined('MODE')) {
     \define('MODE', 0777);
 }
@@ -97,6 +98,28 @@ final class IndexManager
     }
 
     /**
+     * Returns an object representing an element in the index.
+     * @param string $key
+     * @throws \RuntimeException
+     * @return object a stdClass::class
+     */
+    function getElementFromSlugIndex(string $key): object {
+        if (!isset($this->slugIndex[$key])) {
+            throw new \RuntimeException("Key does not exist in the slugIndex! Use 'elementExists() before calling this method.");
+        }
+        return $this->slugIndex[$key];
+    }
+
+    /**
+     * Check if an $key exists in the <b>slug index</b>.
+     * @param string $key
+     * @return bool <code>true</code> if exists, otherwise <code>false</code>
+     */
+    function elementExists(string $key): bool {
+        return isset($this->slugIndex[$key]);
+    }
+
+    /**
      * Initialize the indexing system and create the indexes files if needed.
      */
     private function Initialize(): void {
@@ -160,7 +183,14 @@ final class IndexManager
         $index = [];
         foreach ($this->parseDirectory($this->root.DS.self::USER_DATA_DIR.DS.'*'.DS.'posts'.DS.'*'.DS.'*'.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
             $element = $this->createElement($filepath, \pathinfo($filepath, PATHINFO_FILENAME));
-            $index[(string)$element->key] = $element;
+            if (!isset($element->key)) {
+                throw new \RuntimeException("Invalid format of index element: " . print_r($element, true));
+            }
+            $key = (string)$element->key;
+            if ($element->key === 'index') {
+                $key = 'posts'.FWD_SLASH.$element->key;
+            }
+            $index[$key] = $element;
         }
         $this->writeIndex($this->root.DS.self::POST_INDEX_FILE, $index);
         return $index;
@@ -176,6 +206,9 @@ final class IndexManager
     private function buildTagIndex(array &$tag2PostsIndex, array &$cat2PostIndex): array {
         $index = [];
         foreach ($this->postIndex as $post) {
+            if (!isset($post->key) || !isset($post->tags) || !isset($post->category)) {
+                throw new \RuntimeException("Invalid format of index element: " . print_r($post, true));
+            }
             foreach ($post->tags as $tag) {
                 $index[(string)$tag] = $this->createElementClass($tag, \ucfirst(\str_replace('-', ' ', $tag)), ENUM_TAG);
                 $tag2PostsIndex[$tag][] = $post->key;

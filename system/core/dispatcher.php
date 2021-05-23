@@ -105,7 +105,7 @@ function dispatch(string $uri = null, string $method = GET): string {
 //        $uri = parse_uri($_SERVER['REQUEST_URI']);
         $uri = strip_url_parameters($_SERVER['REQUEST_URI']);
         $uri = \trim($uri, FWD_SLASH);
-        $uri = empty($uri) ? 'home' : $uri;
+        $uri = empty($uri) ? 'index' : $uri;
         $method = \strtoupper($_SERVER['REQUEST_METHOD']);
     }
     if (($retval = route($method, $uri)) === null) {

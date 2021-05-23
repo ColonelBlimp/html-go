@@ -11,6 +11,10 @@ final class ModelFactory
         if (!$obj instanceof \stdClass) {
             throw new \RuntimeException();
         }
+        $data = (array)$obj;
+        if ($data['key'] === 'index') {
+echo 'Content object with a list!';
+        }
         return new Content($this->createSiteObject(), (array)$obj);
     }
 

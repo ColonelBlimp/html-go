@@ -160,35 +160,7 @@ function get_content_object(string $slug): ?Content {
     if (slug_exists($slug) === false) {
         return null;
     }
-    return get_model_factory()->createFromElement(get_index_manager()->getElementFromSlugIndex($slug));
-}
-
-/**
- * Get a near empty <code>Content</code> which does hold a list of <code>Content</code> objects
- * which might be a list of posts, categories or tags.
- * @param int $type See constants: <code>POST_LIST_TYPE, CAT_LIST_TYPE, TAG_LIST_TYPE</code>
- * @param int $page_number
- * @param int $per_page
- * @throws RuntimeException
- * @return Content
- */
-function get_content_list_object(int $type, int $page_number = 1, int $per_page = 5): Content {
-    echo __FUNCTION__ . PHP_EOL;
-    $data = [];
-    switch ($type) {
-        case POST_LIST_TYPE:
-            $data['list'] = [];
-            break;
-        case CAT_LIST_TYPE:
-            $data['list'] = [];
-            break;
-        case TAG_LIST_TYPE:
-            $data['list'] = [];
-            break;
-        default:
-            throw new RuntimeException("Unknown list type [$type]");
-    }
-    return get_model_factory()->createFromData($data);
+    return get_model_factory()->create(get_index_manager()->getElementFromSlugIndex($slug));
 }
 
 /**

@@ -2,12 +2,11 @@
 use html_go\model\Config;
 
 // main index of the site
-get('home', function(string $uri): string {
+get('index', function(string $uri): string {
     $template = 'main.html';
-    if (get_config_bool(Config::KEY_STATIC_INDEX)) {
-        $content = get_content_object('home');
-    } else {
-        $content = get_content_list_object(POST_LIST_TYPE);
+    $content = get_content_object('index');
+    if (!get_config_bool(Config::KEY_STATIC_INDEX)) {
+        $content = get_content_object('post/index');
         $template = 'posts_list.html';
     }
     if ($content === null) {
