@@ -1,13 +1,12 @@
 <?php declare(strict_types=1);
 namespace html_go\indexing;
 
+use html_go\traits\ElementCreator;
 
 if (!\defined('MODE')) {
     \define('MODE', 0777);
 }
-if (!\defined('EMPTY_VALUE')) {
-    \define('EMPTY_VALUE', '<empty>');
-}
+
 //TODO: Replace this with ENUMS from php 8.1
 \define('ENUM_PAGE', 'pages');
 \define('ENUM_CATEGORY', 'categories');
@@ -16,6 +15,8 @@ if (!\defined('EMPTY_VALUE')) {
 
 final class IndexManager
 {
+    use ElementCreator;
+
     private const CATEGORIES_DIR = 'content'.DS.'common'.DS.'categories';
     private const PAGES_DIR = 'content'.DS.'common'.DS.'pages';
     private const INDEX_DIR = 'cache'.DS.'indexes';
@@ -118,6 +119,14 @@ final class IndexManager
      */
     function elementExists(string $key): bool {
         return isset($this->slugIndex[$key]);
+    }
+
+    /**
+     * Return the posts index.
+     * @return array<string, object>
+     */
+    function getPostsIndex(): array {
+        return $this->postIndex;
     }
 
     /**
@@ -290,35 +299,6 @@ final class IndexManager
         $parts = \explode(DS, $pathinfo['dirname']);
         $cnt = \count($parts);
         return $this->createElementClass($key, $filepath, ENUM_POST, $parts[$cnt - 2], $parts[$cnt - 1], $parts[$cnt - 4], $dateString, $tagList);
-    }
-
-    /**
-     * Creates and populates a stdClass for an index element.
-     * @param string $key
-     * @param string $path
-     * @param string $section
-     * @param string $category
-     * @param string $type
-     * @param string $username
-     * @param string $date
-     * @param string $tagList
-     * @return object stdClass
-     */
-    private function createElementClass(string $key, string $path, string $section, string $category = EMPTY_VALUE, string $type = EMPTY_VALUE, string $username = EMPTY_VALUE, string $date = EMPTY_VALUE, string $tagList = ''): object {
-        $tags = [];
-        if (!empty($tagList)) {
-            $tags = \explode(',', $tagList);
-        }
-        $obj = new \stdClass();
-        $obj->key = $key;
-        $obj->path = $path;
-        $obj->section = $section;
-        $obj->category = $category;
-        $obj->type = $type;
-        $obj->username = $username;
-        $obj->date = $date;
-        $obj->tags = $tags;
-        return $obj;
     }
 
     /**

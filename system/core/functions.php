@@ -156,11 +156,35 @@ function get_config_bool(string $key, bool $default = false): bool {
  * @return Content|NULL if no content was found associated with the given slug <code>null</code> is returned.
  */
 function get_content_object(string $slug): ?Content {
-    echo __FUNCTION__ . ': ' . $slug . PHP_EOL;
+    if ($slug === 'posts/index') {
+        return get_model_factory()->createPostList(get_posts());
+    }
     if (slug_exists($slug) === false) {
         return null;
     }
     return get_model_factory()->create(get_index_manager()->getElementFromSlugIndex($slug));
+}
+
+/**
+ * Returns a pagination page of posts.
+ * @param int $page_number The page number
+ * @param int $per_page Items per page
+ * @return array<Content> The resulting list of posts
+ */
+function get_posts(int $page_number = 1, int $per_page = 5): array {
+
+    $posts = get_index_manager()->getPostsIndex();
+    $posts = \array_slice($posts, ($page_number - 1) * $per_page, $per_page);
+
+    print_r($posts);
+
+    $list = [];
+    $factory = get_model_factory();
+    foreach ($posts as $post) {
+        $list[] = $factory->create($post);
+    }
+
+    return $list;
 }
 
 /**

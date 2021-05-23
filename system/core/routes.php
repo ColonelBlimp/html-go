@@ -15,7 +15,7 @@ get('index', function(string $uri): string {
     }
     return render($template, get_template_context($content));
 });
-
+/*
 // Single Category
 get('category/:name', function(string $uri, string $name): string {
     if (($content = get_content_object($name)) === null) {
@@ -31,7 +31,7 @@ get('tag/:name', function(string $uri, string $name): string {
     }
     return render('main.html', get_template_context($content));
 });
-
+*/
 /*
  * Catch-all route. It does a regex check on the given URI, if it matches,
  * then the request is processed as a request for a blog post, otherwise

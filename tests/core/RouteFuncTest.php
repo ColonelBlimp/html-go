@@ -3,7 +3,7 @@ namespace html_go;
 
 use PHPUnit\Framework\TestCase;
 
-class RouteFuncTestOld extends TestCase
+class RouteFuncTest extends TestCase
 {
     function testIndexRoute(): void {
         $this->assertIsString(route('GET', 'home'));
