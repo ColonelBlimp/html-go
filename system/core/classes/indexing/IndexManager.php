@@ -29,7 +29,7 @@ final class IndexManager
     private string $root;
 
     /**
-     * @var array<string, Element> $slugIndex
+     * @var array<string, object> $slugIndex
      */
     private array $slugIndex;
 
@@ -44,22 +44,22 @@ final class IndexManager
     private array $tag2PostIndex;
 
     /**
-     * @var array<string, Element> $postIndex
+     * @var array<string, object> $postIndex
      */
     private array $postIndex;
 
     /**
-     * @var array<string, Element> $pageIndex
+     * @var array<string, object> $pageIndex
      */
     private array $pageIndex;
 
     /**
-     * @var array<string, Element> $categoryIndex
+     * @var array<string, object> $categoryIndex
      */
     private array $categoryIndex;
 
     /**
-     * @var array<string, Element> $tagIndex
+     * @var array<string, object> $tagIndex
      */
     private array $tagIndex;
 
@@ -104,6 +104,8 @@ final class IndexManager
             $this->categoryIndex = $this->buildCategoryIndex();
             $this->pageIndex = $this->buildPageIndex();
             $this->postIndex = $this->buildPostsIndex();
+            $this->tag2PostIndex = [];
+            $this->category2PostsIndex = [];
             $this->tagIndex = $this->buildTagIndex($this->tag2PostIndex, $this->category2PostsIndex);
             return;
         } else {
@@ -118,13 +120,13 @@ final class IndexManager
     /**
      * Scans the <i>content/common/categories</i> folder creating and indexing all the files.
      * When the index is built, it is also loaded.
-     * @return array<int, object>
+     * @return array<string, object>
      */
     private function buildCategoryIndex(): array {
         $index = [];
         foreach ($this->parseDirectory($this->root.DS.self::CATEGORIES_DIR.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
             $key = 'category'.FWD_SLASH.\pathinfo($filepath, PATHINFO_FILENAME);
-            $index[] = $this->createElement($filepath, $key);
+            $index[$key] = $this->createElement($filepath, $key);
         }
         $this->writeIndex($this->root.DS.self::CAT_INDEX_FILE, $index);
         return $index;
@@ -133,7 +135,7 @@ final class IndexManager
     /**
      * Scans the <i>content/pages</i> folder creating and indexing all the files and folders.
      * When the index is built, it is also loaded.
-     * @return array<int, object>
+     * @return array<string, object>
      */
     private function buildPageIndex(): array {
         $index = [];
@@ -142,7 +144,8 @@ final class IndexManager
         $pages = $this->scanDirectory($pagesRoot);
         \sort($pages);
         foreach ($pages as $filepath) {
-            $index[] = $this->createElement($filepath, \substr(\substr($filepath, $len), 0, -3));
+            $key = \substr(\substr($filepath, $len), 0, -3);
+            $index[$key] = $this->createElement($filepath, $key);
         }
         $this->writeIndex($this->root.DS.self::PAGE_INDEX_FILE, $index);
         return $index;
@@ -151,12 +154,13 @@ final class IndexManager
     /**
      * Scans the <i>content/user-data/[username]/posts</i> folder creating and indexing all files.
      * When the index is built, it is also loaded.
-     * @return array<int, object>
+     * @return array<string, object>
      */
     private function buildPostsIndex(): array {
         $index = [];
         foreach ($this->parseDirectory($this->root.DS.self::USER_DATA_DIR.DS.'*'.DS.'posts'.DS.'*'.DS.'*'.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
-            $index[] = $this->createElement($filepath, \pathinfo($filepath, PATHINFO_FILENAME));
+            $element = $this->createElement($filepath, \pathinfo($filepath, PATHINFO_FILENAME));
+            $index[(string)$element->key] = $element;
         }
         $this->writeIndex($this->root.DS.self::POST_INDEX_FILE, $index);
         return $index;
@@ -165,17 +169,17 @@ final class IndexManager
     /**
      * Scans through all the posts extracting the tags.
      * When the index is built, it is also loaded.
-     * @param array $tag2PostsIndex
-     * @param array $cat2PostIndex
-     * @return array<int, object>
+     * @param array<mixed> $tag2PostsIndex
+     * @param array<mixed> $cat2PostIndex
+     * @return array<string, object>
      */
     private function buildTagIndex(array &$tag2PostsIndex, array &$cat2PostIndex): array {
         $index = [];
         foreach ($this->postIndex as $post) {
             foreach ($post->tags as $tag) {
-                $index[$tag] = $this->createElementClass($tag, \ucfirst(\str_replace('-', ' ', $tag)), ENUM_TAG);
+                $index[(string)$tag] = $this->createElementClass($tag, \ucfirst(\str_replace('-', ' ', $tag)), ENUM_TAG);
+                $tag2PostsIndex[$tag][] = $post->key;
             }
-            $tag2PostsIndex[$tag][] = $post->key;
             $cat2PostIndex[$post->category] = $post->key;
         }
         $this->writeIndex($this->root.DS.self::TAG_INDEX_FILE, $index);

@@ -1,17 +1,14 @@
 <?php declare(strict_types=1);
 namespace html_go\model;
 
-use html_go\indexing\Element;
-
 final class Content
 {
     /**
      * Content constructor.
      * @param Site $site
-     * @param Element $element
      * @param array <string, mixed> $fileData
      */
-    function __construct(private Site $site, private Element $element, private array $fileData) {
+    function __construct(private Site $site, private array $fileData) {
     }
 
     /**
