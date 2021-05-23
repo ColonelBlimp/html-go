@@ -3,12 +3,29 @@ namespace html_go\model;
 
 final class Content
 {
+    private Site $site;
+
+    /**
+     * @var array<string, mixed> $fileData
+     */
+    private array $fileData;
+
     /**
      * Content constructor.
      * @param Site $site
      * @param array <string, mixed> $fileData
      */
-    function __construct(private Site $site, private array $fileData) {
+    function __construct(Site $site, array $fileData) {
+        $this->site = $site;
+        $this->fileData = [
+            'key' => '',
+            'description' => '',
+            'body' => '',
+            'menus' => [],
+            'list' => [],
+            'tags' => []
+        ];
+        $this->fileData = \array_merge($this->fileData, $fileData);
     }
 
     /**
