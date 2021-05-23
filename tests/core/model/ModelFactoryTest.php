@@ -18,6 +18,6 @@ class ModelFactoryTest extends TestCase
         $factory = new ModelFactory($cfg);
         $this->assertNotNull($factory);
         $content = $factory->create($obj);
-        print_r($content);
+//        print_r($content);
     }
 }

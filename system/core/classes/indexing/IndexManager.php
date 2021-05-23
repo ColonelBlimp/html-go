@@ -94,6 +94,7 @@ final class IndexManager
                 throw new \RuntimeException("Unable to create directory [$tmp]");
             }
         }
+
         $this->Initialize();
     }
 
@@ -111,7 +112,7 @@ final class IndexManager
     }
 
     /**
-     * Check if an $key exists in the <b>slug index</b>.
+     * Check if an key exists in the <b>slug index</b>.
      * @param string $key
      * @return bool <code>true</code> if exists, otherwise <code>false</code>
      */
@@ -130,7 +131,6 @@ final class IndexManager
             $this->tag2PostIndex = [];
             $this->category2PostsIndex = [];
             $this->tagIndex = $this->buildTagIndex($this->tag2PostIndex, $this->category2PostsIndex);
-            return;
         } else {
             $this->categoryIndex = $this->loadIndex($this->root.DS.self::CAT_INDEX_FILE);
             $this->postIndex = $this->loadIndex($this->root.DS.self::POST_INDEX_FILE);
@@ -148,7 +148,7 @@ final class IndexManager
     private function buildCategoryIndex(): array {
         $index = [];
         foreach ($this->parseDirectory($this->root.DS.self::CATEGORIES_DIR.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
-            $key = 'category'.FWD_SLASH.\pathinfo($filepath, PATHINFO_FILENAME);
+            $key = 'categories'.FWD_SLASH.\pathinfo($filepath, PATHINFO_FILENAME);
             $index[$key] = $this->createElement($filepath, $key);
         }
         $this->writeIndex($this->root.DS.self::CAT_INDEX_FILE, $index);
@@ -167,7 +167,7 @@ final class IndexManager
         $pages = $this->scanDirectory($pagesRoot);
         \sort($pages);
         foreach ($pages as $filepath) {
-            $key = \substr(\substr($filepath, $len), 0, -3);
+            $key = \str_replace(DS, FWD_SLASH, \substr(\substr($filepath, $len), 0, -3));
             $index[$key] = $this->createElement($filepath, $key);
         }
         $this->writeIndex($this->root.DS.self::PAGE_INDEX_FILE, $index);
@@ -186,11 +186,12 @@ final class IndexManager
             if (!isset($element->key)) {
                 throw new \RuntimeException("Invalid format of index element: " . print_r($element, true));
             }
-            $key = (string)$element->key;
-            if ($element->key === 'index') {
-                $key = 'posts'.FWD_SLASH.$element->key;
-            }
-            $index[$key] = $element;
+// This page will never exist. This must be handled as a special case.
+//            $key = (string)$element->key;
+//            if ($element->key === 'index') {
+//                $key = 'posts'.FWD_SLASH.$element->key;
+//            }
+            $index[(string)$element->key] = $element;
         }
         $this->writeIndex($this->root.DS.self::POST_INDEX_FILE, $index);
         return $index;
@@ -206,7 +207,7 @@ final class IndexManager
     private function buildTagIndex(array &$tag2PostsIndex, array &$cat2PostIndex): array {
         $index = [];
         foreach ($this->postIndex as $post) {
-            if (!isset($post->key) || !isset($post->tags) || !isset($post->category)) {
+            if (!isset($post->key, $post->tags, $post->category)) {
                 throw new \RuntimeException("Invalid format of index element: " . print_r($post, true));
             }
             foreach ($post->tags as $tag) {

@@ -5,8 +5,10 @@ use PHPUnit\Framework\TestCase;
 
 final class IndexManagerTest extends TestCase
 {
-    function testInstantiation(): void {
-        $this->assertNotNull(new IndexManager(TEST_DATA_ROOT));
+    function testInstantiation(): IndexManager {
+        $manager = new IndexManager(TEST_DATA_ROOT);
+        $this->assertNotNull($manager);
+        return $manager;
     }
 
     function testInvalidContentDirException(): void {
@@ -14,4 +16,12 @@ final class IndexManagerTest extends TestCase
         new IndexManager('unknown');
     }
 
+    /**
+     * @depends testInstantiation
+     */
+    function testIndexPageSlugs(IndexManager $manager): void {
+        $this->assertNotNull($manager);
+        $this->assertTrue($manager->elementExists('index'));
+        $this->assertTrue($manager->elementExists('categories/index'));
+    }
 }

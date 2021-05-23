@@ -4,9 +4,10 @@ use html_go\model\Config;
 // main index of the site
 get('index', function(string $uri): string {
     $template = 'main.html';
-    $content = get_content_object('index');
-    if (!get_config_bool(Config::KEY_STATIC_INDEX)) {
-        $content = get_content_object('post/index');
+    if (get_config_bool(Config::KEY_STATIC_INDEX)) {
+        $content = get_content_object('index');
+    } else {
+        $content = get_content_object('posts/index');
         $template = 'posts_list.html';
     }
     if ($content === null) {
