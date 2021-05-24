@@ -20,7 +20,7 @@ final class ModelFactory
      */
     function createSingleContentObject(object $obj): Content {
         if (!$obj instanceof \stdClass) {
-            throw new \RuntimeException();
+            throw new \RuntimeException("Object parameter not an instance of stdClass: " . print_r($obj, true)); // @codeCoverageIgnore
         }
         return new Content($this->createSiteObject(), $obj);
     }

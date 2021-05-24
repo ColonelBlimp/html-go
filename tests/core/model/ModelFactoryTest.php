@@ -12,5 +12,9 @@ class ModelFactoryTest extends TestCase
         $manager = new IndexManager(TEST_DATA_ROOT);
         $content = $factory->createSingleContentObject($manager->getElementFromSlugIndex('index'));
         $this->assertNotNull($content);
+        $obj = new \stdClass();
+        $obj->title = 'List Object 1';
+        $content = $factory->createListContentObject("Test List", [$obj]);
+        $this->assertNotNull($content);
     }
 }
