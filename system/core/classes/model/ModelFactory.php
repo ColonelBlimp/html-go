@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace html_go\model;
 
-use html_go\markdown\Markdown;
+use html_go\markdown\MarkdownParser;
 
 /**
  * Responsible for creating <code>Content</code> objects ready to be used in templates.
@@ -11,9 +11,9 @@ use html_go\markdown\Markdown;
 final class ModelFactory
 {
     private Config $config;
-    private Markdown $parser;
+    private MarkdownParser $parser;
 
-    function __construct(Config $config, Markdown $parser) {
+    function __construct(Config $config, MarkdownParser $parser) {
         $this->config = $config;
         $this->parser = $parser;
     }

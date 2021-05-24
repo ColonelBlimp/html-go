@@ -2,13 +2,13 @@
 
 use html_go\i18n\i18n;
 use html_go\indexing\IndexManager;
+use html_go\markdown\MarkdownParser;
+use html_go\markdown\ParsedownParser;
 use html_go\model\Config;
 use html_go\model\Content;
 use html_go\model\ModelFactory;
 use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
-use html_go\markdown\Markdown;
-use html_go\markdown\ParsedownParser;
 
 /**
  * Build and return the template context.
@@ -122,7 +122,11 @@ function get_model_factory(): ModelFactory {
     return $factory;
 }
 
-function get_markdown_parser(): Markdown {
+/**
+ * Returns the instance of the <code>MarkdownParser</code>.
+ * @return MarkdownParser
+ */
+function get_markdown_parser(): MarkdownParser {
     static $parser = null;
     if (empty($parser)) {
         $parser = new ParsedownParser();

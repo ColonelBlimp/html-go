@@ -3,7 +3,12 @@ namespace html_go\markdown;
 
 use Parsedown;
 
-final class ParsedownParser implements Markdown
+/**
+ * Implementation for <code>Parsedown</code>.
+ * @author Marc L. Veary
+ * @since 1.0
+ */
+final class ParsedownParser implements MarkdownParser
 {
     private Parsedown $parser;
 
