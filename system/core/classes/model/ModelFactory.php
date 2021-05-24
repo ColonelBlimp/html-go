@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 namespace html_go\model;
 
+use html_go\markdown\Markdown;
+
 /**
  * Responsible for creating <code>Content</code> objects ready to be used in templates.
  * @author Marc L. Veary
@@ -8,7 +10,12 @@ namespace html_go\model;
  */
 final class ModelFactory
 {
-    function __construct(private Config $config) {
+    private Config $config;
+    private Markdown $parser;
+
+    function __construct(Config $config, Markdown $parser) {
+        $this->config = $config;
+        $this->parser = $parser;
     }
 
     /**
@@ -68,7 +75,7 @@ final class ModelFactory
             throw new \RuntimeException("file_get_contens() failed opening [$stdClass->path]");
         }
 
-        $stdClass = $this->parseFrontMatter($stdClass, $data);
+        $stdClass = $this->parseContentFile($stdClass, $data);
 
         return $stdClass;
     }
@@ -80,7 +87,7 @@ final class ModelFactory
      * @param string $data
      * @throws \RuntimeException
      */
-    private function parseFrontMatter(object $stdClass, string $data): object {
+    private function parseContentFile(object $stdClass, string $data): object {
         $str = \str_replace(["\n\r", "\r\n"], "\n", $data);
         $str = \str_replace("\t", " ", $str);
         $lines = \explode("\n", $data);
@@ -108,6 +115,14 @@ final class ModelFactory
                 $stdClass->$key = $val;
             }
         }
+
+        if (($pos = \strrpos($str, '+++')) === false) {
+            throw new \RuntimeException("Somehow, can't find '+++' in [$str]");
+        }
+
+        $body = \substr($str, $pos + 3);
+        $stdClass->body = $this->parser->parse($body);
+
         return $stdClass;
     }
 }

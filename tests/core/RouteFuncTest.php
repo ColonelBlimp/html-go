@@ -20,13 +20,4 @@ class RouteFuncTest extends TestCase
     function testGetPost(): void {
         $this->assertStringNotContainsString('404', route('GET', '/2021/10/testered'));
     }
-/*
-    function testGetTag(): void {
-        $this->assertStringContainsString('404', route('GET', '/tag/android-development'));
-    }
-
-    function testGetPost(): void {
-        $this->assertStringContainsString('404', route('GET', '/2021/04/honey-processing'));
-    }
-*/
 }

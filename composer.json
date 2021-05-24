@@ -10,7 +10,8 @@
 	],
 	"require" : {
 		"php" : ">=8.0",
-		"twig/twig" : "~3.3"
+		"twig/twig" : "~3.3",
+		"erusev/parsedown" : "~1.7"
 	},
 	"config" : {
 		"vendor-dir" : "system/vendor"

@@ -7,6 +7,8 @@ use html_go\model\Content;
 use html_go\model\ModelFactory;
 use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
+use html_go\markdown\Markdown;
+use html_go\markdown\ParsedownParser;
 
 /**
  * Build and return the template context.
@@ -115,9 +117,17 @@ function get_config(): Config {
 function get_model_factory(): ModelFactory {
     static $factory = null;
     if (empty($factory)) {
-        $factory = new ModelFactory(get_config());
+        $factory = new ModelFactory(get_config(), get_markdown_parser());
     }
     return $factory;
+}
+
+function get_markdown_parser(): Markdown {
+    static $parser = null;
+    if (empty($parser)) {
+        $parser = new ParsedownParser();
+    }
+    return $parser;
 }
 
 /**
