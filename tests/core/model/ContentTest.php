@@ -12,11 +12,15 @@ final class ContentTest extends TestCase
         $this->assertNotNull($site);
         $content = new Content($site, new \stdClass());
         $this->assertNotNull($content);
-
+        $this->assertInstanceOf(Site::class, $content->getSite());
+        $this->assertSame(EMPTY_VALUE, $content->getTitle());
+        $this->assertSame(EMPTY_VALUE, $content->getDescription());
         $this->assertIsArray($content->getMenus());
         $this->assertEmpty($content->getMenus());
         $this->assertIsArray($content->getListing());
         $this->assertEmpty($content->getListing());
         $this->assertSame(EMPTY_VALUE, $content->getRawBody());
+        $this->assertIsArray($content->getTags());
+        $this->assertEmpty($content->getTags());
     }
 }
