@@ -16,6 +16,10 @@ class RouteFuncTest extends TestCase
     function testGetCategory(): void {
         $this->assertStringNotContainsString('404', route('GET', '/category/uncategorized'));
     }
+
+    function testGetPost(): void {
+        $this->assertStringNotContainsString('404', route('GET', '/2021/10/testered'));
+    }
 /*
     function testGetTag(): void {
         $this->assertStringContainsString('404', route('GET', '/tag/android-development'));
