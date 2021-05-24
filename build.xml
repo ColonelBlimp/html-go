@@ -16,9 +16,11 @@
         <mkdir dir="${build.dir}/logs" />
         <delete dir="${basedir}/cache/indexes" />
         <delete dir="${basedir}/tests/test-data/cache/indexes" />
+        <delete file="${basedir}/tests/test-data/content/user-data/@testuser/posts/harvesting/regular/2021010100000__s.md" />
+        <delete file="${basedir}/tests/test-data/content/user-data/@testuser/posts/harvesting/regular/20210101000000_wibble.md" />
     </target>
 
-    <target name="full" depends="prepare, php-lint, phpcs, phpmd, phpcpd, phploc, pdepend, phpstan, phpunit, phpcb">
+    <target name="full" depends="prepare, php-lint, phpcs, phpmd, phpcpd, phploc, pdepend, phpstan, phpunit, phpcb, cleanup">
         <delete file="${basedir}/System.out" />
     </target>
 
@@ -114,8 +116,11 @@
     </target>
 
     <target name="cleanup" description="Clean up cache">
-        <delete dir="${basedir}/cache/index"/>
         <delete file="${basedir}/cache/installedVersion.json"/>
+        <delete dir="${basedir}/cache/indexes" />
+        <delete dir="${basedir}/tests/test-data/cache/indexes" />
+        <delete file="${basedir}/tests/test-data/content/user-data/@testuser/posts/harvesting/regular/2021010100000__s.md" />
+        <delete file="${basedir}/tests/test-data/content/user-data/@testuser/posts/harvesting/regular/20210101000000_wibble.md" />
     </target>
 
 </project>

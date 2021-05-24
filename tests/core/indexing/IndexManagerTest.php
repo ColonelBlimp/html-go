@@ -24,4 +24,20 @@ final class IndexManagerTest extends TestCase
         $this->assertTrue($manager->elementExists('index'));
         $this->assertTrue($manager->elementExists('categories/index'));
     }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testSlugIndexException(IndexManager $manager): void {
+        $this->expectException(\RuntimeException::class);
+        $manager->getElementFromSlugIndex('unknown_slug');
+    }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testGetPostIndex(IndexManager $manager): void {
+        $this->assertNotNull($manager->getPostsIndex());
+        $this->assertIsArray($manager->getPostsIndex());
+    }
 }

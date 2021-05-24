@@ -74,9 +74,8 @@ final class IndexManager
         }
         $this->root = $tmp;
         if (!\is_dir($this->root.DS.self::CATEGORIES_DIR)) {
-            $tmp = $this->root.DS.self::CATEGORIES_DIR;
-            throw new \RuntimeException(
-                "Content directory format is invalid. Directory does not exist [$tmp]");
+            $tmp = $this->root.DS.self::CATEGORIES_DIR; // @codeCoverageIgnore
+            throw new \RuntimeException("Content directory format is invalid. Directory does not exist [$tmp]"); // @codeCoverageIgnore
         }
         if (!\is_dir($this->root.DS.self::PAGES_DIR)) {
             $tmp = $this->root.DS.self::PAGES_DIR; // @codeCoverageIgnore
@@ -88,12 +87,21 @@ final class IndexManager
         }
         if (!\file_exists($this->root.DS.self::INDEX_DIR)) {
             if (\mkdir($this->root.DS.self::INDEX_DIR, MODE, true) === false) {
-                $tmp = $this->root.DS.self::INDEX_DIR;
-                throw new \RuntimeException("Unable to create directory [$tmp]");
+                $tmp = $this->root.DS.self::INDEX_DIR; // @codeCoverageIgnore
+                throw new \RuntimeException("Unable to create directory [$tmp]"); // @codeCoverageIgnore
             }
         }
 
         $this->Initialize();
+    }
+
+    function reindex(): void {
+        $this->categoryIndex = $this->buildCategoryIndex();
+        $this->pageIndex = $this->buildPageIndex();
+        $this->postIndex = $this->buildPostsIndex();
+        $this->tag2PostIndex = [];
+        $this->category2PostsIndex = [];
+        $this->tagIndex = $this->buildTagIndex($this->tag2PostIndex, $this->category2PostsIndex);
     }
 
     /**
@@ -131,12 +139,7 @@ final class IndexManager
      */
     private function Initialize(): void {
         if (\file_exists($this->root.DS.self::POST_INDEX_FILE) === false) {
-            $this->categoryIndex = $this->buildCategoryIndex();
-            $this->pageIndex = $this->buildPageIndex();
-            $this->postIndex = $this->buildPostsIndex();
-            $this->tag2PostIndex = [];
-            $this->category2PostsIndex = [];
-            $this->tagIndex = $this->buildTagIndex($this->tag2PostIndex, $this->category2PostsIndex);
+            $this->reindex();
         } else {
             $this->categoryIndex = $this->loadIndex($this->root.DS.self::CAT_INDEX_FILE);
             $this->postIndex = $this->loadIndex($this->root.DS.self::POST_INDEX_FILE);
@@ -190,13 +193,8 @@ final class IndexManager
         foreach ($this->parseDirectory($this->root.DS.self::USER_DATA_DIR.DS.'*'.DS.'posts'.DS.'*'.DS.'*'.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
             $element = $this->createElement($filepath, \pathinfo($filepath, PATHINFO_FILENAME));
             if (!isset($element->key)) {
-                throw new \RuntimeException("Invalid format of index element: " . print_r($element, true));
+                throw new \RuntimeException("Invalid format of index element: " . print_r($element, true)); // @codeCoverageIgnore
             }
-// This page will never exist. This must be handled as a special case.
-//            $key = (string)$element->key;
-//            if ($element->key === 'index') {
-//                $key = 'posts'.FWD_SLASH.$element->key;
-//            }
             $index[(string)$element->key] = $element;
         }
         $this->writeIndex($this->root.DS.self::POST_INDEX_FILE, $index);
@@ -214,7 +212,7 @@ final class IndexManager
         $index = [];
         foreach ($this->postIndex as $post) {
             if (!isset($post->key, $post->tags, $post->category)) {
-                throw new \RuntimeException("Invalid format of index element: " . print_r($post, true));
+                throw new \RuntimeException("Invalid format of index element: " . print_r($post, true)); // @codeCoverageIgnore
             }
             foreach ($post->tags as $tag) {
                 $index[(string)$tag] = $this->createElementClass($tag, \ucfirst(\str_replace('-', ' ', $tag)), ENUM_TAG);
