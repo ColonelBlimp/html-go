@@ -29,12 +29,7 @@ final class ModelFactory
         if (!$obj instanceof \stdClass) {
             throw new \RuntimeException("Object parameter not an instance of stdClass: " . print_r($obj, true)); // @codeCoverageIgnore
         }
-        //TODO: Load the file and add the data to the $obj
-        echo 'Before: '.print_r($obj, true);
-        $obj = $this->loadDataFile($obj);
-        echo 'After: '.print_r($obj, true);
-
-        return new Content($this->createSiteObject(), $obj);
+        return new Content($this->createSiteObject(), $this->loadDataFile($obj));
     }
 
     /**
@@ -63,21 +58,17 @@ final class ModelFactory
      */
     private function createObject(...$args): object {
         $obj = (object)$args;
-//        print_r($obj);
         return $obj;
     }
 
     private function loadDataFile(object $stdClass): object {
         if (!isset($stdClass->path)) {
-            throw new \RuntimeException("Object does not have 'path' property " . print_r($stdClass, true));
+            throw new \RuntimeException("Object does not have 'path' property " . print_r($stdClass, true)); // @codeCoverageIgnore
         }
         if (($data = \file_get_contents($stdClass->path)) === false) {
-            throw new \RuntimeException("file_get_contens() failed opening [$stdClass->path]");
+            throw new \RuntimeException("file_get_contens() failed opening [$stdClass->path]"); // @codeCoverageIgnore
         }
-
-        $stdClass = $this->parseContentFile($stdClass, $data);
-
-        return $stdClass;
+        return $this->parseContentFile($stdClass, $data);
     }
 
     /**
@@ -117,11 +108,10 @@ final class ModelFactory
         }
 
         if (($pos = \strrpos($str, '+++')) === false) {
-            throw new \RuntimeException("Somehow, can't find '+++' in [$str]");
+            throw new \RuntimeException("Somehow, can't find '+++' in [$str]"); // @codeCoverageIgnore
         }
 
-        $body = \substr($str, $pos + 3);
-        $stdClass->body = $this->parser->parse($body);
+        $stdClass->body = $this->parser->parse(\substr($str, $pos + 3));
 
         return $stdClass;
     }
