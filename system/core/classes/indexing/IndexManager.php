@@ -14,7 +14,7 @@ if (!\defined('MODE')) {
 
 final class IndexManager
 {
-    private const CATEGORIES_DIR = 'content'.DS.'common'.DS.'categories';
+    private const CATEGORIES_DIR = 'content'.DS.'common'.DS.'category';
     private const PAGES_DIR = 'content'.DS.'common'.DS.'pages';
     private const INDEX_DIR = 'cache'.DS.'indexes';
     private const USER_DATA_DIR = 'content'.DS.'user-data';
@@ -157,7 +157,7 @@ final class IndexManager
     private function buildCategoryIndex(): array {
         $index = [];
         foreach ($this->parseDirectory($this->root.DS.self::CATEGORIES_DIR.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
-            $key = 'categories'.FWD_SLASH.\pathinfo($filepath, PATHINFO_FILENAME);
+            $key = 'category'.FWD_SLASH.\pathinfo($filepath, PATHINFO_FILENAME);
             $index[$key] = $this->createElement($filepath, $key);
         }
         $this->writeIndex($this->root.DS.self::CAT_INDEX_FILE, $index);

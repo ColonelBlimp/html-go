@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 class RouteFuncTest extends TestCase
 {
     function testIndexRoute(): void {
-        $this->assertIsString(route('GET', 'home'));
+        $this->assertStringContainsString('404', route('GET', 'home'));
     }
 
     function testGetStaticPage(): void {
@@ -14,7 +14,7 @@ class RouteFuncTest extends TestCase
     }
 
     function testGetCategory(): void {
-        $this->assertIsString(route('GET', '/category/uncategorized'));
+        $this->assertStringNotContainsString('404', route('GET', '/category/uncategorized'));
     }
 /*
     function testGetTag(): void {

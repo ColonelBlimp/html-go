@@ -22,7 +22,7 @@ final class IndexManagerTest extends TestCase
     function testIndexPageSlugs(IndexManager $manager): void {
         $this->assertNotNull($manager);
         $this->assertTrue($manager->elementExists('index'));
-        $this->assertTrue($manager->elementExists('categories/index'));
+        $this->assertTrue($manager->elementExists('category/index'));
     }
 
     /**
