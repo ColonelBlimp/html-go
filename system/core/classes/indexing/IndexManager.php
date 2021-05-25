@@ -24,6 +24,7 @@ final class IndexManager
     private const TAG_INDEX_FILE = self::INDEX_DIR.DS.'tags.inx';
     private const TAG2POSTS_INDEX_FILE = self::INDEX_DIR.DS.'tag2posts.inx';
     private const CAT2POSTS_INDEX_FILE = self::INDEX_DIR.DS.'cat2posts.inx';
+    private const POST_LANDING_FILE = 'content'.DS.'common'.DS.'landing'.DS.'index.md';
 
     private string $root;
 
@@ -190,6 +191,10 @@ final class IndexManager
      */
     private function buildPostsIndex(): array {
         $index = [];
+        // Read landing page special case
+        $landing = $this->createElement($this->root.DS.self::POST_LANDING_FILE, 'posts/index');
+        $index['posts/index'] = $landing;
+
         foreach ($this->parseDirectory($this->root.DS.self::USER_DATA_DIR.DS.'*'.DS.'posts'.DS.'*'.DS.'*'.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
             $element = $this->createElement($filepath, \pathinfo($filepath, PATHINFO_FILENAME));
             if (!isset($element->key)) {
@@ -277,6 +282,9 @@ final class IndexManager
         }
         if (\strpos($filepath, self::PAGES_DIR) !== false) {
             return $this->createElementClass($key, $filepath, ENUM_PAGE);
+        }
+        if (\strpos($filepath, self::POST_LANDING_FILE) !== false) {
+            return $this->createElementClass($key, $filepath, ENUM_POST);
         }
         if (\strlen($key) < 17) {
             throw new \InvalidArgumentException("Content filename is too short [$key]");

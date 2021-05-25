@@ -26,7 +26,6 @@ final class Content
         $this->site = $site;
         $this->fileData = $this->initDataArray();
         $this->fileData = \array_merge($this->fileData, (array)$dataClass);
-//        print_r($this->fileData);
     }
 
     /**

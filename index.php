@@ -8,7 +8,8 @@ if (\getenv('CLI_ENV') !== null) {
 //    new IndexManager(APP_ROOT.DS.'tests'.DS.'test-data');
 //    echo 'Success!';
 //    echo dispatch('/2021/10/testered');
-    route('GET', 'home');
+    echo dispatch('index');
+//    route('GET', 'home');
 } else {
     echo dispatch();
 }

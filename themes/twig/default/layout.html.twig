@@ -3,8 +3,13 @@
     <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-          <title>{{ content.site.title }}</title>
-          <meta name="description" content="{{ content.site.description }}">
+          <title>{{ content.title }}{{ content.site.title }}</title>
+{% if content.description is empty %}
+{% set description = content.site.description %}
+{% else %}
+{% set description = content.description %}
+{% endif %}
+          <meta name="description" content="{{ description }}">
     </head>
     <body>
         <main>

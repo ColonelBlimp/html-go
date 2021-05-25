@@ -50,7 +50,8 @@ function render(string $template, array $vars = []): string {
  * @return string
  */
 function not_found(string $title = '404 Not Found'): string {
-    /* TODO: Refactor
+    //TODO: Refactor
+    /*
     $vars = get_template_vars();
     $vars['site_title'] = $title . $vars['site_title'];
     return render('404.html', $vars);
@@ -170,8 +171,10 @@ function get_config_bool(string $key, bool $default = false): bool {
  * @return Content|NULL if no content was found associated with the given slug <code>null</code> is returned.
  */
 function get_content_object(string $slug): ?Content {
+    // Special case
     if ($slug === 'posts/index') {
-        return get_model_factory()->createListContentObject(listing: get_posts(), title: 'Latest Posts');
+        $obj = get_index_manager()->getElementFromSlugIndex($slug);
+        return get_model_factory()->createListContentObject($obj, get_posts());
     }
     if (slug_exists($slug) === false) {
         return null;

@@ -39,8 +39,10 @@ final class ModelFactory
      * @param array<Content> $listing the list of Content object to be added
      * @return Content
      */
-    function createListContentObject(string $title, array $listing): Content {
-        return new Content($this->createSiteObject(), $this->createObject(title: $title, listing: $listing));
+    function createListContentObject(object $obj, array $listing): Content {
+        $obj = $this->loadDataFile($obj);
+        $obj->listing = $listing;
+        return new Content($this->createSiteObject(), $obj);
     }
 
     private function createSiteObject(): Site {
