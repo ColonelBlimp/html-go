@@ -7,6 +7,7 @@ class RouteFuncTest extends TestCase
 {
     function testIndexRoute(): void {
         $this->assertStringContainsString('404', route('GET', 'home'));
+        $this->assertStringNotContainsString('404', route('GET', 'index'));
     }
 
     function testGetStaticPage(): void {

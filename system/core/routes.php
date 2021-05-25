@@ -15,39 +15,19 @@ get('index', function(string $uri): string {
     }
     return render($template, get_template_context($content));
 });
-/*
-// Single Category
-get('category/:name', function(string $uri, string $name): string {
-    if (($content = get_content_object($name)) === null) {
-        return not_found();
-    }
-    return render('main.html', get_template_context($content));
-});
 
-// Single Tag
-get('tag/:name', function(string $uri, string $name): string {
-    if (($content = get_content_object($name)) === null) {
-        return not_found();
-    }
-    return render('main.html', get_template_context($content));
-});
-*/
 /*
  * Catch-all route. It does a regex check on the given URI, if it matches,
  * then the request is processed as a request for a blog post, otherwise
  * the request is processed as a request for a static page.
  */
 get('.*', function (string $uri): string {
-    echo 'Catch-all: ' . $uri . PHP_EOL;
-
     $template = 'main.html';
-
     $matches = [];
     $result = \preg_match('/(\d{4})\/(\d{2})\/(.+)/i', $uri, $matches);
     if ($result === false) {
         throw new RuntimeException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
     }
-
     if (\count($matches) !== 4 && $result !== 1) {
         $content = get_content_object($uri);
     } else {

@@ -48,9 +48,7 @@ function route(string $method, string $uri_or_pattern, callable $handler = null)
 
             if (\is_callable($data[HANDLER])) {
                 // Add the originally requested URI so it can be passed to
-                // the called function. Therefore, the anon function MUST
-                // specify this parameter!!!
-//                print_r($argv);
+                // the called function.
                 $argv[] = $uri_or_pattern;
                 $retval = \call_user_func_array($data[HANDLER], $argv);
             }
@@ -102,7 +100,6 @@ function get(string $pattern, callable $handler): void {
  */
 function dispatch(string $uri = null, string $method = GET): string {
     if ($uri === null) {
-//        $uri = parse_uri($_SERVER['REQUEST_URI']);
         $uri = strip_url_parameters($_SERVER['REQUEST_URI']);
         $method = \strtoupper($_SERVER['REQUEST_METHOD']);
     }

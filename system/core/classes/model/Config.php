@@ -15,6 +15,7 @@ final class Config
     const KEY_TPL_STRICT_VARS_TWIG = 'template.engine.twig.strict_variables';
     const KEY_STATIC_INDEX = 'static.index';
     const KEY_THEME_NAME = 'theme.name';
+    const KEY_POSTS_PERPAGE = 'posts.per_page';
 
     /**
      * @var array<string, string>
@@ -75,41 +76,44 @@ final class Config
      * @return array<string, mixed>
      */
     private function validateConfig(array $config): array {
-        if (isset($config[Config::KEY_SITE_URL]) === false) {
+        if (isset($config[self::KEY_SITE_URL]) === false) {
             throw new \RuntimeException("Configuration option 'site.url' not set.");
         }
-        if (isset($config[Config::KEY_TITLE]) === false) {
-            $config[Config::KEY_TITLE] = 'HTML-go';
+        if (isset($config[self::KEY_TITLE]) === false) {
+            $config[self::KEY_TITLE] = 'HTML-go';
         }
-        if (isset($config[Config::KEY_DESCRIPTION]) === false) {
-            $config[Config::KEY_DESCRIPTION] = 'Powered by HTML-go, a databaseless, flat-file blogging platform';
+        if (isset($config[self::KEY_DESCRIPTION]) === false) {
+            $config[self::KEY_DESCRIPTION] = 'Powered by HTML-go, a databaseless, flat-file blogging platform';
         }
-        if (isset($config[Config::KEY_TAGLINE]) === false) {
-            $config[Config::KEY_TAGLINE] = 'Another HTML-go Site';
+        if (isset($config[self::KEY_TAGLINE]) === false) {
+            $config[self::KEY_TAGLINE] = 'Another HTML-go Site';
         }
-        if (isset($config[Config::KEY_COPYRIGHT]) === false) {
-            $config[Config::KEY_COPYRIGHT] = '(c) Copyright, Your Name';
+        if (isset($config[self::KEY_COPYRIGHT]) === false) {
+            $config[self::KEY_COPYRIGHT] = '(c) Copyright, Your Name';
         }
-        if (isset($config[Config::KEY_LANG]) === false) {
-            $config[Config::KEY_LANG] = 'en';
+        if (isset($config[self::KEY_LANG]) === false) {
+            $config[self::KEY_LANG] = 'en';
         }
-        if (isset($config[Config::KEY_TPL_ENGINE]) === false) {
-            $config[Config::KEY_TPL_ENGINE] = 'twig';
+        if (isset($config[self::KEY_TPL_ENGINE]) === false) {
+            $config[self::KEY_TPL_ENGINE] = 'twig';
         }
-        if (isset($config[Config::KEY_TPL_CACHING]) === false) {
-            $config[Config::KEY_TPL_CACHING] = false;
+        if (isset($config[self::KEY_TPL_CACHING]) === false) {
+            $config[self::KEY_TPL_CACHING] = false;
         }
-        if (isset($config[Config::KEY_TPL_FILE_EXT]) === false) {
-            $config[Config::KEY_TPL_FILE_EXT] = 'twig';
+        if (isset($config[self::KEY_TPL_FILE_EXT]) === false) {
+            $config[self::KEY_TPL_FILE_EXT] = 'twig';
         }
-        if (isset($config[Config::KEY_TPL_STRICT_VARS_TWIG]) === false) {
-            $config[Config::KEY_TPL_STRICT_VARS_TWIG] = true;
+        if (isset($config[self::KEY_TPL_STRICT_VARS_TWIG]) === false) {
+            $config[self::KEY_TPL_STRICT_VARS_TWIG] = true;
         }
-        if (isset($config[Config::KEY_THEME_NAME]) === false) {
-            $config[Config::KEY_THEME_NAME] = 'default';
+        if (isset($config[self::KEY_THEME_NAME]) === false) {
+            $config[self::KEY_THEME_NAME] = 'default';
         }
-        if (isset($config[Config::KEY_STATIC_INDEX]) === false) {
-            $config[Config::KEY_STATIC_INDEX] = true;
+        if (isset($config[self::KEY_STATIC_INDEX]) === false) {
+            $config[self::KEY_STATIC_INDEX] = true;
+        }
+        if (isset($config[self::KEY_POSTS_PERPAGE]) === false) {
+            $config[self::KEY_POSTS_PERPAGE] = 5;
         }
         return $config;
     }
