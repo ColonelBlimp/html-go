@@ -19,14 +19,6 @@ final class IndexManagerTest extends TestCase
     /**
      * @depends testInstantiation
      */
-    function testIndexPageSlugs(IndexManager $manager): void {
-        $this->assertNotNull($manager);
-        $this->assertTrue($manager->elementExists('index'));
-    }
-
-    /**
-     * @depends testInstantiation
-     */
     function testSlugIndexException(IndexManager $manager): void {
         $this->expectException(\RuntimeException::class);
         $manager->getElementFromSlugIndex('unknown_slug');
@@ -47,6 +39,18 @@ final class IndexManagerTest extends TestCase
         $this->assertTrue($manager->elementExists('posts/index'));
         $this->assertTrue($manager->elementExists('category/index'));
         $this->assertTrue($manager->elementExists('tag/index'));
+        $this->assertTrue($manager->elementExists('index'));
+        $element = $manager->getElementFromSlugIndex('index');
+        $this->assertNotNull($element);
+        $this->assertTrue(isset($element->key));
+        $this->assertSame('index', $element->key);
+        $this->assertTrue(isset($element->path));
+        $this->assertTrue(\str_ends_with($element->path, 'common'.DS.'pages'.DS.'index.md'));
+        $this->assertTrue(isset($element->section));
+        $this->assertTrue(isset($element->type));
+        $this->assertTrue(isset($element->username));
+        $this->assertTrue(isset($element->date));
+        $this->assertIsArray($element->tags);
     }
 
     /**
@@ -56,4 +60,6 @@ final class IndexManagerTest extends TestCase
         $this->assertNotNull($manager->getCategoriesIndex());
         $this->assertIsArray($manager->getCategoriesIndex());
     }
+
+
 }
