@@ -7,8 +7,7 @@ get('index', function(string $uri): string {
     if (get_config_bool(Config::KEY_STATIC_INDEX)) {
         $content = get_content_object('index');
     } else {
-        $content = get_content_object('posts/index');
-        $listing = get_posts();
+        $content = get_content_object('posts/index', get_posts());
         $template = 'listing.html';
     }
     if ($content === null) {
@@ -28,6 +27,7 @@ get('.*', function (string $uri): string {
     if (\count($matches) !== 4 && $result !== 1) {
         $content = get_content_object($uri);
     } else {
+        echo $uri.PHP_EOL;
         $content = get_content_object($matches[1].FWD_SLASH.$matches[2].FWD_SLASH.$matches[3]);
         $template = 'post.html';
     }

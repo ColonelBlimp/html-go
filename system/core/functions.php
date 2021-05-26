@@ -187,14 +187,19 @@ function get_config_bool(string $key, bool $default = false): bool {
 /**
  * Get a <code>Content</code> object (if any) associated with the given slug.
  * @param string $slug
+ * @param array<Content>$listing
  * @return Content|NULL if no content was found associated with the given slug <code>null</code> is returned.
  */
-function get_content_object(string $slug): ?Content {
+function get_content_object(string $slug, array $listing = []): ?Content {
     $manager = get_index_manager();
     if ($manager->elementExists($slug) === false) {
         return null;
     }
-    return get_model_factory()->createContentObject($manager->getElementFromSlugIndex($slug));
+    $content = get_model_factory()->createContentObject($manager->getElementFromSlugIndex($slug));
+    if (!empty($listing)) {
+        $content->listing = $listing;
+    }
+    return $content;
 }
 
 /**
