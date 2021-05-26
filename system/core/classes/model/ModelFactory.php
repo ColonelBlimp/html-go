@@ -21,14 +21,22 @@ final class ModelFactory
 
     function createContentObject(Element $indexElement): Content {
         $contentObject = $this->loadDataFile($indexElement);
+        if (isset($indexElement->key)) {
+            $contentObject->key = $indexElement->key;
+        }
         if (isset($indexElement->title)) {
             $contentObject->title = $indexElement->title;
         }
         if (isset($indexElement->description)) {
             $contentObject->description = $indexElement->description;
         }
+        if (isset($indexElement->category)) {
+            $contentObject->category = $indexElement->category;
+        }
+        if (isset($indexElement->tags)) {
+            $contentObject->tags = $indexElement->tags;
+        }
         $contentObject->menus = [];
-        $contentObject->tags = [];
         $contentObject->listing = [];
         $contentObject->site = $this->getSiteObject();
         return $contentObject;

@@ -19,16 +19,16 @@ get('index', function(string $uri): string {
 // Catch all route
 get('.*', function (string $uri): string {
     $template = 'main.html';
-    $matches = [];
-    $result = \preg_match('/(\d{4})\/(\d{2})\/(.+)/i', $uri, $matches);
+    $result = \preg_match('/(\d{4})\/(\d{2})\/(.+)/i', $uri);
     if ($result === false) {
         throw new RuntimeException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
     }
-    if (\count($matches) !== 4 && $result !== 1) {
+    if ($result === 0) {
+        echo 'NON-POST: '.$uri.PHP_EOL;
         $content = get_content_object($uri);
     } else {
-        echo $uri.PHP_EOL;
-        $content = get_content_object($matches[1].FWD_SLASH.$matches[2].FWD_SLASH.$matches[3]);
+        echo 'POST: '.$uri.PHP_EOL;
+        $content = get_content_object($uri);
         $template = 'post.html';
     }
     if ($content === null) {
