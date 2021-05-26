@@ -75,7 +75,7 @@ final class ModelFactory
 
     /**
      * Parse the front matter and added the key/value pairs to the given stdClass, which is
-     * then returned.
+     * then returned.  This is the starting of a TOML parser, but does not implement very much!
      * @param object $stdClass
      * @param string $data
      * @throws \RuntimeException
