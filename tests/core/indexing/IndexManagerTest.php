@@ -48,4 +48,12 @@ final class IndexManagerTest extends TestCase
         $this->assertTrue($manager->elementExists('category/index'));
         $this->assertTrue($manager->elementExists('tag/index'));
     }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testGetCategoriesIndex(IndexManager $manager): void {
+        $this->assertNotNull($manager->getCategoriesIndex());
+        $this->assertIsArray($manager->getCategoriesIndex());
+    }
 }

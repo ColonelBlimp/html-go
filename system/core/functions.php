@@ -11,6 +11,25 @@ use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
 
 /**
+ * Returns a pagination page of categories.
+ * @param int $page_number The page number
+ * @param int $per_page Items per page. Default is 0 (zero) which means return all
+ * @return array<stdClass> The resulting list of posts
+ */
+function get_categories(int $page_number = 1, int $per_page = 0): array {
+    $cats = get_index_manager()->getCategoriesIndex();
+    if ($per_page > 0) {
+        $cats = \array_slice($cats, ($page_number - 1) * $per_page, $per_page);
+    }
+    $list = [];
+    $factory = get_model_factory();
+    foreach ($cats as $obj) {
+        $list[] = $factory->createContentObject($obj);
+    }
+    return $list;
+}
+
+/**
  * Build and return the template context.
  * @param Content $content
  * @return array<mixed>
@@ -171,15 +190,11 @@ function get_config_bool(string $key, bool $default = false): bool {
  * @return Content|NULL if no content was found associated with the given slug <code>null</code> is returned.
  */
 function get_content_object(string $slug): ?Content {
-    // Special case
-    if ($slug === 'posts/index') {
-        $obj = get_index_manager()->getElementFromSlugIndex($slug);
-        return get_model_factory()->createListContentObject($obj, get_posts());
-    }
-    if (slug_exists($slug) === false) {
+    $manager = get_index_manager();
+    if ($manager->elementExists($slug) === false) {
         return null;
     }
-    return get_model_factory()->createSingleContentObject(get_index_manager()->getElementFromSlugIndex($slug));
+    return get_model_factory()->createContentObject($manager->getElementFromSlugIndex($slug));
 }
 
 /**
@@ -194,7 +209,7 @@ function get_posts(int $page_number = 1, int $per_page = 5): array {
     $list = [];
     $factory = get_model_factory();
     foreach ($posts as $post) {
-        $list[] = $factory->createSingleContentObject($post);
+        $list[] = $factory->createContentObject($post);
     }
     return $list;
 }

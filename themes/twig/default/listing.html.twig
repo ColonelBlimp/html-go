@@ -1,9 +1,13 @@
 {% extends "layout.html.twig" %}
 {% block main %}
 <div>listing.html</div>
+{% if content.listing is empty %}
+<p>No Posts<p>
+{% else %}
 <ul>
 {% for item in content.listing %}
 <li>{{ item.title }}</li>
 {% endfor %}
 </ul>
+{% endif %}
 {% endblock %}

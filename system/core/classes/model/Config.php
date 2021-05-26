@@ -4,10 +4,10 @@ namespace html_go\model;
 final class Config
 {
     const KEY_SITE_URL = 'site.url';
-    const KEY_TITLE = 'site.title';
-    const KEY_DESCRIPTION = 'site.description';
-    const KEY_TAGLINE = 'site.tagline';
-    const KEY_COPYRIGHT = 'site.copyright';
+    const KEY_SITE_TITLE = 'site.title';
+    const KEY_SITE_DESCRIPTION = 'site.description';
+    const KEY_SITE_TAGLINE = 'site.tagline';
+    const KEY_SITE_COPYRIGHT = 'site.copyright';
     const KEY_LANG = 'site.language';
     const KEY_TPL_ENGINE = 'template.engine';
     const KEY_TPL_CACHING = 'template.engine.caching';
@@ -79,17 +79,17 @@ final class Config
         if (isset($config[self::KEY_SITE_URL]) === false) {
             throw new \RuntimeException("Configuration option 'site.url' not set.");
         }
-        if (isset($config[self::KEY_TITLE]) === false) {
-            $config[self::KEY_TITLE] = 'HTML-go';
+        if (isset($config[self::KEY_SITE_TITLE]) === false) {
+            $config[self::KEY_SITE_TITLE] = 'HTML-go';
         }
-        if (isset($config[self::KEY_DESCRIPTION]) === false) {
-            $config[self::KEY_DESCRIPTION] = 'Powered by HTML-go, a databaseless, flat-file blogging platform';
+        if (isset($config[self::KEY_SITE_DESCRIPTION]) === false) {
+            $config[self::KEY_SITE_DESCRIPTION] = 'Powered by HTML-go, a databaseless, flat-file blogging platform';
         }
-        if (isset($config[self::KEY_TAGLINE]) === false) {
-            $config[self::KEY_TAGLINE] = 'Another HTML-go Site';
+        if (isset($config[self::KEY_SITE_TAGLINE]) === false) {
+            $config[self::KEY_SITE_TAGLINE] = 'Another HTML-go Site';
         }
-        if (isset($config[self::KEY_COPYRIGHT]) === false) {
-            $config[self::KEY_COPYRIGHT] = '(c) Copyright, Your Name';
+        if (isset($config[self::KEY_SITE_COPYRIGHT]) === false) {
+            $config[self::KEY_SITE_COPYRIGHT] = '(c) Copyright, Your Name';
         }
         if (isset($config[self::KEY_LANG]) === false) {
             $config[self::KEY_LANG] = 'en';

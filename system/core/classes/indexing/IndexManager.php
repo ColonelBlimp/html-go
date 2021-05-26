@@ -31,7 +31,7 @@ final class IndexManager
     private string $root;
 
     /**
-     * @var array<string, object> $slugIndex
+     * @var array<string, Element> $slugIndex
      */
     private array $slugIndex;
 
@@ -46,22 +46,22 @@ final class IndexManager
     private array $tag2PostIndex;
 
     /**
-     * @var array<string, object> $postIndex
+     * @var array<string, Element> $postIndex
      */
     private array $postIndex;
 
     /**
-     * @var array<string, object> $pageIndex
+     * @var array<string, Element> $pageIndex
      */
     private array $pageIndex;
 
     /**
-     * @var array<string, object> $categoryIndex
+     * @var array<string, Element> $categoryIndex
      */
     private array $categoryIndex;
 
     /**
-     * @var array<string, object> $tagIndex
+     * @var array<string, Element> $tagIndex
      */
     private array $tagIndex;
 
@@ -111,11 +111,11 @@ final class IndexManager
      * Returns an object representing an element in the index.
      * @param string $key
      * @throws \RuntimeException
-     * @return object a stdClass::class
+     * @return Element
      */
-    function getElementFromSlugIndex(string $key): object {
+    function getElementFromSlugIndex(string $key): Element {
         if (!isset($this->slugIndex[$key])) {
-            throw new \RuntimeException("Key does not exist in the slugIndex! Use 'elementExists() before calling this method.");
+            throw new \RuntimeException("Key does not exist in the slugIndex! Use 'elementExists()' before calling this method.");
         }
         return $this->slugIndex[$key];
     }
@@ -131,10 +131,18 @@ final class IndexManager
 
     /**
      * Return the posts index.
-     * @return array<string, object>
+     * @return array<string, Element>
      */
     function getPostsIndex(): array {
         return $this->postIndex;
+    }
+
+    /**
+     * Return the categories index.
+     * @return array<string, Element>
+     */
+    function getCategoriesIndex(): array {
+        return $this->categoryIndex;
     }
 
     /**
@@ -154,7 +162,7 @@ final class IndexManager
 
     /**
      *
-     * @return array<string, object>
+     * @return array<string, Element>
      */
     private function buildLandingIndex(): array {
         $index = [];
@@ -167,7 +175,7 @@ final class IndexManager
     /**
      * Scans the <i>content/common/categories</i> folder creating and indexing all the files.
      * When the index is built, it is also loaded.
-     * @return array<string, object>
+     * @return array<string, Element>
      */
     private function buildCategoryIndex(): array {
         $index = [];
@@ -182,7 +190,7 @@ final class IndexManager
     /**
      * Scans the <i>content/pages</i> folder creating and indexing all the files and folders.
      * When the index is built, it is also loaded.
-     * @return array<string, object>
+     * @return array<string, Element>
      */
     private function buildPageIndex(): array {
         $index = [];
@@ -201,7 +209,7 @@ final class IndexManager
     /**
      * Scans the <i>content/user-data/[username]/posts</i> folder creating and indexing all files.
      * When the index is built, it is also loaded.
-     * @return array<string, object>
+     * @return array<string, Element>
      */
     private function buildPostsIndex(): array {
         $index = [];
@@ -221,7 +229,7 @@ final class IndexManager
      * When the index is built, it is also loaded.
      * @param array<mixed> $tag2PostsIndex
      * @param array<mixed> $cat2PostIndex
-     * @return array<string, object>
+     * @return array<string, Element>
      */
     private function buildTagIndex(array &$tag2PostsIndex, array &$cat2PostIndex): array {
         $index = [];
@@ -280,9 +288,9 @@ final class IndexManager
      * @param string $key Default is <code>null</code> and used with processing a post, otherwise
      * the key should be provided.
      * @throws \InvalidArgumentException
-     * @return object
+     * @return Element
      */
-    private function createElement(string $filepath, string $key = null): object {
+    private function createElement(string $filepath, string $key = null): Element {
         $pathinfo = \pathinfo($filepath);
         if ($key === null) {
             $key = $pathinfo['filename'];
@@ -321,7 +329,7 @@ final class IndexManager
     }
 
     /**
-     * Creates and populates a stdClass for an index element.
+     * Creates and populates an index Element class.
      * @param string $key The index key
      * @param string $path The filepath
      * @param string $section 'pages', 'posts', 'categories' or 'tags'
@@ -330,14 +338,14 @@ final class IndexManager
      * @param string $username
      * @param string $date
      * @param string $tagList
-     * @return object stdClass
+     * @return Element stdClass
      */
-    private function createElementClass(string $key = EMPTY_VALUE, string $path = EMPTY_VALUE, string $section = EMPTY_VALUE, string $category = EMPTY_VALUE, string $type = EMPTY_VALUE, string $username = EMPTY_VALUE, string $date = EMPTY_VALUE, string $tagList = ''): object {
+    private function createElementClass(string $key = EMPTY_VALUE, string $path = EMPTY_VALUE, string $section = EMPTY_VALUE, string $category = EMPTY_VALUE, string $type = EMPTY_VALUE, string $username = EMPTY_VALUE, string $date = EMPTY_VALUE, string $tagList = ''): Element {
         $tags = [];
         if (!empty($tagList)) {
             $tags = \explode(',', $tagList);
         }
-        $obj = new \stdClass();
+        $obj = new Element();
         $obj->key = $key;
         $obj->path = $path;
         $obj->section = $section;

@@ -8,6 +8,7 @@ get('index', function(string $uri): string {
         $content = get_content_object('index');
     } else {
         $content = get_content_object('posts/index');
+        $listing = get_posts();
         $template = 'listing.html';
     }
     if ($content === null) {
@@ -16,11 +17,7 @@ get('index', function(string $uri): string {
     return render($template, get_template_context($content));
 });
 
-/*
- * Catch-all route. It does a regex check on the given URI, if it matches,
- * then the request is processed as a request for a blog post, otherwise
- * the request is processed as a request for a static page.
- */
+// Catch all route
 get('.*', function (string $uri): string {
     $template = 'main.html';
     $matches = [];
@@ -37,6 +34,5 @@ get('.*', function (string $uri): string {
     if ($content === null) {
         return not_found();
     }
-
     return render($template, get_template_context($content));
 });

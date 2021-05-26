@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace html_go\model;
 
+use html_go\indexing\Element;
 use html_go\markdown\MarkdownParser;
 
 /**
@@ -18,74 +19,51 @@ final class ModelFactory
         $this->parser = $parser;
     }
 
-    /**
-     * Create a single <code>Content</code> object. Generally, this represents a single piece of
-     * content in the system, e.g. post, category, tag, page, etc.
-     * @param object $obj Generally, provided by the <code>IndexManager</code>
-     * @throws \RuntimeException
-     * @return Content
-     */
-    function createSingleContentObject(object $obj): Content {
-        if (!$obj instanceof \stdClass) {
-            throw new \RuntimeException("Object parameter not an instance of stdClass: " . print_r($obj, true)); // @codeCoverageIgnore
-        }
-        return new Content($this->createSiteObject(), $this->loadDataFile($obj));
-    }
-
-    /**
-     * Create a <code>Content</code> object containing a list of <code>Content</code> objects.
-     * Generally, this represents a <i>listing</i> page e.g. latest posts, categories, tags,
-     * archive, etc.
-     * @param array<Content> $listing the list of Content object to be added
-     * @return Content
-     */
-    function createListContentObject(object $obj, array $listing): Content {
-        $obj = $this->loadDataFile($obj);
-        $obj->listing = $listing;
-        return new Content($this->createSiteObject(), $obj);
+    function createContentObject(Element $indexElement): Content {
+        $contentObject = $this->loadDataFile($indexElement);
+        $contentObject->title = $indexElement->title;
+        $contentObject->description = $indexElement->description;
+        $contentObject->menus = [];
+        $contentObject->tags = [];
+        $contentObject->listing = [];
+        $contentObject->site = $this->getSiteObject();
+        return $contentObject;
     }
 
     /**
      * Create the site object.
      * @return Site
      */
-    private function createSiteObject(): Site {
+    private function getSiteObject(): Site {
         static $site = null;
         if (empty($site)) {
-            $site = new Site($this->config);
+            $site = new Site();
+            $site->url = $this->config->getString(Config::KEY_SITE_URL);
+            $site->title = $this->config->getString(Config::KEY_SITE_TITLE);
+            $site->description = $this->config->getString(Config::KEY_SITE_DESCRIPTION);
+            $site->tagline = $this->config->getString(Config::KEY_SITE_TAGLINE);
+            $site->copyright = $this->config->getString(Config::KEY_SITE_COPYRIGHT);
         }
         return $site;
     }
 
-    /**
-     * The data file associated with the index object.
-     * @param object $stdClass
-     * @throws \RuntimeException
-     * @return object
-     */
-    private function loadDataFile(object $stdClass): object {
-        if (!isset($stdClass->path)) {
-            throw new \RuntimeException("Object does not have 'path' property " . print_r($stdClass, true)); // @codeCoverageIgnore
+    private function loadDataFile(object $indexElement): Content {
+        if (!isset($indexElement->path)) {
+            throw new \RuntimeException("Object does not have 'path' property " . print_r($indexElement, true)); // @codeCoverageIgnore
         }
-        if (($data = \file_get_contents($stdClass->path)) === false) {
-            throw new \RuntimeException("file_get_contens() failed opening [$stdClass->path]"); // @codeCoverageIgnore
+        if (($data = \file_get_contents($indexElement->path)) === false) {
+            throw new \RuntimeException("file_get_contens() failed opening [$indexElement->path]"); // @codeCoverageIgnore
         }
-        return $this->parseContentFile($stdClass, $data);
+        return $this->parseContentFile($data);
     }
 
-    /**
-     * Parse the front matter and added the key/value pairs to the given stdClass, which is
-     * then returned.  This is the starting of a TOML parser, but does not implement very much!
-     * @param object $stdClass
-     * @param string $data
-     * @throws \RuntimeException
-     */
-    private function parseContentFile(object $stdClass, string $data): object {
+    private function parseContentFile(string $data): Content {
         $str = \str_replace(["\n\r", "\r\n"], "\n", $data);
         $str = \str_replace("\t", " ", $str);
         $lines = \explode("\n", $data);
         $cnt = \count($lines);
         $start = false;
+        $contentObject = new Content();
         for ($index = 0; $index < $cnt; $index++) {
             $line = trim($lines[$index]);
             if ($line === '+++') {
@@ -105,7 +83,8 @@ final class ModelFactory
                 $kv = \explode('=', $line, 2);
                 $key = \trim($kv[0], " \n\r\t\v\0\"");
                 $val = \trim($kv[1], " \n\r\t\v\0\"");
-                $stdClass->$key = $val;
+                //FIXME: Check overwriting existing properties!
+                $contentObject->$key = $val;
             }
         }
 
@@ -113,8 +92,8 @@ final class ModelFactory
             throw new \RuntimeException("Somehow, can't find '+++' in [$str]"); // @codeCoverageIgnore
         }
 
-        $stdClass->body = $this->parser->parse(\substr($str, $pos + 3));
+        $contentObject->body = $this->parser->parse(\substr($str, $pos + 3));
 
-        return $stdClass;
+        return $contentObject;
     }
 }

@@ -12,11 +12,18 @@
           <meta name="description" content="{{ description }}">
     </head>
     <body>
-        <main>
+        <div>
+            <main>
 {% block main %}{% endblock %}
-        </main>
+            </main>
+        </div>
+        <div>
+            <aside>
+{% include "aside.html.twig" %}
+            </aside>
+        </div>
         <footer role="contentinfo">
-{% include("footer.html.twig") %}
+{% include "footer.html.twig" %}
         </footer>
     </body>
 </html>
