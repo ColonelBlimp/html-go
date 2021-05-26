@@ -45,6 +45,10 @@ final class ModelFactory
         return new Content($this->createSiteObject(), $obj);
     }
 
+    /**
+     * Create the site object.
+     * @return Site
+     */
     private function createSiteObject(): Site {
         static $site = null;
         if (empty($site)) {
@@ -54,15 +58,11 @@ final class ModelFactory
     }
 
     /**
-     * Creates a custom object whose data is NOT loaded from the filesystem.
-     * @param mixed ...$args
-     * @return object stdClass
+     * The data file associated with the index object.
+     * @param object $stdClass
+     * @throws \RuntimeException
+     * @return object
      */
-    private function createObject(...$args): object {
-        $obj = (object)$args;
-        return $obj;
-    }
-
     private function loadDataFile(object $stdClass): object {
         if (!isset($stdClass->path)) {
             throw new \RuntimeException("Object does not have 'path' property " . print_r($stdClass, true)); // @codeCoverageIgnore
