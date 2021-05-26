@@ -26,6 +26,8 @@ final class IndexManager
     private const CAT2POSTS_INDEX_FILE = self::INDEX_DIR.DS.'cat2posts.inx';
     private const POST_LANDING_FILE = 'content'.DS.'common'.DS.'landing'.DS.'posts'.DS.'index.md';
     private const TAG_LANDING_FILE = 'content'.DS.'common'.DS.'landing'.DS.'tags'.DS.'index.md';
+    private const CAT_LANDING_FILE = 'content'.DS.'common'.DS.'landing'.DS.'category'.DS.'index.md';
+
     private string $root;
 
     /**
@@ -147,7 +149,19 @@ final class IndexManager
             $this->pageIndex = $this->loadIndex($this->root.DS.self::PAGE_INDEX_FILE);
             $this->tagIndex = $this->loadIndex($this->root.DS.self::TAG_INDEX_FILE);
         }
-        $this->slugIndex = \array_merge($this->postIndex, $this->categoryIndex, $this->pageIndex, $this->tagIndex);
+        $this->slugIndex = \array_merge($this->postIndex, $this->categoryIndex, $this->pageIndex, $this->tagIndex, $this->buildLandingIndex());
+    }
+
+    /**
+     *
+     * @return array<string, object>
+     */
+    private function buildLandingIndex(): array {
+        $index = [];
+        $index['posts/index'] = $this->createElement($this->root.DS.self::POST_LANDING_FILE, 'posts/index');
+        $index['tag/index'] = $this->createElement($this->root.DS.self::TAG_LANDING_FILE, 'tag/index');
+        $index['category/index'] = $this->createElement($this->root.DS.self::CAT_LANDING_FILE, 'category/index');
+        return $index;
     }
 
     /**
@@ -191,10 +205,6 @@ final class IndexManager
      */
     private function buildPostsIndex(): array {
         $index = [];
-        // Read landing page special case
-        $landing = $this->createElement($this->root.DS.self::POST_LANDING_FILE, 'posts/index');
-        $index['posts/index'] = $landing;
-
         foreach ($this->parseDirectory($this->root.DS.self::USER_DATA_DIR.DS.'*'.DS.'posts'.DS.'*'.DS.'*'.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
             $element = $this->createElement($filepath, \pathinfo($filepath, PATHINFO_FILENAME));
             if (!isset($element->key)) {
@@ -215,9 +225,6 @@ final class IndexManager
      */
     private function buildTagIndex(array &$tag2PostsIndex, array &$cat2PostIndex): array {
         $index = [];
-        // Read landing page special case
-        $landing = $this->createElement($this->root.DS.self::TAG_LANDING_FILE, 'tags/index');
-        $index['tags/index'] = $landing;
         foreach ($this->postIndex as $post) {
             if (!isset($post->key, $post->tags, $post->category)) {
                 throw new \RuntimeException("Invalid format of index element: " . print_r($post, true)); // @codeCoverageIgnore
@@ -285,6 +292,9 @@ final class IndexManager
         }
         if (\strpos($filepath, self::PAGES_DIR) !== false) {
             return $this->createElementClass($key, $filepath, ENUM_PAGE);
+        }
+        if (\strpos($filepath, self::CAT_LANDING_FILE) !== false) {
+            return $this->createElementClass($key, $filepath, ENUM_CATEGORY);
         }
         if (\strpos($filepath, self::TAG_LANDING_FILE) !== false) {
             return $this->createElementClass($key, $filepath, ENUM_TAG);

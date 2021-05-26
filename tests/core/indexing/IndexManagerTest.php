@@ -22,7 +22,6 @@ final class IndexManagerTest extends TestCase
     function testIndexPageSlugs(IndexManager $manager): void {
         $this->assertNotNull($manager);
         $this->assertTrue($manager->elementExists('index'));
-        $this->assertTrue($manager->elementExists('category/index'));
     }
 
     /**
@@ -39,5 +38,14 @@ final class IndexManagerTest extends TestCase
     function testGetPostIndex(IndexManager $manager): void {
         $this->assertNotNull($manager->getPostsIndex());
         $this->assertIsArray($manager->getPostsIndex());
+    }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testLandingPages(IndexManager $manager): void {
+        $this->assertTrue($manager->elementExists('posts/index'));
+        $this->assertTrue($manager->elementExists('category/index'));
+        $this->assertTrue($manager->elementExists('tag/index'));
     }
 }
