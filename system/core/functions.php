@@ -191,13 +191,11 @@ function get_content_object(string $slug): ?Content {
 function get_posts(int $page_number = 1, int $per_page = 5): array {
     $posts = get_index_manager()->getPostsIndex();
     $posts = \array_slice($posts, ($page_number - 1) * $per_page, $per_page);
-
     $list = [];
     $factory = get_model_factory();
     foreach ($posts as $post) {
         $list[] = $factory->createSingleContentObject($post);
     }
-
     return $list;
 }
 
