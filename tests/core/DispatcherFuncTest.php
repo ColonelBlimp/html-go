@@ -28,11 +28,13 @@ class DispatcherFuncTest extends TestCase
     }
 
     function testLandingPages(): void {
-        $result = dispatch('index');
+        $result = dispatch('/');
         $this->assertStringNotContainsString('404', $result);
-        $result = dispatch('category');
+        $result = dispatch('/category');
         $this->assertStringNotContainsString('404', $result);
-        $result = dispatch('tag');
+        $result = dispatch('/tag');
+        $this->assertStringNotContainsString('404', $result);
+        $result = dispatch('/blog');
         $this->assertStringNotContainsString('404', $result);
     }
 }

@@ -5,9 +5,9 @@ use html_go\model\Config;
 get('index', function(string $uri): string {
     $template = 'main.html';
     if (get_config_bool(Config::KEY_STATIC_INDEX)) {
-        $content = get_content_object('index');
+        $content = get_content_object(HOME_INDEX_KEY);
     } else {
-        $content = get_content_object('posts/index', get_posts());
+        $content = get_content_object(BLOG_INDEX_KEY, get_posts());
         $template = 'listing.html';
     }
     if ($content === null) {

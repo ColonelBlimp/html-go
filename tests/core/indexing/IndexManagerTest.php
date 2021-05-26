@@ -36,11 +36,11 @@ final class IndexManagerTest extends TestCase
      * @depends testInstantiation
      */
     function testLandingPages(IndexManager $manager): void {
-        $this->assertTrue($manager->elementExists('posts/index'));
-        $this->assertTrue($manager->elementExists('category/index'));
-        $this->assertTrue($manager->elementExists('tag/index'));
-        $this->assertTrue($manager->elementExists('index'));
-        $element = $manager->getElementFromSlugIndex('index');
+        $this->assertTrue($manager->elementExists(BLOG_INDEX_KEY));
+        $this->assertTrue($manager->elementExists(CAT_INDEX_KEY));
+        $this->assertTrue($manager->elementExists(TAG_INDEX_KEY));
+        $this->assertTrue($manager->elementExists(HOME_INDEX_KEY));
+        $element = $manager->getElementFromSlugIndex(HOME_INDEX_KEY);
         $this->assertNotNull($element);
         $this->assertTrue(isset($element->key));
         $this->assertSame('index', $element->key);
@@ -60,6 +60,4 @@ final class IndexManagerTest extends TestCase
         $this->assertNotNull($manager->getCategoriesIndex());
         $this->assertIsArray($manager->getCategoriesIndex());
     }
-
-
 }

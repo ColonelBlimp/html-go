@@ -14,3 +14,8 @@
 \define('CAT_LIST_TYPE', 1);
 \define('TAG_LIST_TYPE', 2);
 \define('EMPTY_VALUE', '<empty>');
+
+\define('HOME_INDEX_KEY', 'index');
+\define('BLOG_INDEX_KEY', 'blog/index');
+\define('CAT_INDEX_KEY', 'category/index');
+\define('TAG_INDEX_KEY', 'tag/index');

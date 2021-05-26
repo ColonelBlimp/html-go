@@ -107,13 +107,15 @@ function dispatch(string $uri = null, string $method = GET): string {
     // Check for index (landing) pages
     $uri = \trim($uri, FWD_SLASH);
     if (empty($uri)) {
-        $uri = 'index';
+        $uri = HOME_INDEX_KEY;
     } elseif ($uri === 'category') {
-        $uri = 'category/index';
+        $uri = CAT_INDEX_KEY;
     } elseif ($uri === 'tag') {
-        $uri = 'tag/index';
+        $uri = TAG_INDEX_KEY;
+    } elseif ($uri === 'blog') {
+        $uri = BLOG_INDEX_KEY;
     }
-echo '>>> '>$uri.PHP_EOL;
+
     if (($retval = route($method, $uri)) === null) {
         throw new \RuntimeException("The route() function returned null!"); // @codeCoverageIgnore
     }

@@ -20,7 +20,9 @@ This page is located at
 
     content/common/landing/posts/index.md
 
-This data file is lised in one index: ``slugIndex`` with the key ``tag/index``
+This data file is lised in one index: ``slugIndex`` with the key ``post/index``. This
+page is generally use when there is a static front page. If the 'blog' link is enabled it will
+point to this page.
 ### Tag Index Page
 This page is located at
 

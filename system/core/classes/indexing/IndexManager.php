@@ -166,9 +166,9 @@ final class IndexManager
      */
     private function buildLandingIndex(): array {
         $index = [];
-        $index['posts/index'] = $this->createElement($this->root.DS.self::POST_LANDING_FILE, 'posts/index');
-        $index['tag/index'] = $this->createElement($this->root.DS.self::TAG_LANDING_FILE, 'tag/index');
-        $index['category/index'] = $this->createElement($this->root.DS.self::CAT_LANDING_FILE, 'category/index');
+        $index[BLOG_INDEX_KEY] = $this->createElement($this->root.DS.self::POST_LANDING_FILE, BLOG_INDEX_KEY);
+        $index[TAG_INDEX_KEY] = $this->createElement($this->root.DS.self::TAG_LANDING_FILE, TAG_INDEX_KEY);
+        $index[CAT_INDEX_KEY] = $this->createElement($this->root.DS.self::CAT_LANDING_FILE, CAT_INDEX_KEY);
         return $index;
     }
 

@@ -19,17 +19,4 @@ class RouteFuncTest extends TestCase
         $result = route('GET', 'category/index');
         $this->assertStringNotContainsString('404', $result);
     }
-    /*
-    function testGetStaticPage(): void {
-        $this->assertStringContainsString('404', route('GET', '/test/unknown'));
-    }
-
-    function testGetCategory(): void {
-        $this->assertStringNotContainsString('404', route('GET', '/category/uncategorized'));
-    }
-
-    function testGetPost(): void {
-        $this->assertStringNotContainsString('404', route('GET', '/2021/10/testered'));
-    }
-    */
 }
