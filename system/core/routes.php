@@ -16,6 +16,24 @@ get('index', function(string $uri): string {
     return render($template, get_template_context($content));
 });
 
+get('category', function (string $uri): string {
+     $template = 'listing.html';
+     $content = get_content_object($uri, get_categories());
+     if ($content === null) {
+         return not_found();
+     }
+     return render($template, get_template_context($content));
+});
+
+get('tag', function (string $uri): string {
+    $template = 'listing.html';
+    $content = get_content_object($uri, get_tags());
+    if ($content === null) {
+        return not_found();
+    }
+    return render($template, get_template_context($content));
+});
+
 // Catch all route
 get('.*', function (string $uri): string {
     $template = 'main.html';

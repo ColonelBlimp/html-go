@@ -5,12 +5,11 @@ use PHPUnit\Framework\TestCase;
 
 class RouteFuncTest extends TestCase
 {
-    /*
-    function testIndexRoute(): void {
+    function testHomePageRoute(): void {
         $this->assertStringContainsString('404', route('GET', 'home'));
         $this->assertStringNotContainsString('404', route('GET', 'index'));
     }
-
+    /*
     function testGetStaticPage(): void {
         $this->assertStringContainsString('404', route('GET', '/test/unknown'));
     }

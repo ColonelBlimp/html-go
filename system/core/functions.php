@@ -11,10 +11,22 @@ use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
 
 /**
+ * Returns a pagination page of tags.
+ * @param int $page_number The page number
+ * @param int $per_page Items per page. Default is 0 (zero) which means return all
+ * @return array<Content>
+ */
+function get_tags(int $page_number = 1, int $per_page = 0): array {
+    $list = [];
+    //TODO: Implement me
+    return $list;
+}
+
+/**
  * Returns a pagination page of categories.
  * @param int $page_number The page number
  * @param int $per_page Items per page. Default is 0 (zero) which means return all
- * @return array<stdClass> The resulting list of posts
+ * @return array<Content> The resulting list of posts
  */
 function get_categories(int $page_number = 1, int $per_page = 0): array {
     $cats = get_index_manager()->getCategoriesIndex();

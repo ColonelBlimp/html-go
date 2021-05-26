@@ -4,23 +4,23 @@
 HTML-go has four editable landing pages for **posts**, **categories** and **tags**. The fourth
 landing page is the **main index** or **home** page.
 ### Home Page (main index)
-This page is located at
+This data file is located at
 
     content/common/pages/index.md
 
-This page is listed in two indexes: *slugIndex* and *pageIndex*
+This data file is listed in two indexes: ``slugIndex`` and ``pageIndex`` with the key ``index``
 ### Category Index Page
 This page is located at
 
     content/common/landing/category/index.md
     
-This page is listed in one index: *slugIndex*
+This data file is listed in one index: ``slugIndex`` with the key ``category/index``
 ### Post Index Page
 This page is located at
 
     content/common/landing/posts/index.md
 
-This page is lised in one index: *slugIndex*
+This data file is lised in one index: ``slugIndex`` with the key ``tag/index``
 ### Tag Index Page
 This page is located at
 
