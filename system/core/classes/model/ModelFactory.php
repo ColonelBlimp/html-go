@@ -87,7 +87,9 @@ final class ModelFactory
                 $kv = \explode('=', $line, 2);
                 $key = \trim($kv[0], " \n\r\t\v\0\"");
                 $val = \trim($kv[1], " \n\r\t\v\0\"");
-                //FIXME: Check overwriting existing properties!
+                if (isset($contentObject->$key)) {
+                    throw new \RuntimeException("Overwriting an existing key/value [$key]");
+                }
                 $contentObject->$key = $val;
             }
         }
