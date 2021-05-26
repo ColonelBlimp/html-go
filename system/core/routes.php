@@ -19,7 +19,7 @@ get('index', function(string $uri): string {
 // Catch all route
 get('.*', function (string $uri): string {
     $template = 'main.html';
-    $result = \preg_match('/(\d{4})\/(\d{2})\/(.+)/i', $uri);
+    $result = \preg_match('/^\d{4}\/\d{2}\/.+/i', $uri);
     if ($result === false) {
         throw new RuntimeException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
     }
