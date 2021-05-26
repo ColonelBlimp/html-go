@@ -103,8 +103,17 @@ function dispatch(string $uri = null, string $method = GET): string {
         $uri = strip_url_parameters($_SERVER['REQUEST_URI']);
         $method = \strtoupper($_SERVER['REQUEST_METHOD']);
     }
+
+    // Check for index (landing) pages
     $uri = \trim($uri, FWD_SLASH);
-    $uri = empty($uri) ? 'index' : $uri;
+    if (empty($uri)) {
+        $uri = 'index';
+    } elseif ($uri === 'category') {
+        $uri = 'category/index';
+    } elseif ($uri === 'tag') {
+        $uri = 'tag/index';
+    }
+echo '>>> '>$uri.PHP_EOL;
     if (($retval = route($method, $uri)) === null) {
         throw new \RuntimeException("The route() function returned null!"); // @codeCoverageIgnore
     }

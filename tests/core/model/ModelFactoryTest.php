@@ -28,7 +28,7 @@ class ModelFactoryTest extends TestCase
         $this->assertTrue(isset($content->site->url));
         $this->assertSame('http://localhost:8000', $content->site->url);
         $this->assertTrue(isset($content->site->title));
-        $this->assertSame('HTML-go', $content->site->title);
+        $this->assertSame(' | HTML-go', $content->site->title);
         $this->assertTrue(isset($content->site->description));
         $this->assertSame('Powered by HTML-go, a databaseless, flat-file blogging platform', $content->site->description);
         $this->assertTrue(isset($content->site->tagline));

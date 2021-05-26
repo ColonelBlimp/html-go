@@ -80,7 +80,7 @@ final class Config
             throw new \RuntimeException("Configuration option 'site.url' not set.");
         }
         if (isset($config[self::KEY_SITE_TITLE]) === false) {
-            $config[self::KEY_SITE_TITLE] = 'HTML-go';
+            $config[self::KEY_SITE_TITLE] = ' | HTML-go';
         }
         if (isset($config[self::KEY_SITE_DESCRIPTION]) === false) {
             $config[self::KEY_SITE_DESCRIPTION] = 'Powered by HTML-go, a databaseless, flat-file blogging platform';
