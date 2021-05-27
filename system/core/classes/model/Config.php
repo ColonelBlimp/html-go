@@ -4,6 +4,7 @@ namespace html_go\model;
 final class Config
 {
     const KEY_SITE_URL = 'site.url';
+    const KEY_SITE_NAME = 'site.name';
     const KEY_SITE_TITLE = 'site.title';
     const KEY_SITE_DESCRIPTION = 'site.description';
     const KEY_SITE_TAGLINE = 'site.tagline';
@@ -82,11 +83,14 @@ final class Config
         if (isset($config[self::KEY_SITE_TITLE]) === false) {
             $config[self::KEY_SITE_TITLE] = ' | HTML-go';
         }
+        if (isset($config[self::KEY_SITE_NAME]) === false) {
+            $config[self::KEY_SITE_NAME] = 'Another HTML-go Site';
+        }
         if (isset($config[self::KEY_SITE_DESCRIPTION]) === false) {
             $config[self::KEY_SITE_DESCRIPTION] = 'Powered by HTML-go, a databaseless, flat-file blogging platform';
         }
         if (isset($config[self::KEY_SITE_TAGLINE]) === false) {
-            $config[self::KEY_SITE_TAGLINE] = 'Another HTML-go Site';
+            $config[self::KEY_SITE_TAGLINE] = 'Another HTML-go website';
         }
         if (isset($config[self::KEY_SITE_COPYRIGHT]) === false) {
             $config[self::KEY_SITE_COPYRIGHT] = '(c) Copyright, Your Name';

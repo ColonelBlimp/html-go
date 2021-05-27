@@ -51,6 +51,7 @@ final class ModelFactory
         if (empty($site)) {
             $site = new Site();
             $site->url = $this->config->getString(Config::KEY_SITE_URL);
+            $site->name = $this->config->getString(Config::KEY_SITE_NAME);
             $site->title = $this->config->getString(Config::KEY_SITE_TITLE);
             $site->description = $this->config->getString(Config::KEY_SITE_DESCRIPTION);
             $site->tagline = $this->config->getString(Config::KEY_SITE_TAGLINE);
