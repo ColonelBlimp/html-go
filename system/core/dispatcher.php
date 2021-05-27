@@ -103,17 +103,9 @@ function dispatch(string $uri = null, string $method = GET): string {
         $uri = strip_url_parameters($_SERVER['REQUEST_URI']);
         $method = \strtoupper($_SERVER['REQUEST_METHOD']);
     }
-
-    // Check for index (landing) pages
     $uri = \trim($uri, FWD_SLASH);
     if (empty($uri)) {
         $uri = HOME_INDEX_KEY;
-    } elseif ($uri === 'category') {
-        $uri = CAT_INDEX_KEY;
-    } elseif ($uri === 'tag') {
-        $uri = TAG_INDEX_KEY;
-    } elseif ($uri === 'blog') {
-        $uri = BLOG_INDEX_KEY;
     }
 
     if (($retval = route($method, $uri)) === null) {
