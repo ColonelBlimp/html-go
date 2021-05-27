@@ -8,11 +8,11 @@ use html_go\model\Config;
  */
 get('index', function(string $uri): string {
     $template = 'main.html';
-    if (get_config_bool(Config::KEY_STATIC_INDEX)) {
+    if (get_config()->getBool(Config::KEY_STATIC_INDEX)) {
         $content = get_content_object(HOME_INDEX_KEY);
     } else {
         $content = get_content_object(BLOG_INDEX_KEY,
-                get_posts(get_pagination_pagenumber(), get_config_int(Config::KEY_POSTS_PERPAGE)));
+                get_posts(get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE)));
         $template = 'listing.html';
     }
     if ($content === null) {
@@ -27,7 +27,7 @@ get('index', function(string $uri): string {
  */
 get('category', function (string $uri): string {
     $content = get_content_object(CAT_INDEX_KEY,
-            get_categories(get_pagination_pagenumber(), get_config_int(Config::KEY_POSTS_PERPAGE)));
+            get_categories(get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE)));
     if ($content === null) {
         return not_found();
     }
@@ -40,7 +40,7 @@ get('category', function (string $uri): string {
  */
 get('tag', function (string $uri): string {
     $content = get_content_object(TAG_INDEX_KEY,
-            get_tags(get_pagination_pagenumber(), get_config_int(Config::KEY_POSTS_PERPAGE)));
+            get_tags(get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE)));
     if ($content === null) {
         return not_found();
     }
@@ -52,7 +52,7 @@ get('tag', function (string $uri): string {
  */
 get('blog', function (string $uri): string {
     $content = get_content_object(HOME_INDEX_KEY,
-            get_posts(get_pagination_pagenumber(), get_config_int(Config::KEY_POSTS_PERPAGE)));
+            get_posts(get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE)));
     if ($content === null) {
         return not_found();
     }

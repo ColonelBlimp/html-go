@@ -74,7 +74,7 @@ function get_template_context(Content $content): array {
 function get_i18n(): i18n {
     static $object = null;
     if (empty($object)) {
-        $object = new i18n(LANG_ROOT.DS.get_config_string('site.language').'.messages.php');
+        $object = new i18n(LANG_ROOT.DS.get_config()->getString(Config::KEY_LANG).'.messages.php');
     }
     return $object;
 }
@@ -111,17 +111,15 @@ function not_found(string $title = '404 Not Found'): string {
 function get_template_engine(): TemplateEngine {
     static $engine = null;
     if (empty($engine)) {
-        $themeName = get_config_string('theme.name', 'default');
-        $engineName = get_config_string('template.engine', 'twig');
+        $themeName = get_config()->getString(Config::KEY_THEME_NAME);
+        $engineName = get_config()->getString(Config::KEY_TPL_ENGINE);
 
         $caching = false;
         $strict_vars = true;
-        if (get_config_bool('template.engine.caching', false)) {
+        if (get_config()->getBool(Config::KEY_TPL_CACHING)) {
             $caching = CACHE_ROOT.DS.'template_cache';
         }
-        if (get_config_bool('template.engine.twig.strict_variables', true) === false) {
-            $strict_vars = false;
-        }
+        $strict_vars = get_config()->getBool(Config::KEY_TPL_STRICT_VARS_TWIG);
         $options = [
             'cache' => $caching,
             'strict_variables' => $strict_vars
@@ -178,36 +176,6 @@ function get_markdown_parser(): MarkdownParser {
         $parser = new ParsedownParser();
     }
     return $parser;
-}
-
-/**
- * Returns an string configuration option value.
- * @param string $key the key of the configuration value to return.
- * @param string $default an empty string
- * @return string the value
- */
-function get_config_string(string $key, string $default = ''): string {
-    return get_config()->getString($key, $default);
-}
-
-/**
- * Returns an integer configuration option value.
- * @param string $key the key of the configuration value to return.
- * @param int $default minus one (-1)
- * @return int
- */
-function get_config_int(string $key, int $default = -1): int {
-    return get_config()->getInt($key, $default);
-}
-
-/**
- * Returns a boolean configuration option value.
- * @param string $key the key of the configuration value to return.
- * @param bool $default <code>false</code>
- * @return bool
- */
-function get_config_bool(string $key, bool $default = false): bool {
-    return get_config()->getBool($key, $default);
 }
 
 /**
