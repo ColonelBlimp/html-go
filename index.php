@@ -8,7 +8,7 @@ if (\getenv('CLI_ENV') !== null) {
 //    new IndexManager(APP_ROOT.DS.'tests'.DS.'test-data');
 //    echo 'Success!';
 //    echo dispatch('/category/uncategorized');
-    echo dispatch('/blog?page=1');
+    echo dispatch('/');
 //    route('GET', 'home');
 } else {
     echo dispatch();

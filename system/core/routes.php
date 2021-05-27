@@ -12,7 +12,7 @@ get('index', function(string $uri): string {
         $content = get_content_object(HOME_INDEX_KEY);
     } else {
         $content = get_content_object(BLOG_INDEX_KEY,
-                get_posts(get_pagination_pagenumber(), get_config_int('post.per_page')));
+                get_posts(get_pagination_pagenumber(), get_config_int(Config::KEY_POSTS_PERPAGE)));
         $template = 'listing.html';
     }
     if ($content === null) {
@@ -27,7 +27,7 @@ get('index', function(string $uri): string {
  */
 get('category', function (string $uri): string {
     $content = get_content_object(CAT_INDEX_KEY,
-            get_categories(get_pagination_pagenumber(), get_config_int('post.per_page')));
+            get_categories(get_pagination_pagenumber(), get_config_int(Config::KEY_POSTS_PERPAGE)));
     if ($content === null) {
         return not_found();
     }
@@ -36,11 +36,11 @@ get('category', function (string $uri): string {
 
 /*
  * The tag landing page, which is a special case page as the index key
- * is not the URI but has '/index' suffixed to the URI (i.e. 'category/index').
+ * is not the URI but has '/index' suffixed to the URI (e.g. 'category/index').
  */
 get('tag', function (string $uri): string {
     $content = get_content_object(TAG_INDEX_KEY,
-            get_tags(get_pagination_pagenumber(), get_config_int('post.per_page')));
+            get_tags(get_pagination_pagenumber(), get_config_int(Config::KEY_POSTS_PERPAGE)));
     if ($content === null) {
         return not_found();
     }
@@ -52,7 +52,7 @@ get('tag', function (string $uri): string {
  */
 get('blog', function (string $uri): string {
     $content = get_content_object(HOME_INDEX_KEY,
-            get_posts(get_pagination_pagenumber(), get_config_int('post.per_page')));
+            get_posts(get_pagination_pagenumber(), get_config_int(Config::KEY_POSTS_PERPAGE)));
     if ($content === null) {
         return not_found();
     }
