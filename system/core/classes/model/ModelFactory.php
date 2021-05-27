@@ -96,7 +96,7 @@ final class ModelFactory
                 $key = \trim($kv[0], " \n\r\t\v\0\"");
                 $val = \trim($kv[1], " \n\r\t\v\0\"");
                 if (isset($contentObject->$key)) {
-                    throw new \RuntimeException("Overwriting an existing key/value [$key]");
+                    throw new \RuntimeException("Overwriting an existing key/value [$key]"); // @codeCoverageIgnore
                 }
                 $contentObject->$key = $val;
             }
