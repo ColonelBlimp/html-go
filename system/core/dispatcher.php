@@ -100,8 +100,8 @@ function get(string $pattern, callable $handler): void {
  */
 function dispatch(string $uri = null, string $method = GET): string {
     if ($uri === null) {
-        $uri = $_SERVER['REQUEST_URI'];
-        $method = \strtoupper($_SERVER['REQUEST_METHOD']);
+        $uri = $_SERVER['REQUEST_URI']; // @codeCoverageIgnore
+        $method = \strtoupper($_SERVER['REQUEST_METHOD']); // @codeCoverageIgnore
     }
     $uri = strip_url_parameters($uri);
     $uri = \trim($uri, FWD_SLASH);

@@ -24,12 +24,6 @@ final class ModelFactory
         if (isset($indexElement->key)) {
             $contentObject->key = $indexElement->key;
         }
-        if (isset($indexElement->title)) {
-            $contentObject->title = $indexElement->title;
-        }
-        if (isset($indexElement->description)) {
-            $contentObject->description = $indexElement->description;
-        }
         if (isset($indexElement->category)) {
             $contentObject->category = $indexElement->category;
         }
@@ -60,7 +54,7 @@ final class ModelFactory
         return $site;
     }
 
-    private function loadDataFile(object $indexElement): Content {
+    private function loadDataFile(Element $indexElement): Content {
         if (!isset($indexElement->path)) {
             throw new \RuntimeException("Object does not have 'path' property " . print_r($indexElement, true)); // @codeCoverageIgnore
         }
