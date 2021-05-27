@@ -25,7 +25,7 @@ get('index', function(string $uri): string {
  * is not the URI but has '/index' suffixed to the URI (i.e. 'category/index').
  */
 get('category', function (string $uri): string {
-    $content = get_content_object(CAT_INDEX_KEY, get_categories());
+    $content = get_content_object(CAT_INDEX_KEY, get_categories(get_pagination_pagenumber()));
     if ($content === null) {
         return not_found();
     }
@@ -37,7 +37,7 @@ get('category', function (string $uri): string {
  * is not the URI but has '/index' suffixed to the URI (i.e. 'category/index').
  */
 get('tag', function (string $uri): string {
-    $content = get_content_object(TAG_INDEX_KEY, get_tags());
+    $content = get_content_object(TAG_INDEX_KEY, get_tags(get_pagination_pagenumber()));
     if ($content === null) {
         return not_found();
     }
@@ -48,7 +48,7 @@ get('tag', function (string $uri): string {
  * The Blog landing page (only used if front page is static).
  */
 get('blog', function (string $uri): string {
-    $content = get_content_object(HOME_INDEX_KEY, get_posts());
+    $content = get_content_object(HOME_INDEX_KEY, get_posts(get_pagination_pagenumber()));
     if ($content === null) {
         return not_found();
     }
