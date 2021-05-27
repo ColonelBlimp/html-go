@@ -10,6 +10,16 @@ use html_go\model\ModelFactory;
 use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
 
+function get_pagination_pagenumber(): int {
+    $page_num = 1;
+    if (($page = get_query_parameter('page')) !== null) {
+        if (\ctype_digit($page)) {
+            $page_num = (int)$page;
+        }
+    }
+    return $page_num;
+}
+
 /**
  * Returns a pagination page of tags.
  * @param int $page_number The page number

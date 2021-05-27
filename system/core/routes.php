@@ -11,7 +11,7 @@ get('index', function(string $uri): string {
     if (get_config_bool(Config::KEY_STATIC_INDEX)) {
         $content = get_content_object(HOME_INDEX_KEY);
     } else {
-        $content = get_content_object(BLOG_INDEX_KEY, get_posts());
+        $content = get_content_object(BLOG_INDEX_KEY, get_posts(get_pagination_pagenumber()));
         $template = 'listing.html';
     }
     if ($content === null) {
@@ -55,7 +55,11 @@ get('blog', function (string $uri): string {
     return render('main.html', get_template_context($content));
 });
 
-// Catch all route
+/*
+ * Catch all route. This should render single content pages only. Listing
+ * pages such as landing pages, archives should be handled as a special
+ * case and have its own route defined.
+ */
 get('.*', function (string $uri): string {
     $result = \preg_match('/^\d{4}\/\d{2}\/.+/i', $uri);
     if ($result === false) {
