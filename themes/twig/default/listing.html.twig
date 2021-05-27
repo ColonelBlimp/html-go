@@ -4,10 +4,11 @@
 {% if content.listing is empty %}
 <p>No Posts<p>
 {% else %}
-<ul>
 {% for item in content.listing %}
-<li>{{ item.title }}</li>
+<article>
+    <h2><a href="{{ item.key }}">{{ item.title }}</a></h2>
+</article>
 {% endfor %}
-</ul>
+
 {% endif %}
 {% endblock %}

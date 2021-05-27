@@ -60,4 +60,11 @@ final class IndexManagerTest extends TestCase
         $this->assertNotNull($manager->getCategoriesIndex());
         $this->assertIsArray($manager->getCategoriesIndex());
     }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testPostKey(IndexManager $manager): void {
+        $this->assertNotNull($manager->getElementFromSlugIndex('2021/01/testered'));
+    }
 }

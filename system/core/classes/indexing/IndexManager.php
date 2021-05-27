@@ -321,7 +321,7 @@ final class IndexManager
         $tagList = \substr($key, $start, $end-$start);
         $title = \substr($key, $end + 1);
         $year = \substr($dateString, 0, 4);
-        $month = \substr($dateString, 5, 2);
+        $month = \substr($dateString, 4, 2);
         $key = $year.FWD_SLASH.$month.FWD_SLASH.$title;
         $parts = \explode(DS, $pathinfo['dirname']);
         $cnt = \count($parts);

@@ -32,7 +32,7 @@ class ModelFactoryTest extends TestCase
         $this->assertTrue(isset($content->site->description));
         $this->assertSame('Powered by HTML-go, a databaseless, flat-file blogging platform', $content->site->description);
         $this->assertTrue(isset($content->site->tagline));
-        $this->assertSame('Another HTML-go Site', $content->site->tagline);
+        $this->assertSame('Another HTML-go website', $content->site->tagline);
         $this->assertTrue(isset($content->site->copyright));
         $this->assertSame('(c) Copyright, Your Name', $content->site->copyright);
     }
