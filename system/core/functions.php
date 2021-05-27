@@ -10,6 +10,10 @@ use html_go\model\ModelFactory;
 use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
 
+/**
+ * Returns the page number from the query string (if there is one).
+ * @return int Default value is one (1)
+ */
 function get_pagination_pagenumber(): int {
     $page_num = 1;
     if (($page = get_query_parameter('page')) !== null) {

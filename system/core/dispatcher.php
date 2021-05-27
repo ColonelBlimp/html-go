@@ -100,9 +100,10 @@ function get(string $pattern, callable $handler): void {
  */
 function dispatch(string $uri = null, string $method = GET): string {
     if ($uri === null) {
-        $uri = strip_url_parameters($_SERVER['REQUEST_URI']);
+        $uri = $_SERVER['REQUEST_URI'];
         $method = \strtoupper($_SERVER['REQUEST_METHOD']);
     }
+    $uri = strip_url_parameters($uri);
     $uri = \trim($uri, FWD_SLASH);
     if (empty($uri)) {
         $uri = HOME_INDEX_KEY;

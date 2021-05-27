@@ -37,4 +37,10 @@ class DispatcherFuncTest extends TestCase
         $result = dispatch('/blog');
         $this->assertStringNotContainsString('404', $result);
     }
+
+    function testPagination(): void {
+        $result = dispatch('/?page=1');
+        print_r($result);
+//        $this->assertStringNotContainsString('404', $result);
+    }
 }

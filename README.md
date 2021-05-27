@@ -10,11 +10,10 @@ listed in two indexes: ``slugIndex`` and ``pageIndex`` under the key ``index``.
 ### Category Index Page
 The data file is located at ``content/common/landing/category/index.md`` and
 is listed in one index: ``slugIndex`` under the key ``category/index``.
-### Post Index Page
+### Blog Index Page
 The data file is located at ``content/common/landing/posts/index.md`` and is
-lised in one index: ``slugIndex`` under the key ``post/index``. Generally,
-this index page is use when there is a static front page; if the 'blog' link is
-enabled it will point to this page.
+lised in one index: ``slugIndex`` under the key ``blog/index``. Generally,
+this index page is use if the 'blog' link is enabled it will point to this page.
 ### Tag Index Page
 This data file is located at ``content/common/landing/tags/index.md`` and
 is listed in one index: ``slugIndex`` under the key ``tag/index``.
