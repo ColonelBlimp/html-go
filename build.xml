@@ -20,10 +20,6 @@
         <delete file="${basedir}/tests/test-data/content/user-data/@testuser/posts/harvesting/regular/20210101000000_wibble.md" />
     </target>
 
-    <target name="full" depends="prepare, php-lint, phpcs, phpmd, phpcpd, phploc, pdepend, phpstan, phpunit, phpcb, cleanup">
-        <delete file="${basedir}/System.out" />
-    </target>
-
 	<target name="minimum" depends="prepare, php-lint, phpstan, phpcs, phpunit, cleanup">
 		<delete file="${basedir}/System.out" />
 	</target>
@@ -97,17 +93,6 @@
             <env key="XDEBUG_MODE" value="coverage"/>
         </exec>
     </target>
-
-	<target name="phpcb" description="Aggregate all the documentation">
-        <exec executable="phpcb.bat">
-            <arg value="--log" />
-            <arg path="${build.dir}/logs" />
-            <arg value="--source" />
-            <arg path="${src.dir}" />
-            <arg value="--output" />
-            <arg path="${build.dir}/code-browser" />
-        </exec>
-	</target>
 
     <target name="tailwindcss" description="Tailwind CLI">
         <exec executable="npx.cmd">

@@ -3,3 +3,4 @@
 /.buildpath
 /.phpunit.result.cache
 /cache.properties
+/node_modules/

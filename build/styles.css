@@ -2,30 +2,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@layer utilities {
-	.article > h1 {
-		@apply font-bold;
-		@apply text-2xl;
-	}
-	
-	.article > h2 {
-		@apply font-bold;
-		@apply text-xl;
-	}
-	
-	.article > p {
-		@apply text-sm;
-		@apply mb-2;
-	}
-
-    div.snackbar {
-        @apply w-full;
-    }
-	div.snackbar > div {
-	   @apply bg-gray-800;
-	   @apply text-white;
-	   @apply text-center;
-	   @apply font-bold;
-	}
-}
