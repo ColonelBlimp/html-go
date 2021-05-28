@@ -10,6 +10,7 @@
 {% set description = content.description %}
 {% endif %}
     <meta name="description" content="{{ description }}">
+    <link rel="stylesheet" href="{{ content.site.url }}/themes/twig/default/css/main.css">
   </head>
   <body>
 {% include "header.html.twig" %}
