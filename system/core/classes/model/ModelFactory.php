@@ -50,6 +50,7 @@ final class ModelFactory
             $site->description = $this->config->getString(Config::KEY_SITE_DESCRIPTION);
             $site->tagline = $this->config->getString(Config::KEY_SITE_TAGLINE);
             $site->copyright = $this->config->getString(Config::KEY_SITE_COPYRIGHT);
+            $site->language = $this->config->getString(Config::KEY_LANG);
         }
         return $site;
     }

@@ -1,33 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-          <title>{{ content.title }}{{ content.site.title }}</title>
+<html lang="{{ content.site.language }}">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{ content.title }}{{ content.site.title }}</title>
 {% if content.description is empty %}
 {% set description = content.site.description %}
 {% else %}
 {% set description = content.description %}
 {% endif %}
-          <meta name="description" content="{{ description }}">
-    </head>
-    <body>
-        <div>
-            <header role="banner">
-                <h1>{{ content.site.name }}</h1>
-                <span>{{ content.site.tagline }}</span>
-            </header>
-            <main>
+    <meta name="description" content="{{ description }}">
+  </head>
+  <body>
+    <nav>
+    </nav>
 {% block main %}{% endblock %}
-            </main>
-        </div>
-        <div>
-            <aside>
-{% include "aside.html.twig" %}
-            </aside>
-        </div>
-        <footer role="contentinfo">
-{% include "footer.html.twig" %}
-        </footer>
-    </body>
+  </body>
 </html>

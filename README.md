@@ -26,3 +26,13 @@ definition is a *catch-all* route.
 
 Content is retrieve using the requested URI, if the requested URI matches content
 it is rendered, otherwise the *not found* page is rendered.
+
+# Templating
+
+### Context Variables
+
+| Variable Name | Config Option | Comments |   |   |
+|---------------|---------------|----------|---|---|
+|               |               |          |   |   |
+|               |               |          |   |   |
+|               |               |          |   |   |
