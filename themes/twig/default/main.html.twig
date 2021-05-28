@@ -1,6 +1,9 @@
 {% extends "layout.html.twig" %}
 {% block main %}
     <main>
-    <p>Static page</p>
+      <div>
+        <h1>{{ content.title }}</h1>
+        <h5>{{ content.description }}</h5>
+      </div>
     </main>
 {% endblock %}

@@ -1,5 +1,5 @@
 +++
-title = "Home Page"
+title = "Chilukwa Honey"
 description = "Welcome to our website"
 +++
 
