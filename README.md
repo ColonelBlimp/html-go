@@ -31,8 +31,19 @@ it is rendered, otherwise the *not found* page is rendered.
 
 ### Context Variables
 
-| Variable Name | Config Option | Comments |   |   |
-|---------------|---------------|----------|---|---|
-|               |               |          |   |   |
-|               |               |          |   |   |
-|               |               |          |   |   |
+<table>
+ <thead>
+  <tr>
+   <th>Variable</th>
+   <th>Config Option</th>
+   <th>Comments</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td>{{ site.language }}</td>
+   <td>site.language</td>
+   <td>Default is "en"</td>
+  </tr>
+ </tbody>
+</table>

@@ -12,8 +12,8 @@
     <meta name="description" content="{{ description }}">
   </head>
   <body>
-    <nav>
-    </nav>
+{% include "header.html.twig" %}
 {% block main %}{% endblock %}
+{% include "footer.html.twig" %}
   </body>
 </html>
