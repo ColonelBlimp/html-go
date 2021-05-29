@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ content.site.language }}">
+<html lang="{{ content.site.language }}" class="bg-white">
   <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,7 +14,9 @@
   </head>
   <body>
 {% include "header.html.twig" %}
+    <main class="border-t border-gray-200">
 {% block main %}{% endblock %}
+    </main>
 {% include "footer.html.twig" %}
   </body>
 </html>
