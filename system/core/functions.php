@@ -5,7 +5,6 @@ use html_go\indexing\IndexManager;
 use html_go\markdown\MarkdownParser;
 use html_go\markdown\ParsedownParser;
 use html_go\model\Config;
-use html_go\model\Content;
 use html_go\model\ModelFactory;
 use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
@@ -28,7 +27,7 @@ function get_pagination_pagenumber(): int {
  * Returns a pagination page of tags.
  * @param int $page_number The page number
  * @param int $per_page Items per page. Default is 0 (zero) which means return all
- * @return array<Content>
+ * @return array<\stdClass>
  */
 function get_tags(int $page_number = 1, int $per_page = 0): array {
     $list = [];
@@ -40,7 +39,7 @@ function get_tags(int $page_number = 1, int $per_page = 0): array {
  * Returns a pagination page of categories.
  * @param int $page_number The page number
  * @param int $per_page Items per page. Default is 0 (zero) which means return all
- * @return array<Content> The resulting list of posts
+ * @return array<\stdClass> The resulting list of posts
  */
 function get_categories(int $page_number = 1, int $per_page = 0): array {
     $cats = get_index_manager()->getCategoriesIndex();
@@ -57,10 +56,10 @@ function get_categories(int $page_number = 1, int $per_page = 0): array {
 
 /**
  * Build and return the template context.
- * @param Content $content
+ * @param \stdClass $content
  * @return array<mixed>
  */
-function get_template_context(Content $content): array {
+function get_template_context(\stdClass $content): array {
     return [
         'i18n' => get_i18n(),
         'content' => $content
@@ -181,10 +180,10 @@ function get_markdown_parser(): MarkdownParser {
 /**
  * Get a <code>Content</code> object (if any) associated with the given slug.
  * @param string $slug
- * @param array<Content>$listing
- * @return Content|NULL if no content was found associated with the given slug <code>null</code> is returned.
+ * @param array<\stdClass>$listing
+ * @return \stdClass|NULL if no content was found associated with the given slug <code>null</code> is returned.
  */
-function get_content_object(string $slug, array $listing = []): ?Content {
+function get_content_object(string $slug, array $listing = []): ?\stdClass {
     $manager = get_index_manager();
     if ($manager->elementExists($slug) === false) {
         return null;
@@ -200,7 +199,7 @@ function get_content_object(string $slug, array $listing = []): ?Content {
  * Returns a pagination page of posts.
  * @param int $page_number The page number
  * @param int $per_page Items per page
- * @return array<Content> The resulting list of posts
+ * @return array<\stdClass> The resulting list of posts
  */
 function get_posts(int $page_number = 1, int $per_page = 5): array {
     $posts = get_index_manager()->getPostsIndex();

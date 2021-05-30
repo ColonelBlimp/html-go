@@ -19,7 +19,7 @@ final class ModelFactory
         $this->parser = $parser;
     }
 
-    function createContentObject(Element $indexElement): Content {
+    function createContentObject(Element $indexElement): \stdClass {
         $contentObject = $this->loadDataFile($indexElement);
         if (isset($indexElement->key)) {
             $contentObject->key = $indexElement->key;
@@ -42,10 +42,10 @@ final class ModelFactory
      * Create the site object.
      * @return Site
      */
-    private function getSiteObject(): Site {
+    private function getSiteObject(): \stdClass {
         static $site = null;
         if (empty($site)) {
-            $site = new Site();
+            $site = new \stdClass();
             $site->url = $this->config->getString(Config::KEY_SITE_URL);
             $site->name = $this->config->getString(Config::KEY_SITE_NAME);
             $site->title = $this->config->getString(Config::KEY_SITE_TITLE);
@@ -57,7 +57,7 @@ final class ModelFactory
         return $site;
     }
 
-    private function loadDataFile(Element $indexElement): Content {
+    private function loadDataFile(Element $indexElement): \stdClass {
         if (!isset($indexElement->path)) {
             throw new \RuntimeException("Object does not have 'path' property " . print_r($indexElement, true)); // @codeCoverageIgnore
         }
@@ -67,45 +67,10 @@ final class ModelFactory
         return $this->parseContentFile($data);
     }
 
-    private function parseContentFile(string $data): Content {
-        $str = \str_replace(["\n\r", "\r\n"], "\n", $data);
-        $str = \str_replace("\t", " ", $str);
-        $lines = \explode("\n", $data);
-        $cnt = \count($lines);
-        $start = false;
-        $contentObject = new Content();
-        for ($index = 0; $index < $cnt; $index++) {
-            $line = trim($lines[$index]);
-            if ($line === '+++') {
-                if ($start === false) {
-                    $start = true;
-                    continue;
-                } else {
-                    break;
-                }
-            }
-
-            if (empty($line) || $line[0] === '#') {
-                continue;
-            }
-
-            if (\strpos($line, '=')) {
-                $kv = \explode('=', $line, 2);
-                $key = \trim($kv[0], " \n\r\t\v\0\"");
-                $val = \trim($kv[1], " \n\r\t\v\0\"");
-                if (isset($contentObject->$key)) {
-                    throw new \RuntimeException("Overwriting an existing key/value [$key]"); // @codeCoverageIgnore
-                }
-                $contentObject->$key = $val;
-            }
+    private function parseContentFile(string $data): \stdClass {
+        if (($contentObject = \json_decode($data)) === null) {
+            throw new \RuntimeException("json_decode returned null!");
         }
-
-        if (($pos = \strrpos($str, '+++')) === false) {
-            throw new \RuntimeException("Somehow, can't find '+++' in [$str]"); // @codeCoverageIgnore
-        }
-
-        $contentObject->body = $this->parser->parse(\substr($str, $pos + 3));
-
         return $contentObject;
     }
 }

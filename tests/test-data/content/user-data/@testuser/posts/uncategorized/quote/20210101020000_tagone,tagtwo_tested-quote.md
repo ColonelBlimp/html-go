@@ -1,6 +1,6 @@
-+++
-title = "Quote Title"
-description = "quote description"
-+++
+{
+    "title": "Quote Title",
+    "description": "quote description",
+    "body": "Test quote post"
+}
 
-Test quote post

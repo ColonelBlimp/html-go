@@ -1,6 +1,5 @@
-+++
-title = "Categories"
-description = "Categories list"
-+++
-
-Categories list.
+{
+    "title": "Categories",
+    "description": "Categories list",
+    "body": "Categories list."
+}

@@ -1,6 +1,5 @@
-+++
-title = "Tags List"
-description = "System tags"
-+++
-
-All our tags.
+{
+    "title": "Tags List",
+    "description": "System tags",
+    "body": "All our tags."
+}

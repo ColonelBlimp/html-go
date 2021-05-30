@@ -1,6 +1,6 @@
-+++
-title = "Latest Posts"
-description = "Latest blog posts"
-+++
+{
+    "title": "Latest Posts",
+    "description": "Latest blog posts",
+    "body": "Our latest blog posts."
+}
 
-Our latest blog posts.

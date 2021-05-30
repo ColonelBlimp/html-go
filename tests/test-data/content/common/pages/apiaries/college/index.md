@@ -1,6 +1,5 @@
-+++
-title = "College Apiary"
-description = "Our College apiary"
-+++
-
-The College apiary was established in...
+{
+    "title": "College Apiary",
+    "description": "Our College apiary",
+    "body": "The College apiary was established in..."
+}
