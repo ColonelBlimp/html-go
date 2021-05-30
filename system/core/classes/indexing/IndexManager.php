@@ -18,6 +18,7 @@ final class IndexManager
     private const PAGES_DIR = 'content'.DS.'common'.DS.'pages';
     private const INDEX_DIR = 'cache'.DS.'indexes';
     private const USER_DATA_DIR = 'content'.DS.'user-data';
+
     private const PAGE_INDEX_FILE = self::INDEX_DIR.DS.'pages.inx';
     private const POST_INDEX_FILE = self::INDEX_DIR.DS.'posts.inx';
     private const CAT_INDEX_FILE = self::INDEX_DIR.DS.'categories.inx';
@@ -31,6 +32,10 @@ final class IndexManager
     private const CAT_LANDING_FILE = 'content'.DS.'common'.DS.'landing'.DS.'category'.DS.'index'.CONTENT_FILE_EXT;
 
     private string $root;
+    private string $categoriesDir;
+    private string $pagesDir;
+    private string $userDataDir;
+    private string $indexDir;
 
     /**
      * @var array<string, Element> $slugIndex
@@ -83,22 +88,23 @@ final class IndexManager
             throw new \InvalidArgumentException("Unable to validate the location of the 'content' directory [$root]");
         }
         $this->root = $tmp;
-        if (!\is_dir($this->root.DS.self::CATEGORIES_DIR)) {
-            $tmp = $this->root.DS.self::CATEGORIES_DIR; // @codeCoverageIgnore
-            throw new \RuntimeException("Content directory format is invalid. Directory does not exist [$tmp]"); // @codeCoverageIgnore
+        $this->categoriesDir = $this->root.DS.self::CATEGORIES_DIR;
+        $this->pagesDir = $this->root.DS.self::PAGES_DIR;
+        $this->userDataDir = $this->root.DS.self::USER_DATA_DIR;
+        $this->indexDir = $this->root.DS.self::INDEX_DIR;
+
+        if (!\is_dir($this->categoriesDir)) {
+            throw new \RuntimeException("Content directory format is invalid. Directory does not exist [$this->categoriesDir]"); // @codeCoverageIgnore
         }
-        if (!\is_dir($this->root.DS.self::PAGES_DIR)) {
-            $tmp = $this->root.DS.self::PAGES_DIR; // @codeCoverageIgnore
-            throw new \RuntimeException("Content directory format is invalid. Directory does not exist [$tmp]"); // @codeCoverageIgnore
+        if (!\is_dir($this->pagesDir)) {
+            throw new \RuntimeException("Content directory format is invalid. Directory does not exist [$this->pagesDir]"); // @codeCoverageIgnore
         }
-        if (!\is_dir($this->root.DS.self::USER_DATA_DIR)) {
-            $tmp = $this->root.DS.self::USER_DATA_DIR; // @codeCoverageIgnore
-            throw new \RuntimeException("Content directory format is invalid. Directory does not exist [$tmp]"); // @codeCoverageIgnore
+        if (!\is_dir($this->userDataDir)) {
+            throw new \RuntimeException("Content directory format is invalid. Directory does not exist [$this->userDataDir]"); // @codeCoverageIgnore
         }
-        if (!\file_exists($this->root.DS.self::INDEX_DIR)) {
-            if (\mkdir($this->root.DS.self::INDEX_DIR, MODE, true) === false) {
-                $tmp = $this->root.DS.self::INDEX_DIR; // @codeCoverageIgnore
-                throw new \RuntimeException("Unable to create directory [$tmp]"); // @codeCoverageIgnore
+        if (!\file_exists($this->indexDir)) {
+            if (\mkdir($this->indexDir, MODE, true) === false) {
+                throw new \RuntimeException("Unable to create directory [$this->indexDir]"); // @codeCoverageIgnore
             }
         }
 
@@ -172,6 +178,7 @@ final class IndexManager
             $this->postIndex = $this->loadIndex($this->root.DS.self::POST_INDEX_FILE);
             $this->pageIndex = $this->loadIndex($this->root.DS.self::PAGE_INDEX_FILE);
             $this->tagIndex = $this->loadIndex($this->root.DS.self::TAG_INDEX_FILE);
+            $this->menusIndex = $this->loadIndex($this->root.DS.self::MENUS_INDEX_FILE);
         }
         $this->slugIndex = \array_merge($this->postIndex, $this->categoryIndex, $this->pageIndex, $this->tagIndex, $this->buildLandingIndex());
     }
@@ -195,7 +202,7 @@ final class IndexManager
      */
     private function buildCategoryIndex(): array {
         $index = [];
-        foreach ($this->parseDirectory($this->root.DS.self::CATEGORIES_DIR.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
+        foreach ($this->parseDirectory($this->categoriesDir.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
             $key = 'category'.FWD_SLASH.\pathinfo($filepath, PATHINFO_FILENAME);
             $index[$key] = $this->createElement($filepath, $key);
         }
@@ -206,19 +213,19 @@ final class IndexManager
     /**
      * Scans the <i>content/pages</i> folder creating and indexing all the files and folders.
      * When the index is built, it is also loaded.
-     * @return array<string, Element>
+     * @return array<string, Element> Returns the page index.
      */
     private function buildPageIndex(): array {
         $menuIndex = [];
         $pageIndex = [];
-        $pagesRoot = $this->root.DS.self::PAGES_DIR;
-        $len = \strlen($pagesRoot) + 1;
-        $pages = $this->scanDirectory($pagesRoot);
+        $len = \strlen($this->pagesDir) + 1;
+        $pages = $this->scanDirectory($this->pagesDir);
         \sort($pages);
         foreach ($pages as $filepath) {
-            $key = \str_replace(DS, FWD_SLASH, \substr(\substr($filepath, $len), 0, -3));
+            $location = \substr($filepath, $len);
+            $key = \str_replace(DS, FWD_SLASH, \substr($location, 0, (\strlen($location) - CONTENT_FILE_EXT_LEN)));
             $pageIndex[$key] = $this->createElement($filepath, $key);
-            $menuIndex = $this->getMenuSettings($filepath);
+            $menuIndex = $this->getMenuSettings($filepath, $key);
         }
         $this->writeIndex($this->root.DS.self::PAGE_INDEX_FILE, $pageIndex);
         $this->writeIndex($this->root.DS.self::MENUS_INDEX_FILE, $menuIndex);
@@ -227,12 +234,14 @@ final class IndexManager
 
     /**
      * Scans the <i>content/user-data/[username]/posts</i> folder creating and indexing all files.
+     * This method also creates the menu index, as the menus are based on the front matter of
+     * page content files.
      * When the index is built, it is also loaded.
      * @return array<string, Element>
      */
     private function buildPostsIndex(): array {
         $index = [];
-        foreach ($this->parseDirectory($this->root.DS.self::USER_DATA_DIR.DS.'*'.DS.'posts'.DS.'*'.DS.'*'.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
+        foreach ($this->parseDirectory($this->userDataDir.DS.'*'.DS.'posts'.DS.'*'.DS.'*'.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
             $element = $this->createElement($filepath, \pathinfo($filepath, PATHINFO_FILENAME));
             if (!isset($element->key)) {
                 throw new \RuntimeException("Invalid format of index element: " . print_r($element, true)); // @codeCoverageIgnore
@@ -309,10 +318,9 @@ final class IndexManager
      * @throws \InvalidArgumentException
      * @return Element
      */
-    private function createElement(string $filepath, string $key = null): Element {
-        $pathinfo = \pathinfo($filepath);
-        if ($key === null) {
-            $key = $pathinfo['filename'];
+    private function createElement(string $filepath, string $key): Element {
+        if (empty($key)) {
+            throw new \RuntimeException("Key is empty for [$filepath]");
         }
         if (\strpos($filepath, self::CATEGORIES_DIR) !== false) {
             return $this->createElementClass($key, $filepath, ENUM_CATEGORY);
@@ -342,6 +350,7 @@ final class IndexManager
         $year = \substr($dateString, 0, 4);
         $month = \substr($dateString, 4, 2);
         $key = $year.FWD_SLASH.$month.FWD_SLASH.$title;
+        $pathinfo = \pathinfo($filepath);
         $parts = \explode(DS, $pathinfo['dirname']);
         $cnt = \count($parts);
         return $this->createElementClass($key, $filepath, ENUM_POST, $parts[$cnt - 2], $parts[$cnt - 1], $parts[$cnt - 4], $dateString, $tagList);
@@ -359,7 +368,7 @@ final class IndexManager
      * @param string $tagList
      * @return Element stdClass
      */
-    private function createElementClass(string $key = EMPTY_VALUE, string $path = EMPTY_VALUE, string $section = EMPTY_VALUE, string $category = EMPTY_VALUE, string $type = EMPTY_VALUE, string $username = EMPTY_VALUE, string $date = EMPTY_VALUE, string $tagList = ''): Element {
+    private function createElementClass(string $key, string $path = EMPTY_VALUE, string $section = EMPTY_VALUE, string $category = EMPTY_VALUE, string $type = EMPTY_VALUE, string $username = EMPTY_VALUE, string $date = EMPTY_VALUE, string $tagList = ''): Element {
         $tags = [];
         if (!empty($tagList)) {
             $tags = \explode(',', $tagList);
@@ -405,15 +414,22 @@ final class IndexManager
     }
 
     /**
-     *
+     * Reads the given file and creates an
      * @return array<mixed>
      */
-    private function getMenuSettings(string $filepath): array {
+    private function getMenuSettings(string $filepath, string $key): array {
+        if (empty($key)) {
+            throw new \RuntimeException("Key is empty for [$filepath]");
+        }
         if (($json = \file_get_contents($filepath)) === false) {
             throw new \RuntimeException("file_get_contents() failed reading [$filepath]");
         }
         $data = \json_decode($json, true);
         if (isset($data['menus'])) {
+            foreach($data['menus'] as $k => $v) {
+                $v['key'] = $key;
+                $data['menus'][$k] = $v;
+            }
             return $data['menus'];
         }
         return [];

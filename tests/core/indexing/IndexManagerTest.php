@@ -75,5 +75,6 @@ final class IndexManagerTest extends TestCase
         $menus = $manager->getMenusIndex();
         $this->assertNotNull($menus);
         $this->assertIsArray($menus);
+//        var_dump($menus);
     }
 }

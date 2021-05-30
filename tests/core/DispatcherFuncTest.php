@@ -26,20 +26,4 @@ class DispatcherFuncTest extends TestCase
         $this->assertEmpty($params);
         $this->assertNull(get_query_parameter('test'), '1');
     }
-
-    function testLandingPages(): void {
-        $result = dispatch('/');
-        $this->assertStringNotContainsString('404', $result);
-        $result = dispatch('/category');
-        $this->assertStringNotContainsString('404', $result);
-        $result = dispatch('/tag');
-        $this->assertStringNotContainsString('404', $result);
-        $result = dispatch('/blog');
-        $this->assertStringNotContainsString('404', $result);
-    }
-
-    function testPagination(): void {
-        $result = dispatch('/?page=1');
-        $this->assertStringNotContainsString('404', $result);
-    }
 }
