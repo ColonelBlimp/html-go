@@ -24,6 +24,8 @@ final class IndexManager
     private const TAG_INDEX_FILE = self::INDEX_DIR.DS.'tags.inx';
     private const TAG2POSTS_INDEX_FILE = self::INDEX_DIR.DS.'tag2posts.inx';
     private const CAT2POSTS_INDEX_FILE = self::INDEX_DIR.DS.'cat2posts.inx';
+    private const MENUS_INDEX_FILE = self::INDEX_DIR.DS.'menus.inx';
+
     private const POST_LANDING_FILE = 'content'.DS.'common'.DS.'landing'.DS.'posts'.DS.'index'.CONTENT_FILE_EXT;
     private const TAG_LANDING_FILE = 'content'.DS.'common'.DS.'landing'.DS.'tags'.DS.'index'.CONTENT_FILE_EXT;
     private const CAT_LANDING_FILE = 'content'.DS.'common'.DS.'landing'.DS.'category'.DS.'index'.CONTENT_FILE_EXT;
@@ -66,6 +68,11 @@ final class IndexManager
     private array $tagIndex;
 
     /**
+     * @var array<mixed> $menusIndex
+     */
+    private array $menusIndex;
+
+    /**
      * IndexManager constructor.
      * @param string $root
      * @throws \InvalidArgumentException
@@ -102,8 +109,6 @@ final class IndexManager
         $this->categoryIndex = $this->buildCategoryIndex();
         $this->pageIndex = $this->buildPageIndex();
         $this->postIndex = $this->buildPostsIndex();
-        $this->tag2PostIndex = [];
-        $this->category2PostsIndex = [];
         $this->tagIndex = $this->buildTagIndex($this->tag2PostIndex, $this->category2PostsIndex);
     }
 
@@ -146,9 +151,20 @@ final class IndexManager
     }
 
     /**
+     * Return the menus index.
+     * @return array<mixed>
+     */
+    function getMenusIndex(): array {
+        return $this->menusIndex;
+    }
+
+    /**
      * Initialize the indexing system and create the indexes files if needed.
      */
     private function Initialize(): void {
+        $this->tag2PostIndex = [];
+        $this->category2PostsIndex = [];
+        $this->menusIndex = [];
         if (\file_exists($this->root.DS.self::POST_INDEX_FILE) === false) {
             $this->reindex();
         } else {
@@ -193,17 +209,20 @@ final class IndexManager
      * @return array<string, Element>
      */
     private function buildPageIndex(): array {
-        $index = [];
+        $menuIndex = [];
+        $pageIndex = [];
         $pagesRoot = $this->root.DS.self::PAGES_DIR;
         $len = \strlen($pagesRoot) + 1;
         $pages = $this->scanDirectory($pagesRoot);
         \sort($pages);
         foreach ($pages as $filepath) {
             $key = \str_replace(DS, FWD_SLASH, \substr(\substr($filepath, $len), 0, -3));
-            $index[$key] = $this->createElement($filepath, $key);
+            $pageIndex[$key] = $this->createElement($filepath, $key);
+            $menuIndex = $this->getMenuSettings($filepath);
         }
-        $this->writeIndex($this->root.DS.self::PAGE_INDEX_FILE, $index);
-        return $index;
+        $this->writeIndex($this->root.DS.self::PAGE_INDEX_FILE, $pageIndex);
+        $this->writeIndex($this->root.DS.self::MENUS_INDEX_FILE, $menuIndex);
+        return $pageIndex;
     }
 
     /**
@@ -383,5 +402,20 @@ final class IndexManager
             throw new \ErrorException("unserialize() failed [$filepath]"); // @codeCoverageIgnore
         }
         return $data;
+    }
+
+    /**
+     *
+     * @return array<mixed>
+     */
+    private function getMenuSettings(string $filepath): array {
+        if (($json = \file_get_contents($filepath)) === false) {
+            throw new \RuntimeException("file_get_contents() failed reading [$filepath]");
+        }
+        $data = \json_decode($json, true);
+        if (isset($data['menus'])) {
+            return $data['menus'];
+        }
+        return [];
     }
 }

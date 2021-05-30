@@ -67,4 +67,13 @@ final class IndexManagerTest extends TestCase
     function testPostKey(IndexManager $manager): void {
         $this->assertNotNull($manager->getElementFromSlugIndex('2021/01/testered'));
     }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testMenuIndex(IndexManager $manager): void {
+        $menus = $manager->getMenusIndex();
+        $this->assertNotNull($menus);
+        $this->assertIsArray($menus);
+    }
 }
