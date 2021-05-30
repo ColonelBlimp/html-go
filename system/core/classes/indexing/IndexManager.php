@@ -25,8 +25,8 @@ final class IndexManager
     private const TAG2POSTS_INDEX_FILE = self::INDEX_DIR.DS.'tag2posts.inx';
     private const CAT2POSTS_INDEX_FILE = self::INDEX_DIR.DS.'cat2posts.inx';
     private const POST_LANDING_FILE = 'content'.DS.'common'.DS.'landing'.DS.'posts'.DS.'index'.CONTENT_FILE_EXT;
-    private const TAG_LANDING_FILE = 'content'.DS.'common'.DS.'landing'.DS.'tags'.DS.'index';
-    private const CAT_LANDING_FILE = 'content'.DS.'common'.DS.'landing'.DS.'category'.DS.'index.CONTENT_FILE_EXT';
+    private const TAG_LANDING_FILE = 'content'.DS.'common'.DS.'landing'.DS.'tags'.DS.'index'.CONTENT_FILE_EXT;
+    private const CAT_LANDING_FILE = 'content'.DS.'common'.DS.'landing'.DS.'category'.DS.'index'.CONTENT_FILE_EXT;
 
     private string $root;
 
