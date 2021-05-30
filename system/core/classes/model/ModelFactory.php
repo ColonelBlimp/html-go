@@ -40,7 +40,7 @@ final class ModelFactory
 
     /**
      * Create the site object.
-     * @return Site
+     * @return \stdClass
      */
     private function getSiteObject(): \stdClass {
         static $site = null;
