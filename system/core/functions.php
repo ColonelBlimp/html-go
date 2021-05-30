@@ -10,6 +10,21 @@ use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
 
 /**
+ * Returns an array for the given menu.
+ * @param string $name
+ * @return array<mixed>
+ */
+function get_menu(string $name): array {
+    $menu = [];
+
+    $index = get_index_manager()->getMenusIndex();
+    if (isset($index[$name])) {
+        print_r($index[$name]);
+    }
+    return $menu;
+}
+
+/**
  * Returns the page number from the query string (if there is one).
  * @return int Default value is one (1)
  */
@@ -192,6 +207,7 @@ function get_content_object(string $slug, array $listing = []): ?\stdClass {
     if (!empty($listing)) {
         $content->listing = $listing;
     }
+    print_r($content);
     return $content;
 }
 

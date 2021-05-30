@@ -5,6 +5,9 @@ use PHPUnit\Framework\TestCase;
 
 class IndexManagerExceptionsTest extends TestCase
 {
+    /**
+     * @runInSeparateProcess
+     */
     function testExceptions(): IndexManager {
         $manager = new IndexManager(TEST_DATA_ROOT);
         $this->assertNotNull($manager);
