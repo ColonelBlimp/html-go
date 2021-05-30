@@ -10,7 +10,7 @@ class IndexManagerTestOld extends IndexingTestCase
     function testConstructorAppRootException(): void {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Unable to validate the application root [');
-        new IndexManager(IndexingTestCase::APP_ROOT.DIRECTORY_SEPARATOR.'content.md');
+        new IndexManager(IndexingTestCase::APP_ROOT.DIRECTORY_SEPARATOR.'content'.CONTENT_FILE_EXT);
     }
 
     /**
@@ -59,7 +59,7 @@ class IndexManagerTestOld extends IndexingTestCase
 
         // Category
         $this->assertSame('uncategorized', $elem->getKey());
-        $this->assertSame(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'common'.DS.'categories'.DS.'uncategorized.md', $elem->getPath());
+        $this->assertSame(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'common'.DS.'categories'.DS.'uncategorized'.CONTENT_FILE_EXT, $elem->getPath());
         $this->assertSame('categories', $elem->getSection());
         $this->assertSame(EMPTY_VALUE, $elem->getCategory());
         $this->assertSame(EMPTY_VALUE, $elem->getType());
@@ -69,7 +69,7 @@ class IndexManagerTestOld extends IndexingTestCase
         $elem = $manager->getElementFromSlugIndex('about');
         $this->assertNotNull($elem);
         $this->assertSame('about', $elem->getKey());
-        $this->assertSame(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'common'.DS.'pages'.DS.'about.md', $elem->getPath());
+        $this->assertSame(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'common'.DS.'pages'.DS.'about'.CONTENT_FILE_EXT, $elem->getPath());
         $this->assertSame('pages', $elem->getSection());
         $this->assertSame(EMPTY_VALUE, $elem->getCategory());
         $this->assertSame(EMPTY_VALUE, $elem->getType());
@@ -79,7 +79,7 @@ class IndexManagerTestOld extends IndexingTestCase
         $elem = $manager->getElementFromSlugIndex('apiaries/chilukwa');
         $this->assertNotNull($elem);
         $this->assertSame('apiaries/chilukwa', $elem->getKey());
-        $this->assertSame(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'common'.DS.'pages'.DS.'apiaries'.DS.'chilukwa'.DS.'_index.md', $elem->getPath());
+        $this->assertSame(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'common'.DS.'pages'.DS.'apiaries'.DS.'chilukwa'.DS.'_index'.CONTENT_FILE_EXT, $elem->getPath());
         $this->assertSame('pages', $elem->getSection());
         $this->assertSame(EMPTY_VALUE, $elem->getCategory());
         $this->assertSame(EMPTY_VALUE, $elem->getType());
@@ -89,7 +89,7 @@ class IndexManagerTestOld extends IndexingTestCase
         $elem = $manager->getElementFromSlugIndex('harvest-time');
         $this->assertNotNull($elem);
         $this->assertSame('harvest-time', $elem->getKey());
-        $this->assertSame(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'harvesting'.DS.'image'.DS.'20210101000000_tagone,tagtwo,tagthree_harvest-time.md', $elem->getPath());
+        $this->assertSame(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'harvesting'.DS.'image'.DS.'20210101000000_tagone,tagtwo,tagthree_harvest-time'.CONTENT_FILE_EXT, $elem->getPath());
         $this->assertSame('posts', $elem->getSection());
         $this->assertSame('harvesting', $elem->getCategory());
         $this->assertSame('image', $elem->getType());
@@ -101,7 +101,7 @@ class IndexManagerTestOld extends IndexingTestCase
         $elem = $manager->getElementFromSlugIndex('s');
         $this->assertNotNull($elem);
         $this->assertSame('s', $elem->getKey());
-        $this->assertSame(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'harvesting'.DS.'regular'.DS.'20210101030000__s.md', $elem->getPath());
+        $this->assertSame(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'harvesting'.DS.'regular'.DS.'20210101030000__s'.CONTENT_FILE_EXT, $elem->getPath());
         $this->assertSame('posts', $elem->getSection());
         $this->assertSame('harvesting', $elem->getCategory());
         $this->assertSame('regular', $elem->getType());
@@ -113,7 +113,7 @@ class IndexManagerTestOld extends IndexingTestCase
         $elem = $manager->getElementFromSlugIndex('tested-quote');
         $this->assertNotNull($elem);
         $this->assertSame('tested-quote', $elem->getKey());
-        $this->assertSame(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'uncategorized'.DS.'quote'.DS.'20210101020000_tagone,tagtwo_tested-quote.md', $elem->getPath());
+        $this->assertSame(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'uncategorized'.DS.'quote'.DS.'20210101020000_tagone,tagtwo_tested-quote'.CONTENT_FILE_EXT, $elem->getPath());
         $this->assertSame('posts', $elem->getSection());
         $this->assertSame('uncategorized', $elem->getCategory());
         $this->assertSame('quote', $elem->getType());
@@ -191,7 +191,7 @@ class IndexManagerTestOld extends IndexingTestCase
      * @runInSeparateProcess
      */
     function testShortFilenameException(): void {
-        $this->assertTrue(touch(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'harvesting'.DS.'regular'.DS.'2021010100000__s.md'));
+        $this->assertTrue(touch(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'harvesting'.DS.'regular'.DS.'2021010100000__s'.CONTENT_FILE_EXT));
         $this->expectException(\InvalidArgumentException::class);
         new IndexManager(IndexingTestCase::APP_ROOT);
     }
@@ -200,7 +200,7 @@ class IndexManagerTestOld extends IndexingTestCase
      * @runInSeparateProcess
      */
     function testSyntaxFilenameException(): void {
-        $this->assertTrue(touch(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'harvesting'.DS.'regular'.DS.'20210101000000_wibble.md'));
+        $this->assertTrue(touch(\realpath(IndexingTestCase::APP_ROOT).DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'harvesting'.DS.'regular'.DS.'20210101000000_wibble'.CONTENT_FILE_EXT));
         $this->expectException(\InvalidArgumentException::class);
         new IndexManager(IndexingTestCase::APP_ROOT);
     }

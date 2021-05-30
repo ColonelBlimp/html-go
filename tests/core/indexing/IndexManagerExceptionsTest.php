@@ -16,7 +16,7 @@ class IndexManagerExceptionsTest extends TestCase
      * @depends testExceptions
      */
     function testShortFilenameException(IndexManager $manager): void {
-        $this->assertTrue(touch(TEST_DATA_ROOT.DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'harvesting'.DS.'regular'.DS.'2021010100000__s.md'));
+        $this->assertTrue(touch(TEST_DATA_ROOT.DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'harvesting'.DS.'regular'.DS.'2021010100000__s'.CONTENT_FILE_EXT));
         $this->expectException(\InvalidArgumentException::class);
         $manager->reindex();
     }
@@ -26,7 +26,7 @@ class IndexManagerExceptionsTest extends TestCase
      * @depends testExceptions
      */
     function testSyntaxFilenameException(IndexManager $manager): void {
-        $this->assertTrue(touch(TEST_DATA_ROOT.DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'harvesting'.DS.'regular'.DS.'20210101000000_wibble.md'));
+        $this->assertTrue(touch(TEST_DATA_ROOT.DS.'content'.DS.'user-data'.DS.'@testuser'.DS.'posts'.DS.'harvesting'.DS.'regular'.DS.'20210101000000_wibble'.CONTENT_FILE_EXT));
         $this->expectException(\InvalidArgumentException::class);
         $manager->reindex();
     }

@@ -45,7 +45,7 @@ final class IndexManagerTest extends TestCase
         $this->assertTrue(isset($element->key));
         $this->assertSame('index', $element->key);
         $this->assertTrue(isset($element->path));
-        $this->assertTrue(\str_ends_with($element->path, 'common'.DS.'pages'.DS.'index.md'));
+        $this->assertTrue(\str_ends_with($element->path, 'common'.DS.'pages'.DS.'index'.CONTENT_FILE_EXT));
         $this->assertTrue(isset($element->section));
         $this->assertTrue(isset($element->type));
         $this->assertTrue(isset($element->username));
