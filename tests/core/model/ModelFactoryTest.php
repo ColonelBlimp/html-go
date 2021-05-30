@@ -12,11 +12,11 @@ class ModelFactoryTest extends TestCase
         $parser = new ParsedownParser();
         $factory = new ModelFactory($cfg, $parser);
         $manager = new IndexManager(TEST_DATA_ROOT);
-        $this->assertTrue($manager->elementExists('category/index'));
-        $element = $manager->getElementFromSlugIndex('category/index');
+        $this->assertTrue($manager->elementExists(CAT_INDEX_KEY));
+        $element = $manager->getElementFromSlugIndex(CAT_INDEX_KEY);
         $content = $factory->createContentObject($element);
         $this->assertTrue(isset($content->key));
-        $this->assertSame('category/index', $element->key);
+        $this->assertSame(CAT_INDEX_KEY, $element->key);
         $this->assertTrue(isset($content->title));
         $this->assertSame('Categories', $content->title);
         $this->assertTrue(isset($content->description));
