@@ -64,12 +64,9 @@ final class ModelFactory
         if (($data = \file_get_contents($indexElement->path)) === false) {
             throw new \RuntimeException("file_get_contens() failed opening [$indexElement->path]"); // @codeCoverageIgnore
         }
-        return $this->parseContentFile($data);
-    }
-
-    private function parseContentFile(string $data): \stdClass {
         if (($contentObject = \json_decode($data)) === null) {
-            throw new \RuntimeException("json_decode returned null!");
+            $path = $indexElement->path;
+            throw new \RuntimeException("json_decode returned null decoding [$data] from [$path]"); // @codeCoverageIgnore
         }
         return $contentObject;
     }
