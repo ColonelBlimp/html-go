@@ -10,4 +10,14 @@ class IndexManagerTest extends TestCase
         $this->assertNotNull($manager);
         return $manager;
     }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testLandingPages(IndexManager $manager): void {
+        $this->assertNotNull($manager);
+        $this->assertTrue($manager->elementExists(CAT_INDEX_KEY));
+        $this->assertTrue($manager->elementExists(HOME_INDEX_KEY));
+        $this->assertTrue($manager->elementExists(BLOG_INDEX_KEY));
+    }
 }
