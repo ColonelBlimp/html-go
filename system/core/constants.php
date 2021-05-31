@@ -20,3 +20,4 @@
 \define('BLOG_INDEX_KEY', 'blog/index');
 \define('CAT_INDEX_KEY', 'category/index');
 \define('TAG_INDEX_KEY', 'tag/index');
+
