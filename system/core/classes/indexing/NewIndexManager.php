@@ -1,11 +1,6 @@
 <?php declare(strict_types=1);
 namespace html_go\indexing;
 
-\define('ENUM_PAGE', 'page');
-\define('ENUM_CATEGORY', 'category');
-\define('ENUM_POST', 'post');
-\define('ENUM_TAG', 'tag');
-
 final class NewIndexManager
 {
     private string $parentDir;
@@ -20,12 +15,36 @@ final class NewIndexManager
     private string $cat2postInxFile;
     private string $menuInxFile;
 
+    /** @var array<string, Element> /** @var array<string, Element> $pageIndex */
     private array $catIndex;
+
+    /** @var array<string, Element> $pageIndex */
     private array $pageIndex;
+
+    /** @var array<string, Element> $postIndex */
     private array $postIndex;
+
+    /** @var array<mixed> $menuIndex */
     private array $menuIndex;
+
+    /** @var array<string, Element> $tagIndex */
     private array $tagIndex;
 
+    /** @var array<string, Element> $slugIndex */
+    private array $slugIndex;
+
+    /** @var array<string, Element> $tag2postIndex */
+    private array $tag2postIndex;
+
+    /** @var array<string, Element> $cat2postIndex */
+    private array $cat2postIndex;
+
+    /**
+     * IndexManager constructor.
+     * @param string $parentDir The parent directory for the content directory.
+     * @throws \InvalidArgumentException If the parent directory is invalid.
+     * @throws \RuntimeException
+     */
     function __construct(string $parentDir) {
         if (\is_dir($parentDir) === false) {
             throw new \InvalidArgumentException("The application root cannot be found [$parentDir]");
@@ -49,17 +68,78 @@ final class NewIndexManager
         $this->initialize();
     }
 
+    /**
+     * Rebuild all the indexes.
+     */
     function reindex(): void {
         $this->catIndex = $this->buildCategoryIndex();
-        $this->pageIndex = $this->buildPageAndMenuIndexes()[0];
-        $this->menuIndex = $this->buildPageAndMenuIndexes()[1];
+        $pageMenuIndex = $this->buildPageAndMenuIndexes();
+        $this->pageIndex = $pageMenuIndex[0];
+        $this->menuIndex = $pageMenuIndex[1];
         $this->postIndex = $this->buildPostIndex();
-        $this->tagIndex = $this->buildCompositeIndexes()[0];
-        print_r($this->tagIndex);
+        $compositeIndex = $this->buildCompositeIndexes();
+        $this->tagIndex = $compositeIndex[0];
+        $this->tag2postIndex = $compositeIndex[1];
+        $this->cat2postIndex = $compositeIndex[2];
+        $this->slugIndex = \array_merge($this->postIndex, $this->catIndex, $this->pageIndex, $this->tagIndex);
     }
 
     /**
-     * @return array<Element>
+     * Returns an object representing an element in the index.
+     * @param string $key
+     * @throws \RuntimeException If the given $key does not exist in the index.
+     * @return Element
+     */
+    function getElementFromSlugIndex(string $key): Element {
+        if (!isset($this->slugIndex[$key])) {
+            throw new \RuntimeException("Key does not exist in the slugIndex! Use 'elementExists()' before calling this method.");
+        }
+        return $this->slugIndex[$key];
+    }
+
+    /**
+     * Check if an key exists in the <b>slug index</b>.
+     * @param string $key
+     * @return bool <code>true</code> if exists, otherwise <code>false</code>
+     */
+    function elementExists(string $key): bool {
+        return isset($this->slugIndex[$key]);
+    }
+
+    /**
+     * Return the posts index.
+     * @return array<string, Element>
+     */
+    function getPostsIndex(): array {
+        return $this->postIndex;
+    }
+
+    /**
+     * Return the category index.
+     * @return array<string, Element>
+     */
+    function getCategoriesIndex(): array {
+        return $this->catIndex;
+    }
+
+    /**
+     * Return the tag index.
+     * @return array<string, Element>
+     */
+    function getTagIndex(): array {
+        return $this->tagIndex;
+    }
+
+    /**
+     * Return the menus index.
+     * @return array<mixed>
+     */
+    function getMenusIndex(): array {
+        return $this->menuIndex;
+    }
+
+    /**
+     * @return array<string, Element>
      */
     private function buildCategoryIndex(): array {
         $index = [];
@@ -74,6 +154,10 @@ final class NewIndexManager
         return $index;
     }
 
+    /**
+     * Builds two indexes: menu and post indexes.
+     * @return array<mixed>
+     */
     private function buildPageAndMenuIndexes(): array {
         $menuIndex = [];
         $pageIndex = [];
@@ -92,13 +176,17 @@ final class NewIndexManager
                 }
             }
             $pageIndex[$key] = $this->createElement($key, $filepath, ENUM_PAGE);
-            $menuIndex = $this->getMenuSettings($key, $filepath);
+            $menuIndex = $this->buildMenus($key, $filepath);
         }
         $this->writeIndex($this->pageInxFile, $pageIndex);
         $this->writeIndex($this->menuInxFile, $menuIndex);
         return [$pageIndex, $menuIndex];
     }
 
+    /**
+     * Builds the post index.
+     * @return array<string, Element>
+     */
     private function buildPostIndex(): array {
         $index = [];
         foreach ($this->parseDirectory($this->userDataDir.DS.'*'.DS.'posts'.DS.'*'.DS.'*'.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
@@ -115,7 +203,7 @@ final class NewIndexManager
      * Reads the given file and creates an
      * @return array<mixed>
      */
-    private function getMenuSettings(string $key, string $filepath): array {
+    private function buildMenus(string $key, string $filepath): array {
         if (empty($key)) {
             throw new \RuntimeException("Key is empty for [$filepath]");
         }
@@ -133,6 +221,11 @@ final class NewIndexManager
         return [];
     }
 
+    /**
+     * Builds three indexes: 'category 2 posts', 'tag 2 posts' and tag index.
+     * @throws \RuntimeException
+     * @return array<mixed>
+     */
     private function buildCompositeIndexes(): array {
         $tagIndex = [];
         $tag2PostsIndex = [];
@@ -142,8 +235,9 @@ final class NewIndexManager
                 throw new \RuntimeException("Invalid format of index element: " . print_r($post, true)); // @codeCoverageIgnore
             }
             foreach ($post->tags as $tag) {
-                $tagIndex[(string)$tag] = $this->createElementClass($tag, \ucfirst(\str_replace('-', ' ', $tag)), ENUM_TAG);
-                $tag2PostsIndex[$tag][] = $post->key;
+                $key = 'tag'.FWD_SLASH.(string)$tag;
+                $tagIndex[$key] = $this->createElementClass($key, \ucfirst(\str_replace('-', ' ', $tag)), ENUM_TAG);
+                $tag2PostsIndex[$key][] = $post->key;
             }
             $cat2PostIndex[$post->category] = $post->key;
         }
@@ -161,10 +255,24 @@ final class NewIndexManager
             }
             $this->reindex();
         } else {
-echo '1';
+            $this->catIndex = $this->loadIndex($this->catInxFile);
+            $this->pageIndex = $this->loadIndex($this->pageInxFile);
+            $this->postIndex = $this->loadIndex($this->postInxFile);
+            $this->tagIndex = $this->loadIndex($this->tagInxFile);
+            $this->cat2postIndex = $this->loadIndex($this->cat2postInxFile);
+            $this->tag2postIndex = $this->loadIndex($this->tag2postInxFile);
+            $this->menuIndex = $this->loadIndex($this->menuInxFile);
+            $this->slugIndex = \array_merge($this->postIndex, $this->catIndex, $this->pageIndex, $this->tagIndex);
         }
     }
 
+    /**
+     * Load the given index file.
+     * @param string $filename
+     * @throws \RuntimeException
+     * @throws \ErrorException
+     * @return array<string, Element>
+     */
     private function loadIndex(string $filename): array {
         if (\file_exists($filename) === false) {
             throw new \RuntimeException("Index file does not exist [$filename]. Call 'redindex()'");
@@ -212,6 +320,7 @@ echo '1';
 
     /**
      * Writes data to an index file, creating the file if necessary.
+     * @param string $filepath
      * @param array<mixed> $index
      */
     private function writeIndex(string $filepath, array $index): void {
@@ -256,6 +365,7 @@ echo '1';
      * Creates and populates an index Element class.
      * @param string $key The index key
      * @param string $path The filepath
+     * @param string $type
      * @param string $section 'pages', 'posts', 'categories' or 'tags'
      * @param string $category
      * @param string $username

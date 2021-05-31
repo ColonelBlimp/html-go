@@ -13,6 +13,11 @@
 \define('CONTENT_FILE_EXT_LEN', \strlen(CONTENT_FILE_EXT));
 \define('MODE', 0777);
 
+\define('ENUM_PAGE', 'page');
+\define('ENUM_CATEGORY', 'category');
+\define('ENUM_POST', 'post');
+\define('ENUM_TAG', 'tag');
+
 \define('POST_LIST_TYPE', 0);
 \define('CAT_LIST_TYPE', 1);
 \define('TAG_LIST_TYPE', 2);

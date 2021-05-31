@@ -5,12 +5,9 @@ use PHPUnit\Framework\TestCase;
 
 class NewIndexManagerTest extends TestCase
 {
-    function testInstantiation(): void {
+    function testInstantiation(): NewIndexManager {
         $manager = new NewIndexManager(TEST_DATA_ROOT);
         $this->assertNotNull($manager);
-
-//        return $manager;
+        return $manager;
     }
-
-
 }
