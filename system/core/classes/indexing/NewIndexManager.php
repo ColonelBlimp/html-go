@@ -22,6 +22,9 @@ final class NewIndexManager
 
     private array $catIndex;
     private array $pageIndex;
+    private array $postIndex;
+    private array $menuIndex;
+    private array $tagIndex;
 
     function __construct(string $parentDir) {
         if (\is_dir($parentDir) === false) {
@@ -48,8 +51,11 @@ final class NewIndexManager
 
     function reindex(): void {
         $this->catIndex = $this->buildCategoryIndex();
-        $this->pageIndex = $this->buildPageIndex();
-        print_r($this->pageIndex);
+        $this->pageIndex = $this->buildPageAndMenuIndexes()[0];
+        $this->menuIndex = $this->buildPageAndMenuIndexes()[1];
+        $this->postIndex = $this->buildPostIndex();
+        $this->tagIndex = $this->buildCompositeIndexes()[0];
+        print_r($this->tagIndex);
     }
 
     /**
@@ -68,7 +74,7 @@ final class NewIndexManager
         return $index;
     }
 
-    private function buildPageIndex(): array {
+    private function buildPageAndMenuIndexes(): array {
         $menuIndex = [];
         $pageIndex = [];
         $pageDir = $this->commonDir.DS.'pages';
@@ -86,11 +92,65 @@ final class NewIndexManager
                 }
             }
             $pageIndex[$key] = $this->createElement($key, $filepath, ENUM_PAGE);
-//            $menuIndex = $this->getMenuSettings($filepath, $key);
+            $menuIndex = $this->getMenuSettings($key, $filepath);
         }
         $this->writeIndex($this->pageInxFile, $pageIndex);
-//        $this->writeIndex($this->root.DS.self::MENUS_INDEX_FILE, $menuIndex);
-        return $pageIndex;
+        $this->writeIndex($this->menuInxFile, $menuIndex);
+        return [$pageIndex, $menuIndex];
+    }
+
+    private function buildPostIndex(): array {
+        $index = [];
+        foreach ($this->parseDirectory($this->userDataDir.DS.'*'.DS.'posts'.DS.'*'.DS.'*'.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
+            $key = \pathinfo($filepath, PATHINFO_FILENAME);
+            $element = $this->createElement($key, $filepath, ENUM_POST);
+            $index[(string)$element->key] = $element;
+        }
+        $index['blog'] = $this->createElementClass('blog', $this->commonDir.DS.'landing'.DS.'blog'.DS.'index.md', ENUM_POST);
+        $this->writeIndex($this->postInxFile, $index);
+        return $index;
+    }
+
+    /**
+     * Reads the given file and creates an
+     * @return array<mixed>
+     */
+    private function getMenuSettings(string $key, string $filepath): array {
+        if (empty($key)) {
+            throw new \RuntimeException("Key is empty for [$filepath]");
+        }
+        if (($json = \file_get_contents($filepath)) === false) {
+            throw new \RuntimeException("file_get_contents() failed reading [$filepath]");
+        }
+        $data = \json_decode($json, true);
+        if (isset($data['menus'])) {
+            foreach($data['menus'] as $k => $v) {
+                $v['key'] = $key;
+                $data['menus'][$k] = $v;
+            }
+            return $data['menus'];
+        }
+        return [];
+    }
+
+    private function buildCompositeIndexes(): array {
+        $tagIndex = [];
+        $tag2PostsIndex = [];
+        $cat2PostIndex = [];
+        foreach ($this->postIndex as $post) {
+            if (!isset($post->key, $post->tags, $post->category)) {
+                throw new \RuntimeException("Invalid format of index element: " . print_r($post, true)); // @codeCoverageIgnore
+            }
+            foreach ($post->tags as $tag) {
+                $tagIndex[(string)$tag] = $this->createElementClass($tag, \ucfirst(\str_replace('-', ' ', $tag)), ENUM_TAG);
+                $tag2PostsIndex[$tag][] = $post->key;
+            }
+            $cat2PostIndex[$post->category] = $post->key;
+        }
+        $this->writeIndex($this->tagInxFile, $tagIndex);
+        $this->writeIndex($this->tag2postInxFile, $tag2PostsIndex);
+        $this->writeIndex($this->cat2postInxFile, $cat2PostIndex);
+        return [$tagIndex, $tag2PostsIndex, $cat2PostIndex];
     }
 
     private function initialize(): void {
@@ -161,18 +221,19 @@ echo '1';
         }
     }
 
-    private function createElement(string $key, string $filepath, string $type): Element {
+    private function createElement(string $key, string $filepath, string $section): Element {
         if (empty($key)) {
             throw new \RuntimeException("Key is empty for [$filepath]");
         }
-        switch ($type) {
+        switch ($section) {
             case ENUM_CATEGORY:
             case ENUM_PAGE:
-                return $this->createElementClass($key, $filepath, $type);
-            default:
+                return $this->createElementClass($key, $filepath, $section);
+            case ENUM_POST:
                 if (\strlen($key) < 17) {
                     throw new \InvalidArgumentException("Post content filename is too short [$key]");
                 }
+                $pathinfo = \pathinfo($filepath);
                 $dateString = \substr($key, 0, 14);
                 $start = 15;
                 if (($end = \strpos($key, '_', $start)) === false) {
@@ -183,10 +244,11 @@ echo '1';
                 $year = \substr($dateString, 0, 4);
                 $month = \substr($dateString, 4, 2);
                 $key = $year.FWD_SLASH.$month.FWD_SLASH.$title;
-                $pathinfo = \pathinfo($filepath);
                 $parts = \explode(DS, $pathinfo['dirname']);
                 $cnt = \count($parts);
-                return $this->createElementClass($key, $filepath, ENUM_POST, $parts[$cnt - 2], $parts[$cnt - 1], $parts[$cnt - 4], $dateString, $tagList);
+                return $this->createElementClass($key, $filepath, ENUM_POST, $parts[$cnt - 1], $parts[$cnt - 2], $parts[$cnt - 4], $dateString, $tagList);
+            default:
+                throw new \RuntimeException("Unknown sectiontype [$section]");
         }
     }
 
@@ -201,7 +263,7 @@ echo '1';
      * @param string $tagList
      * @return Element stdClass
      */
-    private function createElementClass(string $key, string $path = EMPTY_VALUE, string $section = EMPTY_VALUE, string $category = EMPTY_VALUE, string $username = EMPTY_VALUE, string $date = EMPTY_VALUE, string $tagList = ''): Element {
+    private function createElementClass(string $key, string $path, string $section, string $type = EMPTY_VALUE, string $category = EMPTY_VALUE, string $username = EMPTY_VALUE, string $date = EMPTY_VALUE, string $tagList = ''): Element {
         $tags = [];
         if (!empty($tagList)) {
             $tags = \explode(',', $tagList);
@@ -209,6 +271,7 @@ echo '1';
         $obj = new Element();
         $obj->key = $key;
         $obj->path = $path;
+        $obj->type = $type;
         $obj->section = $section;
         $obj->category = $category;
         $obj->username = $username;
