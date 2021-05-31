@@ -205,10 +205,10 @@ final class IndexManager
      */
     private function buildMenus(string $key, string $filepath): array {
         if (empty($key)) {
-            throw new \RuntimeException("Key is empty for [$filepath]");
+            throw new \RuntimeException("Key is empty for [$filepath]"); // @codeCoverageIgnore
         }
         if (($json = \file_get_contents($filepath)) === false) {
-            throw new \RuntimeException("file_get_contents() failed reading [$filepath]");
+            throw new \RuntimeException("file_get_contents() failed reading [$filepath]"); // @codeCoverageIgnore
         }
         $data = \json_decode($json, true);
         if (isset($data['menus'])) {
@@ -275,7 +275,7 @@ final class IndexManager
      */
     private function loadIndex(string $filename): array {
         if (\file_exists($filename) === false) {
-            throw new \RuntimeException("Index file does not exist [$filename]. Call 'redindex()'");
+            throw new \RuntimeException("Index file does not exist [$filename]. Call 'redindex()'"); // @codeCoverageIgnore
         }
         if (($data = \file_get_contents($filename)) === false) {
             throw new \ErrorException("file_get_contents() failed [$filename]"); // @codeCoverageIgnore
@@ -346,7 +346,7 @@ final class IndexManager
                 $dateString = \substr($key, 0, 14);
                 $start = 15;
                 if (($end = \strpos($key, '_', $start)) === false) {
-                    throw new \InvalidArgumentException("Content filename syntax error [$key]");
+                    throw new \InvalidArgumentException("Post content filename syntax error [$key]");
                 }
                 $tagList = \substr($key, $start, $end-$start);
                 $title = \substr($key, $end + 1);
@@ -357,7 +357,7 @@ final class IndexManager
                 $cnt = \count($parts);
                 return $this->createElementClass($key, $filepath, ENUM_POST, $parts[$cnt - 1], $parts[$cnt - 2], $parts[$cnt - 4], $dateString, $tagList);
             default:
-                throw new \RuntimeException("Unknown sectiontype [$section]");
+                throw new \RuntimeException("Unknown section [$section]"); // @codeCoverageIgnore
         }
     }
 
