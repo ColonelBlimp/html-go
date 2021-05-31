@@ -48,7 +48,8 @@ final class NewIndexManager
 
     function reindex(): void {
         $this->catIndex = $this->buildCategoryIndex();
-        print_r($this->catIndex);
+        $this->pageIndex = $this->buildPageIndex();
+        print_r($this->pageIndex);
     }
 
     /**
@@ -61,15 +62,43 @@ final class NewIndexManager
             $key = \str_replace(DS, FWD_SLASH, \substr($root, 0, \strlen($root) - CONTENT_FILE_EXT_LEN));
             $index[$key] = $this->createElement($key, $filepath, ENUM_CATEGORY);
         }
+        // Add the landing page
         $index['category'] = $this->createElement('category', $this->commonDir.DS.'landing'.DS.'category'.DS.'index.md', ENUM_CATEGORY);
-//        $this->writeIndex($this->root.DS.self::CAT_INDEX_FILE, $index);
-
+        $this->writeIndex($this->catInxFile, $index);
         return $index;
+    }
+
+    private function buildPageIndex(): array {
+        $menuIndex = [];
+        $pageIndex = [];
+        $pageDir = $this->commonDir.DS.'pages';
+        $len = \strlen($pageDir) + 1;
+        $pages = $this->scanDirectory($pageDir);
+        \sort($pages);
+        foreach ($pages as $filepath) {
+            $location = \substr($filepath, $len);
+            $key = \str_replace(DS, FWD_SLASH, \substr($location, 0, (\strlen($location) - CONTENT_FILE_EXT_LEN)));
+            if (\str_ends_with($key, '/index')) {
+                $key = substr($key, 0, \strlen($key) - 6);
+            } else {
+                if ($key === 'index') {
+                    $key = FWD_SLASH;
+                }
+            }
+            $pageIndex[$key] = $this->createElement($key, $filepath, ENUM_PAGE);
+//            $menuIndex = $this->getMenuSettings($filepath, $key);
+        }
+        $this->writeIndex($this->pageInxFile, $pageIndex);
+//        $this->writeIndex($this->root.DS.self::MENUS_INDEX_FILE, $menuIndex);
+        return $pageIndex;
     }
 
     private function initialize(): void {
         if ((\is_dir($this->parentDir.DS.'cache'.DS.'indexes')) === false) {
-            echo '2';
+            $dir = $this->parentDir.DS.'cache'.DS.'indexes';
+            if (\mkdir($dir, MODE, true) === false) {
+                throw new \RuntimeException("Unable to create directory [$dir]"); // @codeCoverageIgnore
+            }
             $this->reindex();
         } else {
 echo '1';
@@ -97,6 +126,39 @@ echo '1';
             throw new \ErrorException("glob() failed [$pattern]"); // @codeCoverageIgnore
         }
         return $files;
+    }
+
+    /**
+     * Recursively scans a folder heirarchy.
+     * @return array<int, string>
+     */
+    private function scanDirectory(string $rootDir): array {
+        static $files = [];
+        if (($handle = \opendir($rootDir)) === false) {
+            throw new \ErrorException("opendir() failed [$rootDir]"); // @codeCoverageIgnore
+        }
+        while (($entry = \readdir($handle)) !== false) {
+            $path = $rootDir.DS.$entry;
+            if (\is_dir($path)) {
+                if ($entry === '.' || $entry === '..') continue;
+                $this->scanDirectory($path);
+                continue;
+            }
+            $files[] = $path;
+        }
+        \closedir($handle);
+        return $files;
+    }
+
+    /**
+     * Writes data to an index file, creating the file if necessary.
+     * @param array<mixed> $index
+     */
+    private function writeIndex(string $filepath, array $index): void {
+        $index = \serialize($index);
+        if (\file_put_contents($filepath, print_r($index, true)) === false) {
+            throw new \RuntimeException("file_put_contents() failed [$filepath]"); // @codeCoverageIgnore
+        }
     }
 
     private function createElement(string $key, string $filepath, string $type): Element {
@@ -134,13 +196,12 @@ echo '1';
      * @param string $path The filepath
      * @param string $section 'pages', 'posts', 'categories' or 'tags'
      * @param string $category
-     * @param string $type
      * @param string $username
      * @param string $date
      * @param string $tagList
      * @return Element stdClass
      */
-    private function createElementClass(string $key, string $path = EMPTY_VALUE, string $section = EMPTY_VALUE, string $category = EMPTY_VALUE, string $type = EMPTY_VALUE, string $username = EMPTY_VALUE, string $date = EMPTY_VALUE, string $tagList = ''): Element {
+    private function createElementClass(string $key, string $path = EMPTY_VALUE, string $section = EMPTY_VALUE, string $category = EMPTY_VALUE, string $username = EMPTY_VALUE, string $date = EMPTY_VALUE, string $tagList = ''): Element {
         $tags = [];
         if (!empty($tagList)) {
             $tags = \explode(',', $tagList);
@@ -150,7 +211,6 @@ echo '1';
         $obj->path = $path;
         $obj->section = $section;
         $obj->category = $category;
-        $obj->type = $type;
         $obj->username = $username;
         $obj->date = $date;
         $obj->tags = $tags;

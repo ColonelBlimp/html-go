@@ -11,6 +11,8 @@
 \define('FWD_SLASH', '/');
 \define('CONTENT_FILE_EXT', '.md');
 \define('CONTENT_FILE_EXT_LEN', \strlen(CONTENT_FILE_EXT));
+\define('MODE', 0777);
+
 \define('POST_LIST_TYPE', 0);
 \define('CAT_LIST_TYPE', 1);
 \define('TAG_LIST_TYPE', 2);
