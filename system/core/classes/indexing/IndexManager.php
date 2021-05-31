@@ -224,6 +224,9 @@ final class IndexManager
         foreach ($pages as $filepath) {
             $location = \substr($filepath, $len);
             $key = \str_replace(DS, FWD_SLASH, \substr($location, 0, (\strlen($location) - CONTENT_FILE_EXT_LEN)));
+            if ($key === 'index') {
+                echo 'INDEX PAGE: '.$key.PHP_EOL;
+            }
             $pageIndex[$key] = $this->createElement($filepath, $key);
             $menuIndex = $this->getMenuSettings($filepath, $key);
         }
