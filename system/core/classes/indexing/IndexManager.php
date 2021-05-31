@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace html_go\indexing;
 
-final class NewIndexManager
+final class IndexManager
 {
     private string $parentDir;
     private string $commonDir;

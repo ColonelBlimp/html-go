@@ -3,10 +3,10 @@ namespace html_go\indexing;
 
 use PHPUnit\Framework\TestCase;
 
-class NewIndexManagerTest extends TestCase
+class IndexManagerTest extends TestCase
 {
-    function testInstantiation(): NewIndexManager {
-        $manager = new NewIndexManager(TEST_DATA_ROOT);
+    function testInstantiation(): IndexManager {
+        $manager = new IndexManager(TEST_DATA_ROOT);
         $this->assertNotNull($manager);
         return $manager;
     }
