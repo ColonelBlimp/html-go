@@ -20,4 +20,49 @@ class IndexManagerTest extends TestCase
         $this->assertTrue($manager->elementExists(HOME_INDEX_KEY));
         $this->assertTrue($manager->elementExists(BLOG_INDEX_KEY));
     }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testCategoryIndex(IndexManager $manager): void {
+        $this->assertNotNull($manager);
+        $this->assertIsArray($manager->getCategoriesIndex());
+        $this->assertCount(3, $manager->getCategoriesIndex());
+    }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testPageIndex(IndexManager $manager): void {
+        $this->assertNotNull($manager);
+        $this->assertIsArray($manager->getPageIndex());
+        $this->assertCount(6, $manager->getPageIndex());
+    }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testTagIndex(IndexManager $manager): void {
+        $this->assertNotNull($manager);
+        $this->assertIsArray($manager->getTagIndex());
+        $this->assertCount(3, $manager->getTagIndex());
+    }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testElementExists(IndexManager $manager): void {
+        $this->assertNotNull($manager);
+        $this->assertFalse($manager->elementExists('unknown'));
+        $this->assertTrue($manager->elementExists('category/harvesting'));
+    }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testGetElementException(IndexManager $manager): void {
+        $this->assertNotNull($manager);
+        $this->expectException(\InvalidArgumentException::class);
+        $manager->getElementFromSlugIndex('category/wibble');
+    }
 }

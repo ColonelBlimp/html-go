@@ -87,12 +87,12 @@ final class IndexManager
     /**
      * Returns an object representing an element in the index.
      * @param string $key
-     * @throws \RuntimeException If the given $key does not exist in the index.
+     * @throws \InvalidArgumentException If the given $key does not exist in the index.
      * @return Element
      */
     function getElementFromSlugIndex(string $key): Element {
         if (!isset($this->slugIndex[$key])) {
-            throw new \RuntimeException("Key does not exist in the slugIndex! Use 'elementExists()' before calling this method.");
+            throw new \InvalidArgumentException("Key does not exist in the slugIndex! Use 'elementExists()' before calling this method.");
         }
         return $this->slugIndex[$key];
     }
@@ -136,6 +136,14 @@ final class IndexManager
      */
     function getMenusIndex(): array {
         return $this->menuIndex;
+    }
+
+    /**
+     * Return the tag index.
+     * @return array<string, Element>
+     */
+    function getPageIndex(): array {
+        return $this->pageIndex;
     }
 
     /**
