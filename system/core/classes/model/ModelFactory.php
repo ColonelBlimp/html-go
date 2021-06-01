@@ -61,8 +61,12 @@ final class ModelFactory
         if (!isset($indexElement->path)) {
             throw new \RuntimeException("Object does not have 'path' property " . print_r($indexElement, true)); // @codeCoverageIgnore
         }
+        if ($indexElement->path === EMPTY_VALUE) {
+exit('Implement me');
+        }
+
         if (($data = \file_get_contents($indexElement->path)) === false) {
-            throw new \RuntimeException("file_get_contens() failed opening [$indexElement->path]"); // @codeCoverageIgnore
+            throw new \RuntimeException("file_get_contents() failed opening [$indexElement->path]"); // @codeCoverageIgnore
         }
         if (($contentObject = \json_decode($data)) === null) {
             $path = $indexElement->path;

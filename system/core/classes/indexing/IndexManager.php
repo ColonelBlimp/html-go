@@ -15,7 +15,7 @@ final class IndexManager
     private string $cat2postInxFile;
     private string $menuInxFile;
 
-    /** @var array<string, Element> /** @var array<string, Element> $pageIndex */
+    /** @var array<string, Element> $catIndex */
     private array $catIndex;
 
     /** @var array<string, Element> $pageIndex */
@@ -27,10 +27,17 @@ final class IndexManager
     /** @var array<mixed> $menuIndex */
     private array $menuIndex;
 
-    /** @var array<string, Element> $tagIndex */
+    /**
+     * A tag is NOT represented by any file on the physical filessytem.
+     * @var array<string, Element> $tagIndex
+     */
     private array $tagIndex;
 
-    /** @var array<string, Element> $slugIndex */
+    /**
+     * The slug index holds references to files on the physical filesystem.,
+     * and is a combination of the catIndex, postIndex and pageIndex
+     * @var array<string, Element> $slugIndex
+     */
     private array $slugIndex;
 
     /** @var array<string, Element> $tag2postIndex */
@@ -86,7 +93,7 @@ final class IndexManager
         $this->tagIndex = $compositeIndex[0];
         $this->tag2postIndex = $compositeIndex[1];
         $this->cat2postIndex = $compositeIndex[2];
-        $this->slugIndex = \array_merge($this->postIndex, $this->catIndex, $this->pageIndex, $this->tagIndex);
+        $this->slugIndex = \array_merge($this->postIndex, $this->catIndex, $this->pageIndex);
     }
 
     /**
@@ -248,8 +255,8 @@ final class IndexManager
                 throw new \RuntimeException("Invalid format of index element: " . print_r($post, true)); // @codeCoverageIgnore
             }
             foreach ($post->tags as $tag) {
-                $key = 'tag'.FWD_SLASH.(string)$tag;
-                $tagIndex[$key] = $this->createElementClass($key, \ucfirst(\str_replace('-', ' ', $tag)), ENUM_TAG);
+                $key = (string)$tag;
+                $tagIndex[$key] = $this->createElementClass($key, EMPTY_VALUE, ENUM_TAG);
                 $tag2PostsIndex[$key][] = $post->key;
             }
             $cat2PostIndex[$post->category] = $post->key;

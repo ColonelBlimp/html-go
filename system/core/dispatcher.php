@@ -5,7 +5,7 @@
 \define('REGEX', 'regex');
 \define('HANDLER', 'handler');
 
-/**
+/*
  * Registers a route or processes a request (uri) for a route.
  * @param string $method the HTTP method
  * @param string $uri_or_pattern the requested URI to be processed or route pattern to be registered
@@ -13,7 +13,7 @@
  *                          the request for that route.
  * @return string|NULL <code>string</code> when processing a route request, otherwise
  *                     <code>null</code> when registering a route
- */
+
 function route(string $method, string $uri_or_pattern, callable $handler = null): ?string {
 
     static $routeMap = [
@@ -72,6 +72,7 @@ function route(string $method, string $uri_or_pattern, callable $handler = null)
 
     return $retval;
 }
+*/
 
 function route_to_regex(string $route): string {
     $route = \preg_replace_callback('@:[\w]+@i', function ($matches) {
@@ -81,15 +82,16 @@ function route_to_regex(string $route): string {
     return '@^' . $route . '$@i';
 }
 
-/**
+/*
  * Helper function to register a HTTP GET route.
  * @param string $pattern
  * @param callable $handler an anonymous function which will process the request for the registered
  *                          route.
- */
+ *
 function get(string $pattern, callable $handler): void {
     route(GET, $pattern, $handler);
 }
+*/
 
 /**
  * The main entry point. Called from <code>index.php</code> in the application
@@ -108,21 +110,26 @@ function dispatch(string $uri = null, string $method = GET): string {
     if (empty($uri)) {
         $uri = HOME_INDEX_KEY;
     }
+echo '>> '.$uri.PHP_EOL;
+    return route($uri, $method);
+}
 
-    $manager = get_index_manager();
-    if ($manager->elementExists($uri)) {
-        if (($content = get_content_object($uri)) === null) {
-            return not_found();
-        }
-        return render('main.html', get_template_context($content));
+function route(string $uri, string $method): string {
+    $result = \preg_match('/^\d{4}\/\d{2}\/.+/i', $uri);
+    if ($result === false) {
+        throw new RuntimeException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
     }
-    return not_found();
-    /*
-    if (($retval = route($method, $uri)) === null) {
-        throw new \RuntimeException("The route() function returned null!"); // @codeCoverageIgnore
+    if ($result === 0) { // some other resource
+        $content = get_content_object($uri);
+        $template = 'main.html';
+    } else { // blog article request
+        $content = get_content_object($uri);
+        $template = 'post.html';
     }
-    */
-//    return $retval;
+    if ($content === null) {
+        return not_found();
+    }
+    return render($template, get_template_context($content));
 }
 
 /**
