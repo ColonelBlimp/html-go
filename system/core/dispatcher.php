@@ -108,10 +108,23 @@ function dispatch(string $uri = null, string $method = GET): string {
     if (empty($uri)) {
         $uri = HOME_INDEX_KEY;
     }
+
+    $manager = get_index_manager();
+    if ($manager->elementExists($uri)) {
+        $content = get_content_object($uri);
+
+        return render('main.html', get_template_context($content));
+    } else {
+
+    }
+
+
+    /*
     if (($retval = route($method, $uri)) === null) {
         throw new \RuntimeException("The route() function returned null!"); // @codeCoverageIgnore
     }
-    return $retval;
+    */
+//    return $retval;
 }
 
 /**

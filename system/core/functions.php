@@ -207,7 +207,7 @@ function get_content_object(string $slug, array $listing = []): ?\stdClass {
     if (!empty($listing)) {
         $content->listing = $listing;
     }
-    print_r($content);
+//    print_r($content);
     return $content;
 }
 
