@@ -43,20 +43,25 @@ final class IndexManager
      * IndexManager constructor.
      * @param string $parentDir The parent directory for the content directory.
      * @throws \InvalidArgumentException If the parent directory is invalid.
-     * @throws \RuntimeException
+     * @throws \ErrorException
      */
     function __construct(string $parentDir) {
-        if (\is_dir($parentDir) === false) {
-            throw new \InvalidArgumentException("The application root cannot be found [$parentDir]");
-        }
         if (($path = \realpath($parentDir)) === false) {
-            throw new \RuntimeException("realpath() function failed on [$parentDir]");
+            throw new \ErrorException("realpath() function failed on [$parentDir]"); // @codeCoverageIgnore
         }
-        $indexDir = $path.DS.'cache'.DS.'indexes';
         $this->parentDir = $path;
-        $this->commonDir = $path.DS.'content'.DS.'common';
-        $this->userDataDir = $path.DS.'content'.DS.'user-data';
 
+        $this->commonDir = $path.DS.'content'.DS.'common';
+        if (\is_dir($this->commonDir) === false) {
+            throw new \InvalidArgumentException("The content/common directory cannot be found [$this->commonDir]");
+        }
+
+        $this->userDataDir = $path.DS.'content'.DS.'user-data';
+        if (\is_dir($this->userDataDir) === false) {
+            throw new \InvalidArgumentException("The content/user-data directory cannot be found [$this->userDataDir]");
+        }
+
+        $indexDir = $path.DS.'cache'.DS.'indexes';
         $this->pageInxFile = $indexDir.DS.'page.inx';
         $this->catInxFile = $indexDir.DS.'category.inx';
         $this->postInxFile = $indexDir.DS.'post.inx';
@@ -259,7 +264,7 @@ final class IndexManager
         if ((\is_dir($this->parentDir.DS.'cache'.DS.'indexes')) === false) {
             $dir = $this->parentDir.DS.'cache'.DS.'indexes';
             if (\mkdir($dir, MODE, true) === false) {
-                throw new \RuntimeException("Unable to create directory [$dir]"); // @codeCoverageIgnore
+                throw new \RuntimeException("Unable to create cache/indexes directory [$dir]"); // @codeCoverageIgnore
             }
             $this->reindex();
         } else {
@@ -340,7 +345,7 @@ final class IndexManager
 
     private function createElement(string $key, string $filepath, string $section): Element {
         if (empty($key)) {
-            throw new \RuntimeException("Key is empty for [$filepath]");
+            throw new \RuntimeException("Key is empty for [$filepath]"); // @codeCoverageIgnore
         }
         switch ($section) {
             case ENUM_CATEGORY:

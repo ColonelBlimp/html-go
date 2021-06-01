@@ -11,6 +11,11 @@ class IndexManagerTest extends TestCase
         return $manager;
     }
 
+    function testInstantiationException(): void {
+        $this->expectException(\InvalidArgumentException::class);
+        new IndexManager(__DIR__);
+    }
+
     /**
      * @depends testInstantiation
      */
@@ -46,6 +51,24 @@ class IndexManagerTest extends TestCase
         $this->assertNotNull($manager);
         $this->assertIsArray($manager->getTagIndex());
         $this->assertCount(3, $manager->getTagIndex());
+    }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testPostIndex(IndexManager $manager): void {
+        $this->assertNotNull($manager);
+        $this->assertIsArray($manager->getPostsIndex());
+        $this->assertCount(4, $manager->getPostsIndex());
+    }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testMenuIndex(IndexManager $manager): void {
+        $this->assertNotNull($manager);
+        $this->assertIsArray($manager->getMenusIndex());
+        $this->assertCount(1, $manager->getMenusIndex());
     }
 
     /**
