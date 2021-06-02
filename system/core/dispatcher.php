@@ -1,97 +1,11 @@
 <?php declare(strict_types=1);
 
+use html_go\model\Config;
+
 \define('GET', 'GET');
 \define('POST', 'POST');
 \define('REGEX', 'regex');
 \define('HANDLER', 'handler');
-
-/*
- * Registers a route or processes a request (uri) for a route.
- * @param string $method the HTTP method
- * @param string $uri_or_pattern the requested URI to be processed or route pattern to be registered
- * @param callable $handler when registering a route a callback must be provided to process the
- *                          the request for that route.
- * @return string|NULL <code>string</code> when processing a route request, otherwise
- *                     <code>null</code> when registering a route
-
-function route(string $method, string $uri_or_pattern, callable $handler = null): ?string {
-
-    static $routeMap = [
-        GET => [],
-        POST => []
-    ];
-
-    $retval = null;
-
-    $uri_or_pattern = \trim($uri_or_pattern, FWD_SLASH);
-
-    if ($handler === null) {
-        foreach ($routeMap[$method] as $def => $data) {
-            $matches = [];
-            $result = \preg_match($data[REGEX], $uri_or_pattern, $matches);
-            if ($result === 0 || $result === false) {
-                continue;
-            }
-
-            \array_shift($matches);
-            $keys = [];
-            \preg_match_all('@:([\w]+)@', $def, $keys, PREG_PATTERN_ORDER);
-            $keys = \array_shift($keys);
-
-            $argv = [];
-            foreach ($keys as $id) {
-                $id = \substr($id, 1);
-                if (isset($matches[$id])) {
-                    $argv[] = \trim(\urldecode($matches[$id]));
-                }
-            }
-
-            if (\is_callable($data[HANDLER])) {
-                // Add the originally requested URI so it can be passed to
-                // the called function.
-                $argv[] = $uri_or_pattern;
-                $retval = \call_user_func_array($data[HANDLER], $argv);
-            }
-
-            break;
-        }
-
-        // No matching route was found, so send a 404
-        //TODO: change this to handle errors only (false). The catch-all
-        // route should send the user to not_found() if there is no matching
-        // static page.
-        if ($retval === null || $retval === false) {
-            $retval = not_found();
-        }
-    } else {
-        $routeMap[$method][$uri_or_pattern] = [
-            REGEX => route_to_regex($uri_or_pattern),
-            HANDLER => $handler
-        ];
-    }
-
-    return $retval;
-}
-*/
-
-function route_to_regex(string $route): string {
-    $route = \preg_replace_callback('@:[\w]+@i', function ($matches) {
-        $token = \str_replace(':', '', $matches[0]);
-        return '(?P<' . $token . '>[a-z0-9_\0-\.]+)';
-    }, $route);
-    return '@^' . $route . '$@i';
-}
-
-/*
- * Helper function to register a HTTP GET route.
- * @param string $pattern
- * @param callable $handler an anonymous function which will process the request for the registered
- *                          route.
- *
-function get(string $pattern, callable $handler): void {
-    route(GET, $pattern, $handler);
-}
-*/
 
 /**
  * The main entry point. Called from <code>index.php</code> in the application
@@ -110,25 +24,63 @@ function dispatch(string $uri = null, string $method = GET): string {
     if (empty($uri)) {
         $uri = HOME_INDEX_KEY;
     }
-echo '>> '.$uri.PHP_EOL;
     return route($uri, $method);
 }
 
+/**
+ *
+ * @param string $uri
+ * @param string $method
+ * @throws RuntimeException
+ * @return string
+ */
 function route(string $uri, string $method): string {
     $result = \preg_match('/^\d{4}\/\d{2}\/.+/i', $uri);
     if ($result === false) {
         throw new RuntimeException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
     }
     if ($result === 0) { // some other resource
-        $content = get_content_object($uri);
         $template = 'main.html';
+        switch ($uri) {
+            case HOME_INDEX_KEY:
+                if (get_config()->getBool(Config::KEY_STATIC_INDEX)) {
+                    $content = get_content_object($uri);
+                } else {
+                    $content = get_content_object($uri, get_posts());
+                }
+                if ($content === null) {
+                    return not_found();
+                }
+                break;
+            case BLOG_INDEX_KEY:
+                if (($content = get_content_object($uri, get_posts())) === null) {
+                    return not_found();
+                }
+                break;
+            case CAT_INDEX_KEY:
+                if (($content = get_content_object($uri, get_categories())) === null) {
+                    return not_found();
+                }
+                break;
+            default:
+                if (($content = get_content_object($uri)) === null) {
+                    return not_found();
+                }
+        }
+//        print_r($content);
+        // The template should be determined by the 'section'?
+        if (isset($content->template)) {
+            $template = $content->template;
+        }
+
     } else { // blog article request
-        $content = get_content_object($uri);
+        if (($content = get_content_object($uri)) === null) {
+            return not_found();
+        }
         $template = 'post.html';
     }
-    if ($content === null) {
-        return not_found();
-    }
+
+    echo $template.PHP_EOL.$uri.PHP_EOL;
     return render($template, get_template_context($content));
 }
 

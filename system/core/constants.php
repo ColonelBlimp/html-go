@@ -23,6 +23,7 @@
 \define('TAG_LIST_TYPE', 2);
 \define('EMPTY_VALUE', '<empty>');
 
+// Special cases
 \define('HOME_INDEX_KEY', '/');
 \define('BLOG_INDEX_KEY', 'blog');
 \define('CAT_INDEX_KEY', 'category');
