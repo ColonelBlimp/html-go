@@ -196,10 +196,10 @@ final class IndexManager
                 }
             }
             $pageIndex[$key] = $this->createElement($key, $filepath, ENUM_PAGE);
-            $menuIndex = $this->mergeToMenuIndex($this->buildMenus($key, $filepath));
+            $menuIndex = $this->mergeToMenuIndex($menuIndex, $this->buildMenus($key, $filepath));
         }
         $this->writeIndex($this->pageInxFile, $pageIndex);
-        $this->writeIndex($this->menuInxFile, $menuIndex);
+        $this->writeIndex($this->menuInxFile, $this->orderMenuEntries($menuIndex));
         return [$pageIndex, $menuIndex];
     }
 
@@ -244,6 +244,16 @@ final class IndexManager
             }
         }
         return $menus;
+    }
+
+    private function orderMenuEntries(array $index): array {
+        foreach ($index as $name => $defs) {
+            \usort($defs, function($a, $b): int {
+                return $a->weight === $b->weight ? 0 : ($a->weight > $b->weight ? 1 : -1);
+            });
+            $index[$name] = $defs;
+        }
+        return $index;
     }
 
     /**
@@ -358,21 +368,31 @@ final class IndexManager
     /**
      * Merge the given menu array into the main menu array returning the new
      * main menu array.
+     * @param array<mixed> $initial
      * @param array<mixed> $toMerge The menu array to be merged.
      * @return array<mixed>
      */
-    private function mergeToMenuIndex(array $toMerge): array {
-        if (empty($this->menuIndex)) {
-            $this->menuIndex = [];
-        }
-        $index = $this->menuIndex;
+    private function mergeToMenuIndex(array $initial, array $toMerge): array {
         foreach ($toMerge as $name => $def) {
-            $index[$name][] = $def;
+            if (isset($initial[$name])) {
+                $nodes = $initial[$name];
+                $initial[$name] = \array_merge($nodes, $def);
+            } else {
+                $initial[$name] = $def;
+            }
         }
-        $this->menuIndex = $index;
-        return $index;
+        return $initial;
     }
 
+    /**
+     * Create an Element object.
+     * @param string $key
+     * @param string $filepath
+     * @param string $section
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
+     * @return Element
+     */
     private function createElement(string $key, string $filepath, string $section): Element {
         if (empty($key)) {
             throw new \RuntimeException("Key is empty for [$filepath]"); // @codeCoverageIgnore

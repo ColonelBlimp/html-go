@@ -3,7 +3,7 @@
 {% if content.menus.main is defined %}
 {% for main in content.menus.main %}
 {% for node in main %}
-        <li><a href="{{ content.site.url }}/{{ node.key }}">{{ node.name }}</a></li>
+        <li><a href="{{ content.site.url }}{%if node.key starts with '/'%}{{ node.key }}{% else %}/{{ node.key }}{% endif %}">{{ node.name }}</a></li>
 {% endfor %}
 {% endfor %}
 {% endif %}
