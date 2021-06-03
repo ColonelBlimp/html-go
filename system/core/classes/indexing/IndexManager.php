@@ -220,7 +220,8 @@ final class IndexManager
     }
 
     /**
-     * Reads the given file and creates an
+     * Reads the given file and creates an array of menus in which this
+     * resource is listed.
      * @return array<mixed>
      */
     private function buildMenus(string $key, string $filepath): array {
@@ -231,14 +232,18 @@ final class IndexManager
             throw new \RuntimeException("file_get_contents() failed reading [$filepath]"); // @codeCoverageIgnore
         }
         $data = \json_decode($json, true);
+        $menus = [];
         if (isset($data['menus'])) {
-            foreach($data['menus'] as $k => $v) {
-                $v['key'] = $key;
-                $data['menus'][$k] = $v;
+            foreach($data['menus'] as $name => $defs) {
+                $node = new \stdClass();
+                $node->key = $key;
+                foreach ($defs as $label => $value) {
+                    $node->$label = $value;
+                }
+                $menus[$name][] = $node;
             }
-            return $data['menus'];
         }
-        return [];
+        return $menus;
     }
 
     /**

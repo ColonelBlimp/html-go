@@ -16,16 +16,7 @@ use html_go\templating\TwigTemplateEngine;
  * @return array<mixed>
  */
 function get_menu(): array {
-    $menus = [];
-    $index = get_index_manager()->getMenusIndex();
-    foreach ($index as $name => $defs) {
-        $node = new \stdClass();
-        foreach ($defs as $label => $value) {
-            $node->$label = $value;
-        }
-        $menus[$name][] = $node;
-    }
-    return $menus;
+    return get_index_manager()->getMenusIndex();
 }
 
 /**
