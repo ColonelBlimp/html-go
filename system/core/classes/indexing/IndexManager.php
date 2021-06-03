@@ -196,7 +196,7 @@ final class IndexManager
                 }
             }
             $pageIndex[$key] = $this->createElement($key, $filepath, ENUM_PAGE);
-            $menuIndex = $this->buildMenus($key, $filepath);
+            $menuIndex = $this->mergeToMenuIndex($this->buildMenus($key, $filepath));
         }
         $this->writeIndex($this->pageInxFile, $pageIndex);
         $this->writeIndex($this->menuInxFile, $menuIndex);
@@ -353,6 +353,24 @@ final class IndexManager
         if (\file_put_contents($filepath, print_r($index, true)) === false) {
             throw new \RuntimeException("file_put_contents() failed [$filepath]"); // @codeCoverageIgnore
         }
+    }
+
+    /**
+     * Merge the given menu array into the main menu array returning the new
+     * main menu array.
+     * @param array<mixed> $toMerge The menu array to be merged.
+     * @return array<mixed>
+     */
+    private function mergeToMenuIndex(array $toMerge): array {
+        if (empty($this->menuIndex)) {
+            $this->menuIndex = [];
+        }
+        $index = $this->menuIndex;
+        foreach ($toMerge as $name => $def) {
+            $index[$name][] = $def;
+        }
+        $this->menuIndex = $index;
+        return $index;
     }
 
     private function createElement(string $key, string $filepath, string $section): Element {

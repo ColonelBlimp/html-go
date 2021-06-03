@@ -1,8 +1,10 @@
     <nav class="h-12 bg-gray-100 border-t-4 border-yellow-500">
       <ul>
 {% if content.menus.main is defined %}
-{% for node in content.menus.main %}
-        <li><a href="{{ content.site.url }}{{ node.key }}">{{ node.name }}</a></li>
+{% for main in content.menus.main %}
+{% for node in main %}
+        <li><a href="{{ content.site.url }}/{{ node.key }}">{{ node.name }}</a></li>
+{% endfor %}
 {% endfor %}
 {% endif %}
       </ul>
