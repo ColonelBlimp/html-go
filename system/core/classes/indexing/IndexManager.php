@@ -93,7 +93,7 @@ final class IndexManager
         $this->tagIndex = $compositeIndex[0];
         $this->tag2postIndex = $compositeIndex[1];
         $this->cat2postIndex = $compositeIndex[2];
-        $this->slugIndex = \array_merge($this->postIndex, $this->catIndex, $this->pageIndex);
+        $this->slugIndex = \array_merge($this->postIndex, $this->catIndex, $this->pageIndex, $this->tagIndex);
     }
 
     /**
@@ -255,7 +255,7 @@ final class IndexManager
                 throw new \RuntimeException("Invalid format of index element: " . print_r($post, true)); // @codeCoverageIgnore
             }
             foreach ($post->tags as $tag) {
-                $key = (string)$tag;
+                $key = 'tag'.FWD_SLASH.(string)$tag;
                 $tagIndex[$key] = $this->createElementClass($key, EMPTY_VALUE, ENUM_TAG);
                 $tag2PostsIndex[$key][] = $post->key;
             }

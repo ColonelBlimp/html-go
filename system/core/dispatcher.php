@@ -47,6 +47,7 @@ function route(string $uri, string $method): string {
                     $content = get_content_object($uri);
                 } else {
                     $content = get_content_object($uri, get_posts());
+                    $template = 'listing.html';
                 }
                 if ($content === null) {
                     return not_found();
@@ -67,6 +68,7 @@ function route(string $uri, string $method): string {
                     return not_found();
                 }
         }
+        $content->menus = get_menu();
 //        print_r($content);
         // The template should be determined by the 'section'?
         if (isset($content->template)) {
