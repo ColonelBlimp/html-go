@@ -2,5 +2,11 @@
     "title": "Latest Posts",
     "description": "Latest blog posts",
     "template": "listing.html",
+    "menus": {
+        "main": {
+            "name": "Blog",
+            "weight": 2
+        }
+    },
     "body": "Our latest blog posts."
 }

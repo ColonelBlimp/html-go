@@ -169,7 +169,7 @@ final class IndexManager
             $index[$key] = $this->createElement($key, $filepath, ENUM_CATEGORY);
         }
         // Add the landing page
-        $index['category'] = $this->createElement('category', $this->commonDir.DS.'landing'.DS.'category'.DS.'index.md', ENUM_CATEGORY);
+        $index['category'] = $this->createElement('category', $this->commonDir.DS.'landing'.DS.'category'.DS.'index'.CONTENT_FILE_EXT, ENUM_CATEGORY);
         $this->writeIndex($this->catInxFile, $index);
         return $index;
     }
@@ -199,7 +199,7 @@ final class IndexManager
             $menuIndex = $this->mergeToMenuIndex($menuIndex, $this->buildMenus($key, $filepath));
         }
         // Blog (posts) landing page
-        $pageIndex['blog'] = $this->createElementClass('blog', $this->commonDir.DS.'landing'.DS.'blog'.DS.'index.md', ENUM_POST);
+        $pageIndex['blog'] = $this->createElementClass('blog', $this->commonDir.DS.'landing'.DS.'blog'.DS.'index'.CONTENT_FILE_EXT, ENUM_POST);
         $this->writeIndex($this->pageInxFile, $pageIndex);
         $menuIndex = $this->orderMenuEntries($menuIndex);
         $this->writeIndex($this->menuInxFile, $menuIndex);

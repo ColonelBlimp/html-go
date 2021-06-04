@@ -4,7 +4,7 @@
     "menus": {
         "main": {
             "name": "About",
-            "weight": 2
+            "weight": 3
         }
     },
     "body" : "We are a small bee farming and honey processing business."
