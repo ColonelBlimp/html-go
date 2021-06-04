@@ -10,18 +10,12 @@ use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
 
 /**
- * Returns an array for the given menu.
- * @param string $name
+ * Returns an multi-dimensional array. The first level is the menu name, the
+ * second level is an array of stdClass objects each representing a menu node.
  * @return array<mixed>
  */
-function get_menu(string $name): array {
-    $menu = [];
-
-    $index = get_index_manager()->getMenusIndex();
-    if (isset($index[$name])) {
-        print_r($index[$name]);
-    }
-    return $menu;
+function get_menu(): array {
+    return get_index_manager()->getMenusIndex();
 }
 
 /**
@@ -207,7 +201,7 @@ function get_content_object(string $slug, array $listing = []): ?\stdClass {
     if (!empty($listing)) {
         $content->listing = $listing;
     }
-    print_r($content);
+//    print_r($content);
     return $content;
 }
 

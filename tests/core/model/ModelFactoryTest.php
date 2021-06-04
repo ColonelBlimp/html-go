@@ -22,7 +22,7 @@ class ModelFactoryTest extends TestCase
         $this->assertTrue(isset($content->description));
         $this->assertSame('Categories list', $content->description);
         $this->assertIsArray($content->tags);
-        $this->assertIsArray($content->menus);
+//        $this->assertIsArray($content->menus);
         $this->assertIsArray($content->listing);
         $this->assertTrue(isset($content->site));
         $this->assertTrue(isset($content->site->url));

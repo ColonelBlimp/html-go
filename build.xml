@@ -102,8 +102,8 @@
 
     <target name="cleanup" description="Clean up cache">
         <delete file="${basedir}/cache/installedVersion.json"/>
-        <!-- delete dir="${basedir}/cache/indexes" /-->
-        <delete dir="${basedir}/tests/test-data/cache/indexes" />
+        <!-- delete dir="${basedir}/cache/indexes" />
+        <delete dir="${basedir}/tests/test-data/cache/indexes" /-->
         <delete file="${basedir}/tests/test-data/content/user-data/@testuser/posts/harvesting/regular/2021010100000__s.md" />
         <delete file="${basedir}/tests/test-data/content/user-data/@testuser/posts/harvesting/regular/20210101000000_wibble.md" />
     </target>

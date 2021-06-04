@@ -20,7 +20,6 @@
 		"files" : [
 			"system/core/constants.php",
 			"system/core/dispatcher.php",
-			"system/core/routes.php",
 			"system/core/functions.php"
 		],
 		"psr-4" : {
