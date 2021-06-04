@@ -19,13 +19,24 @@ This data file is located at ``content/common/landing/tags/index.md`` and
 is listed in one index: ``slugIndex`` under the key ``tag/index``.
 
 # Routing
-Routes are defined in ``system/core/routes.php``. For the main site,
-*special case* routes are explicity defined (i.e. landing pages where the requested
-URI does not match the index key. See [above](#landing-pages)). The last route
-definition is a *catch-all* route.
+There is no complex router for html-go which analizes a request and routes it
+accordingly. Rather, html-go uses a indexing system whereby all the content is indexed
+and the URI used as the key. Apart from a few special cases such as landing pages,
+the requested URI is passed to the indexing system to check if it exists,
+otherwise the *not found* page is rendered.
 
-Content is retrieve using the requested URI, if the requested URI matches content
-it is rendered, otherwise the *not found* page is rendered.
+# Content
+Content files are in JSON format as JSON is handled natively by PHP and conversion
+between JSON object and ``stdClass`` is also handled natively. The minimum
+required for a valid content file is:
+
+    {
+        "title": "some title",
+        "description": "some description",
+        "body": "The content."
+    }
+
+### Menus
 
 # Templating
 
