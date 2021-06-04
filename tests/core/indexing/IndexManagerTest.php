@@ -41,7 +41,7 @@ class IndexManagerTest extends TestCase
     function testPageIndex(IndexManager $manager): void {
         $this->assertNotNull($manager);
         $this->assertIsArray($manager->getPageIndex());
-        $this->assertCount(6, $manager->getPageIndex());
+        $this->assertCount(7, $manager->getPageIndex());
     }
 
     /**
@@ -59,7 +59,7 @@ class IndexManagerTest extends TestCase
     function testPostIndex(IndexManager $manager): void {
         $this->assertNotNull($manager);
         $this->assertIsArray($manager->getPostsIndex());
-        $this->assertCount(4, $manager->getPostsIndex());
+        $this->assertCount(3, $manager->getPostsIndex());
     }
 
     /**
