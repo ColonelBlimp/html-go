@@ -12,7 +12,6 @@ use html_go\templating\TwigTemplateEngine;
 /**
  * Returns an multi-dimensional array. The first level is the menu name, the
  * second level is an array of stdClass objects each representing a menu node.
- * @param string $name
  * @return array<mixed>
  */
 function get_menu(): array {

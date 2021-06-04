@@ -246,6 +246,11 @@ final class IndexManager
         return $menus;
     }
 
+    /**
+     * Does a <code>usort</code> on the <code>weight</code> property.
+     * @param array<mixed> $index the unsorted array
+     * @return array<mixed> the sorted array
+     */
     private function orderMenuEntries(array $index): array {
         foreach ($index as $name => $defs) {
             \usort($defs, function($a, $b): int {
