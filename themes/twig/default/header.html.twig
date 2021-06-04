@@ -1,1 +1,7 @@
+    <header class="flex flex-wrap flex-row justify-between space-x-4 bg-gray-100 border-t-4 border-yellow-500 p-2">
+      <a href="{{ content.site.url }}" class="block">
+        <span class="sr-only">{{ content.site.name }}</span>
+        <img class="h-8" src="{{ content.site.url }}/themes/{{ content.site.tpl_engine }}/{{ content.site.theme }}/img/logo.jpg">
+      </a>
 {%  include 'menus/main.html.twig' %}
+    </header>

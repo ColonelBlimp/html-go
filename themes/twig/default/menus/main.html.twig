@@ -1,9 +1,7 @@
-    <nav class="h-12 bg-gray-100 border-t-4 border-yellow-500">
-      <ul>
+    <nav class="flex flex-row space-x-6 font-semibold">
 {% if content.menus.main is defined %}
 {% for main in content.menus.main %}
-        <li><a href="{{ content.site.url }}{%if main.key starts with '/'%}{{ main.key }}{% else %}/{{ main.key }}{% endif %}">{{ main.name }}</a></li>
+        <a href="{{ content.site.url }}{%if main.key starts with '/'%}{{ main.key }}{% else %}/{{ main.key }}{% endif %}">{{ main.name }}</a>
 {% endfor %}
 {% endif %}
-      </ul>
     </nav>

@@ -50,6 +50,8 @@ final class ModelFactory
             $site->tagline = $this->config->getString(Config::KEY_SITE_TAGLINE);
             $site->copyright = $this->config->getString(Config::KEY_SITE_COPYRIGHT);
             $site->language = $this->config->getString(Config::KEY_LANG);
+            $site->theme = $this->config->getString(Config::KEY_THEME_NAME);
+            $site->tpl_engine = $this->config->getString(Config::KEY_TPL_ENGINE);
         }
         return $site;
     }

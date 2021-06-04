@@ -82,7 +82,7 @@ function route(string $uri, string $method): string {
         $template = 'post.html';
     }
 
-    echo $template.PHP_EOL.$uri.PHP_EOL;
+//    echo $template.PHP_EOL.$uri.PHP_EOL;
     return render($template, get_template_context($content));
 }
 
