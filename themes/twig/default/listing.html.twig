@@ -7,7 +7,7 @@
       <article>
         <header>
           <h2><a href="{{ item.key }}">{{ item.title }}</a></h2>
-          <time datetime="">{{ item.date }}</time>
+          <time datetime="{{ item.timestamp }}">{{ item.date }}</time>
         </header>
       </article>
 {% endfor %}

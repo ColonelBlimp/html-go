@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace html_go\model;
 
+use DateTimeInterface;
 use html_go\indexing\Element;
 use html_go\markdown\MarkdownParser;
 
@@ -31,7 +32,14 @@ final class ModelFactory
             $contentObject->tags = $indexElement->tags;
         }
         if (isset($indexElement->date)) {
-            $contentObject->date = $indexElement->date;
+            if (EMPTY_VALUE === $indexElement->date) {
+                $contentObject->date = $indexElement->date;
+                $contentObject->timestamp = EMPTY_VALUE;
+            } else {
+                $dt = new \DateTime($indexElement->date);
+                $contentObject->date = $dt->format($this->config->getString(Config::KEY_POST_DATE_FMT));
+                $contentObject->timestamp = $dt->format(DateTimeInterface::W3C);
+            }
         }
         $contentObject->listing = [];
         $contentObject->site = $this->getSiteObject();

@@ -16,7 +16,8 @@ final class Config
     const KEY_TPL_STRICT_VARS_TWIG = 'template.engine.twig.strict_variables';
     const KEY_STATIC_INDEX = 'static.index';
     const KEY_THEME_NAME = 'theme.name';
-    const KEY_POSTS_PERPAGE = 'posts.per_page';
+    const KEY_POSTS_PERPAGE = 'blog.posts_per_page';
+    const KEY_POST_DATE_FMT = 'blog.post_date_format';
 
     /**
      * @var array<string, string>
@@ -118,6 +119,9 @@ final class Config
         }
         if (isset($config[self::KEY_POSTS_PERPAGE]) === false) {
             $config[self::KEY_POSTS_PERPAGE] = 5;
+        }
+        if (isset($config[self::KEY_POST_DATE_FMT]) === false) {
+            $config[self::KEY_POST_DATE_FMT] = 'jS M Y';
         }
         return $config;
     }
