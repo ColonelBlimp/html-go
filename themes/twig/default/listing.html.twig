@@ -1,11 +1,14 @@
 {% extends "layout.html.twig" %}
 {% block main %}
 {% if content.listing is empty %}
-      <p>{{ i18n.getText('no_posts_found') }}<p>
+      <h2>{{ i18n.getText('no_posts_found') }}</h2>
 {% else %}
 {% for item in content.listing %}
       <article>
-        <h2><a href="{{ item.key }}">{{ item.title }}</a></h2>
+        <header>
+          <h2><a href="{{ item.key }}">{{ item.title }}</a></h2>
+          <time datetime="">{{ item.date }}</time>
+        </header>
       </article>
 {% endfor %}
 {% endif %}

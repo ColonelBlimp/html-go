@@ -30,6 +30,9 @@ final class ModelFactory
         if (isset($indexElement->tags)) {
             $contentObject->tags = $indexElement->tags;
         }
+        if (isset($indexElement->date)) {
+            $contentObject->date = $indexElement->date;
+        }
         $contentObject->listing = [];
         $contentObject->site = $this->getSiteObject();
         return $contentObject;
