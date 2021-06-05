@@ -1,7 +1,7 @@
 {% extends "layout.html.twig" %}
 {% block main %}
 {% if content.listing is empty %}
-      <p>No Posts<p>
+      <p>{{ i18n.getText('no_posts_found') }}<p>
 {% else %}
 {% for item in content.listing %}
       <article>

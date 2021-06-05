@@ -3,32 +3,33 @@
 
 # Landing Pages
 HTML-go has four editable landing pages for **posts**, **categories** and **tags**. The fourth
-landing page is the **main index** or **home** page.
+landing page is the **main index** or **home** page. All of these pages are listed
+in the ``slugIndex`` and the ``pageIndex``.
 ### Home Page (main index)
 The data file is located at ``content/common/pages/index.md`` and is
 listed in two indexes: ``slugIndex`` and ``pageIndex`` under the key ``index``.
 ### Category Index Page
 The data file is located at ``content/common/landing/category/index.md`` and
-is listed in one index: ``slugIndex`` under the key ``category/index``.
+is listed in one index: ``slugIndex`` under the key ``category``.
 ### Blog Index Page
 The data file is located at ``content/common/landing/posts/index.md`` and is
-lised in one index: ``slugIndex`` under the key ``blog/index``. Generally,
+lised in one index: ``slugIndex`` under the key ``blog``. Generally,
 this index page is use if the 'blog' link is enabled it will point to this page.
 ### Tag Index Page
 This data file is located at ``content/common/landing/tags/index.md`` and
-is listed in one index: ``slugIndex`` under the key ``tag/index``.
+is listed in one index: ``slugIndex`` under the key ``tag``.
 
 # Routing
-There is no complex router for html-go which analizes a request and routes it
-accordingly. Rather, html-go uses a indexing system whereby all the content is indexed
-and the URI used as the key. Apart from a few special cases such as landing pages,
-the requested URI is passed to the indexing system to check if it exists,
-otherwise the *not found* page is rendered.
+There is no complex router for html-go. Rather, html-go uses a indexing system
+whereby all the content is indexed and the URI used as the index key. Apart from
+a few special cases such as landing pages, the requested URI is passed to the
+indexing system to check if it exists, if it does it is loaded and rendered.
+Otherwise the *not found* page is rendered.
 
 # Content
 Content files are in JSON format as JSON is handled natively by PHP and conversion
-between JSON object and ``stdClass`` is also handled natively. The minimum
-required for a valid content file is:
+between JSON object, ``stdClass`` and an ``array`` is also handled natively.
+The minimum required for a valid content file is:
 
     {
         "title": "some title",
@@ -37,22 +38,72 @@ required for a valid content file is:
     }
 
 ### Menus
+Menus entries are valid for *pages* only.
+A single content can have be listed in as many menus as required. Defined menus
+are available on the ``content.menus.[menu_name]`` object within the
+template context.
+
+For example, below is a sample home page with the page listed in two menus:
+**main** and **footer**. The **name** or the menu link is *Home* in both menus
+and the position (weight) is the first entry. The actual link will be the same
+for both menus and is defined by the system.
+
+    {
+        "title" : "Our Website",
+        "description" : "Welcome to our website",
+        "menus": {
+            "main": {
+                "name": "Home",
+                "weight": 1
+            },
+            "footer": {
+                "name": "Home",
+                "weight": 1
+            }
+        },
+        "body" : "Welcome to our new website."
+    }
+
+The above menus can be accessed by the following **Twig** code:
+
+    {{ content.menus.main }}
+
+and
+
+    {{ content.menus.footer }}
+
+#### Twig Code Sample
+
+    {% if content.menus.main is defined %}
+    {% for main in content.menus.main %}
+            <a href="{{ content.site.url }}{%if main.key starts with '/'%}{{ main.key }}{% else %}/{{ main.key }}{% endif %}">{{ main.name }}</a>
+    {% endfor %}
+    {% endif %}
 
 # Templating
 
 ### Context Variables
 
+|Header1 |Header2  | Header3|
+|--- | --- | ---|
+|**bold style**| `code block`|data3|
+|\|escape pipe|\`backtick|data13|
+
 <table>
  <thead>
   <tr>
-   <th>Variable</th>
+   <th>Twig</th>
+   <th>Smarty</th>
+   <th>PHP</th>
    <th>Config Option</th>
    <th>Comments</th>
   </tr>
  </thead>
  <tbody>
   <tr>
-   <td>{{ site.language }}</td>
+   <td><code>{{ site.language }}</code></td>
+   <td><code>s??</code></td>
+   <td><code>??</code></td>
    <td>site.language</td>
    <td>Default is "en"</td>
   </tr>
