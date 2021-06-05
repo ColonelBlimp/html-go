@@ -168,8 +168,6 @@ final class IndexManager
             $key = \str_replace(DS, FWD_SLASH, \substr($root, 0, \strlen($root) - CONTENT_FILE_EXT_LEN));
             $index[$key] = $this->createElement($key, $filepath, ENUM_CATEGORY);
         }
-        // Add the landing page
-        $index['category'] = $this->createElement('category', $this->commonDir.DS.'landing'.DS.'category'.DS.'index'.CONTENT_FILE_EXT, ENUM_CATEGORY);
         $this->writeIndex($this->catInxFile, $index);
         return $index;
     }
@@ -198,8 +196,19 @@ final class IndexManager
             $pageIndex[$key] = $this->createElement($key, $filepath, ENUM_PAGE);
             $menuIndex = $this->mergeToMenuIndex($menuIndex, $this->buildMenus($key, $filepath));
         }
-        // Blog (posts) landing page
-        $pageIndex['blog'] = $this->createElementClass('blog', $this->commonDir.DS.'landing'.DS.'blog'.DS.'index'.CONTENT_FILE_EXT, ENUM_POST);
+
+        // Add Category landing page
+        $filepath = $this->commonDir.DS.'landing'.DS.'category'.DS.'index'.CONTENT_FILE_EXT;
+        $key = CAT_INDEX_KEY;
+        $pageIndex[$key] = $this->createElement($key, $filepath, ENUM_CATEGORY);
+        $menuIndex = $this->mergeToMenuIndex($menuIndex, $this->buildMenus($key, $filepath));
+
+        // Add Blog (posts) landing page
+        $filepath = $this->commonDir.DS.'landing'.DS.'blog'.DS.'index'.CONTENT_FILE_EXT;
+        $key = BLOG_INDEX_KEY;
+        $pageIndex[$key] = $this->createElementClass($key, $filepath, ENUM_POST);
+        $menuIndex = $this->mergeToMenuIndex($menuIndex, $this->buildMenus($key, $filepath));
+
         $this->writeIndex($this->pageInxFile, $pageIndex);
         $menuIndex = $this->orderMenuEntries($menuIndex);
         $this->writeIndex($this->menuInxFile, $menuIndex);

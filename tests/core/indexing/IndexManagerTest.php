@@ -32,7 +32,7 @@ class IndexManagerTest extends TestCase
     function testCategoryIndex(IndexManager $manager): void {
         $this->assertNotNull($manager);
         $this->assertIsArray($manager->getCategoriesIndex());
-        $this->assertCount(3, $manager->getCategoriesIndex());
+        $this->assertCount(2, $manager->getCategoriesIndex());
     }
 
     /**
@@ -41,7 +41,7 @@ class IndexManagerTest extends TestCase
     function testPageIndex(IndexManager $manager): void {
         $this->assertNotNull($manager);
         $this->assertIsArray($manager->getPageIndex());
-        $this->assertCount(7, $manager->getPageIndex());
+        $this->assertCount(8, $manager->getPageIndex());
     }
 
     /**
@@ -68,7 +68,7 @@ class IndexManagerTest extends TestCase
     function testMenuIndex(IndexManager $manager): void {
         $this->assertNotNull($manager);
         $this->assertIsArray($manager->getMenusIndex());
-        $this->assertCount(1, $manager->getMenusIndex());
+        $this->assertCount(2, $manager->getMenusIndex());
     }
 
     /**
