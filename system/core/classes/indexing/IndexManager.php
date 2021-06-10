@@ -1,6 +1,10 @@
 <?php declare(strict_types=1);
 namespace html_go\indexing;
 
+use ErrorException;
+use InvalidArgumentException;
+use RuntimeException;
+
 final class IndexManager
 {
     private string $parentDir;
@@ -60,12 +64,12 @@ final class IndexManager
 
         $this->commonDir = $path.DS.'content'.DS.'common';
         if (\is_dir($this->commonDir) === false) {
-            throw new \InvalidArgumentException("The content/common directory cannot be found [$this->commonDir]");
+            throw new InvalidArgumentException("The content/common directory cannot be found [$this->commonDir]");
         }
 
         $this->userDataDir = $path.DS.'content'.DS.'user-data';
         if (\is_dir($this->userDataDir) === false) {
-            throw new \InvalidArgumentException("The content/user-data directory cannot be found [$this->userDataDir]");
+            throw new InvalidArgumentException("The content/user-data directory cannot be found [$this->userDataDir]");
         }
 
         $indexDir = $path.DS.'cache'.DS.'indexes';
@@ -104,7 +108,7 @@ final class IndexManager
      */
     function getElementFromSlugIndex(string $key): Element {
         if (!isset($this->slugIndex[$key])) {
-            throw new \InvalidArgumentException("Key does not exist in the slugIndex! Use 'elementExists()' before calling this method.");
+            throw new InvalidArgumentException("Key does not exist in the slugIndex! Use 'elementExists()' before calling this method.");
         }
         return $this->slugIndex[$key];
     }
@@ -177,8 +181,8 @@ final class IndexManager
      * @return array<mixed>
      */
     private function buildPageAndMenuIndexes(): array {
-        $menuIndex = [];
-        $pageIndex = [];
+//        $menuIndex = [];
+//        $pageIndex = [];
         $pageDir = $this->commonDir.DS.'pages';
         $len = \strlen($pageDir) + 1;
         $pages = $this->scanDirectory($pageDir);
@@ -243,10 +247,10 @@ final class IndexManager
      */
     private function buildMenus(string $key, string $filepath): array {
         if (empty($key)) {
-            throw new \RuntimeException("Key is empty for [$filepath]"); // @codeCoverageIgnore
+            throw new RuntimeException("Key is empty for [$filepath]"); // @codeCoverageIgnore
         }
         if (($json = \file_get_contents($filepath)) === false) {
-            throw new \RuntimeException("file_get_contents() failed reading [$filepath]"); // @codeCoverageIgnore
+            throw new RuntimeException("file_get_contents() failed reading [$filepath]"); // @codeCoverageIgnore
         }
         $data = \json_decode($json, true);
         $menus = [];
@@ -289,7 +293,7 @@ final class IndexManager
         $cat2PostIndex = [];
         foreach ($this->postIndex as $post) {
             if (!isset($post->key, $post->tags, $post->category)) {
-                throw new \RuntimeException("Invalid format of index element: " . print_r($post, true)); // @codeCoverageIgnore
+                throw new RuntimeException("Invalid format of index element: " . print_r($post, true)); // @codeCoverageIgnore
             }
             foreach ($post->tags as $tag) {
                 $key = 'tag'.FWD_SLASH.(string)$tag;
@@ -308,7 +312,7 @@ final class IndexManager
         if ((\is_dir($this->parentDir.DS.'cache'.DS.'indexes')) === false) {
             $dir = $this->parentDir.DS.'cache'.DS.'indexes';
             if (\mkdir($dir, MODE, true) === false) {
-                throw new \RuntimeException("Unable to create cache/indexes directory [$dir]"); // @codeCoverageIgnore
+                throw new RuntimeException("Unable to create cache/indexes directory [$dir]"); // @codeCoverageIgnore
             }
             $this->reindex();
         } else {
@@ -335,10 +339,10 @@ final class IndexManager
             throw new \RuntimeException("Index file does not exist [$filename]. Call 'redindex()'"); // @codeCoverageIgnore
         }
         if (($data = \file_get_contents($filename)) === false) {
-            throw new \ErrorException("file_get_contents() failed [$filename]"); // @codeCoverageIgnore
+            throw new ErrorException("file_get_contents() failed [$filename]"); // @codeCoverageIgnore
         }
         if (($data = \unserialize($data)) === false) {
-            throw new \ErrorException("unserialize() failed [$filename]"); // @codeCoverageIgnore
+            throw new ErrorException("unserialize() failed [$filename]"); // @codeCoverageIgnore
         }
         return $data;
     }
@@ -348,7 +352,7 @@ final class IndexManager
      */
     private function parseDirectory(string $pattern): array {
         if (($files = \glob($pattern, GLOB_NOSORT)) === false) {
-            throw new \ErrorException("glob() failed [$pattern]"); // @codeCoverageIgnore
+            throw new ErrorException("glob() failed [$pattern]"); // @codeCoverageIgnore
         }
         return $files;
     }
@@ -360,7 +364,7 @@ final class IndexManager
     private function scanDirectory(string $rootDir): array {
         static $files = [];
         if (($handle = \opendir($rootDir)) === false) {
-            throw new \ErrorException("opendir() failed [$rootDir]"); // @codeCoverageIgnore
+            throw new ErrorException("opendir() failed [$rootDir]"); // @codeCoverageIgnore
         }
         while (($entry = \readdir($handle)) !== false) {
             $path = $rootDir.DS.$entry;
@@ -383,7 +387,7 @@ final class IndexManager
     private function writeIndex(string $filepath, array $index): void {
         $index = \serialize($index);
         if (\file_put_contents($filepath, print_r($index, true)) === false) {
-            throw new \RuntimeException("file_put_contents() failed [$filepath]"); // @codeCoverageIgnore
+            throw new RuntimeException("file_put_contents() failed [$filepath]"); // @codeCoverageIgnore
         }
     }
 
@@ -417,7 +421,7 @@ final class IndexManager
      */
     private function createElement(string $key, string $filepath, string $section): Element {
         if (empty($key)) {
-            throw new \RuntimeException("Key is empty for [$filepath]"); // @codeCoverageIgnore
+            throw new RuntimeException("Key is empty for [$filepath]"); // @codeCoverageIgnore
         }
         switch ($section) {
             case ENUM_CATEGORY:
@@ -426,13 +430,13 @@ final class IndexManager
                 return $this->createElementClass($key, $filepath, $section);
             case ENUM_POST:
                 if (\strlen($key) < 17) {
-                    throw new \InvalidArgumentException("Post content filename is too short [$key]");
+                    throw new InvalidArgumentException("Post content filename is too short [$key]");
                 }
                 $pathinfo = \pathinfo($filepath);
                 $dateString = \substr($key, 0, 14);
                 $start = 15;
                 if (($end = \strpos($key, '_', $start)) === false) {
-                    throw new \InvalidArgumentException("Post content filename syntax error [$key]");
+                    throw new InvalidArgumentException("Post content filename syntax error [$key]");
                 }
                 $tagList = \substr($key, $start, $end-$start);
                 $title = \substr($key, $end + 1);
@@ -443,7 +447,7 @@ final class IndexManager
                 $cnt = \count($parts);
                 return $this->createElementClass($key, $filepath, ENUM_POST, $parts[$cnt - 1], $parts[$cnt - 2], $parts[$cnt - 4], $dateString, $tagList);
             default:
-                throw new \RuntimeException("Unknown section [$section]"); // @codeCoverageIgnore
+                throw new RuntimeException("Unknown section [$section]"); // @codeCoverageIgnore
         }
     }
 
@@ -459,7 +463,7 @@ final class IndexManager
      * @param string $tagList
      * @return Element stdClass
      */
-    private function createElementClass(string $key, string $path, string $section, string $type = EMPTY_VALUE, string $category = EMPTY_VALUE, string $username = EMPTY_VALUE, string $date = EMPTY_VALUE, string $tagList = ''): Element {
+    private function createElementClass(string $key, string $path, string $section, string $type = EMPTY_VALUE, string $category = EMPTY_VALUE, string $username = EMPTY_VALUE, string $date = EMPTY_VALUE, string $tagList = EMPTY_VALUE): Element {
         $tags = [];
         if (!empty($tagList)) {
             $tags = \explode(',', $tagList);
