@@ -7,6 +7,7 @@
 \define('THEMES_ROOT', APP_ROOT.DS.'themes');
 \define('CACHE_ROOT', APP_ROOT.DS.'cache');
 \define('LANG_ROOT', APP_ROOT.DS.'lang');
+\define('AUTHOR_ROOT', CONFIG_ROOT.DS.'users');
 
 \define('FWD_SLASH', '/');
 \define('CONTENT_FILE_EXT', '.json');

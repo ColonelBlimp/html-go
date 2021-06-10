@@ -10,6 +10,18 @@ use html_go\templating\TemplateEngine;
 use html_go\templating\TwigTemplateEngine;
 
 /**
+ * Returns a stdClass object populated with the author details.
+ * @param string $name
+ * @return \stdClass|NULL stdClass object, otherwise <code>null</code> if the
+ * user does not exist.
+ */
+function get_author(string $name): ?\stdClass {
+    $obj = new \stdClass();
+
+    return $obj;
+}
+
+/**
  * Returns an multi-dimensional array. The first level is the menu name, the
  * second level is an array of stdClass objects each representing a menu node.
  * @return array<mixed>
