@@ -21,9 +21,10 @@
 \define('POST_LIST_TYPE', 0);
 \define('CAT_LIST_TYPE', 1);
 \define('TAG_LIST_TYPE', 2);
-\define('EMPTY_VALUE', '<empty>');
+\define('EMPTY_VALUE', '');
 
 // Special cases
 \define('HOME_INDEX_KEY', '/');
 \define('BLOG_INDEX_KEY', 'blog');
 \define('CAT_INDEX_KEY', 'category');
+\define('TAG_INDEX_KEY', 'tag');

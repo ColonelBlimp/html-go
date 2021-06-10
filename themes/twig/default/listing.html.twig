@@ -7,7 +7,9 @@
       <article>
         <header>
           <h2><a href="{{ item.key }}">{{ item.title }}</a></h2>
+{% if item.date is not empty %}
           <time datetime="{{ item.timestamp }}">{{ item.date }}</time>
+{% endif %}
         </header>
       </article>
 {% endfor %}

@@ -60,6 +60,7 @@ function get_categories(int $page_number = 1, int $per_page = 0): array {
     foreach ($cats as $obj) {
         $list[] = $factory->createContentObject($obj);
     }
+//    print_r($list);
     return $list;
 }
 

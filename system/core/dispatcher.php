@@ -39,8 +39,10 @@ function route(string $uri, string $method): string {
     if ($result === false) {
         throw new RuntimeException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
     }
+    $content = null;
     if ($result === 0) { // some other resource
         $template = 'main.html';
+        //FIXME: Page number and count
         switch ($uri) {
             case HOME_INDEX_KEY:
                 if (get_config()->getBool(Config::KEY_STATIC_INDEX)) {
@@ -49,40 +51,34 @@ function route(string $uri, string $method): string {
                     $content = get_content_object($uri, get_posts());
                     $template = 'listing.html';
                 }
-                if ($content === null) {
-                    return not_found();
-                }
                 break;
             case BLOG_INDEX_KEY:
-                if (($content = get_content_object($uri, get_posts())) === null) {
-                    return not_found();
-                }
+                $content = get_content_object($uri, get_posts());
                 break;
             case CAT_INDEX_KEY:
-                if (($content = get_content_object($uri, get_categories())) === null) {
-                    return not_found();
-                }
+                $content = get_content_object($uri, get_categories());
+//                print_r($content);
+                break;
+            case TAG_INDEX_KEY:
+                $content = get_content_object($uri, get_tags());
                 break;
             default:
-                if (($content = get_content_object($uri)) === null) {
-                    return not_found();
-                }
+                $content = get_content_object($uri);
         }
         $content->menus = get_menu();
-//        print_r($content);
-        // The template should be determined by the 'section'?
-        if (isset($content->template)) {
-            $template = $content->template;
-        }
-
     } else { // blog article request
-        if (($content = get_content_object($uri)) === null) {
-            return not_found();
-        }
+        $content = get_content_object($uri);
         $template = 'post.html';
     }
 
-//    echo $template.PHP_EOL.$uri.PHP_EOL;
+    if ($content === null) {
+        return not_found();
+    }
+
+    if (isset($content->template)) {
+        $template = $content->template;
+    }
+
     return render($template, get_template_context($content));
 }
 

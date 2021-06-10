@@ -197,6 +197,12 @@ final class IndexManager
             $menuIndex = $this->mergeToMenuIndex($menuIndex, $this->buildMenus($key, $filepath));
         }
 
+        // Add Tag landing page
+        $filepath = $this->commonDir.DS.'landing'.DS.'tags'.DS.'index'.CONTENT_FILE_EXT;
+        $key = TAG_INDEX_KEY;
+        $pageIndex[$key] = $this->createElement($key, $filepath, ENUM_TAG);
+        $menuIndex = $this->mergeToMenuIndex($menuIndex, $this->buildMenus($key, $filepath));
+
         // Add Category landing page
         $filepath = $this->commonDir.DS.'landing'.DS.'category'.DS.'index'.CONTENT_FILE_EXT;
         $key = CAT_INDEX_KEY;
@@ -382,8 +388,8 @@ final class IndexManager
     }
 
     /**
-     * Merge the given menu array into the main menu array returning the new
-     * main menu array.
+     * Merge the given menu array into the master menu index returning the new
+     * master menu index.
      * @param array<mixed> $initial
      * @param array<mixed> $toMerge The menu array to be merged.
      * @return array<mixed>
@@ -415,6 +421,7 @@ final class IndexManager
         }
         switch ($section) {
             case ENUM_CATEGORY:
+            case ENUM_TAG:
             case ENUM_PAGE:
                 return $this->createElementClass($key, $filepath, $section);
             case ENUM_POST:

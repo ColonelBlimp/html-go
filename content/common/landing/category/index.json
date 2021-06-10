@@ -1,5 +1,6 @@
 {
     "title": "Categories",
     "description": "Categories list",
-    "body": "Categories list."
+    "body": "Categories list.",
+    "template": "listing.html"
 }
