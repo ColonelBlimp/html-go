@@ -36,10 +36,8 @@ function get_menu(): array {
  */
 function get_pagination_pagenumber(): int {
     $page_num = 1;
-    if (($page = get_query_parameter('page')) !== null) {
-        if (\ctype_digit($page)) {
+    if (($page = get_query_parameter('page')) !== null && \ctype_digit($page)) {
             $page_num = (int)$page;
-        }
     }
     return $page_num;
 }
