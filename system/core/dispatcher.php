@@ -41,39 +41,37 @@ function route(string $uri, string $method): string {
     }
     $content = null;
     if ($result === 0) { // some other resource
-        $template = 'main.html';
-        //FIXME: Page number and count
+        $template = DEFAULT_TEMPLATE;
+        $page_num = get_pagination_pagenumber();
+        $per_page = get_config()->getInt(Config::KEY_POSTS_PERPAGE);
         switch ($uri) {
             case HOME_INDEX_KEY:
                 if (get_config()->getBool(Config::KEY_STATIC_INDEX)) {
                     $content = get_content_object($uri);
                 } else {
-                    $content = get_content_object($uri, get_posts());
-                    $template = 'listing.html';
+                    $content = get_content_object($uri, get_posts($page_num, $per_page));
                 }
                 break;
             case BLOG_INDEX_KEY:
-                $content = get_content_object($uri, get_posts());
+                $content = get_content_object($uri, get_posts($page_num, $per_page));
                 break;
             case CAT_INDEX_KEY:
-                $content = get_content_object($uri, get_categories());
-//                print_r($content);
+                $content = get_content_object($uri, get_categories($page_num, $per_page));
                 break;
             case TAG_INDEX_KEY:
-                $content = get_content_object($uri, get_tags());
+                $content = get_content_object($uri, get_tags($page_num, $per_page));
                 break;
             default:
                 $content = get_content_object($uri);
         }
-        $content->menus = get_menu();
     } else { // blog article request
         $content = get_content_object($uri);
-        $template = 'post.html';
     }
 
     if ($content === null) {
         return not_found();
     }
+    $content->menus = get_menu();
 
     if (isset($content->template)) {
         $template = $content->template;

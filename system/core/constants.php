@@ -12,6 +12,7 @@
 \define('CONTENT_FILE_EXT', '.json');
 \define('CONTENT_FILE_EXT_LEN', \strlen(CONTENT_FILE_EXT));
 \define('MODE', 0777);
+\define('DEFAULT_TEMPLATE', 'main.html');
 
 \define('ENUM_PAGE', 'page');
 \define('ENUM_CATEGORY', 'category');

@@ -1,5 +1,6 @@
 {
     "title": "Tags List",
     "description": "System tags",
-    "body": "All our tags."
+    "body": "All our tags.",
+    "template": "listing.html"
 }

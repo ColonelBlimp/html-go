@@ -4,6 +4,7 @@ namespace html_go\model;
 use DateTimeInterface;
 use html_go\indexing\Element;
 use html_go\markdown\MarkdownParser;
+use html_go\indexing\IndexManager;
 
 /**
  * Responsible for creating <code>Content</code> objects ready to be used in templates.
@@ -15,11 +16,23 @@ final class ModelFactory
     private Config $config;
     private MarkdownParser $parser;
 
+    /**
+     * ModelFactory constructor.
+     * @param Config $config
+     * @param MarkdownParser $parser Implementation of the
+     * <code>MarkdownParser</code> interface.
+     */
     function __construct(Config $config, MarkdownParser $parser) {
         $this->config = $config;
         $this->parser = $parser;
     }
 
+    /**
+     * Create a content object (stdClass) from an index <code>Element</code>
+     * object.
+     * @param Element $indexElement As obtained from the <code>IndexManager</code>
+     * @return \stdClass
+     */
     function createContentObject(Element $indexElement): \stdClass {
         $contentObject = $this->loadDataFile($indexElement);
         if (isset($indexElement->key)) {
