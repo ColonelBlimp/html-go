@@ -2,6 +2,7 @@
 namespace html_go\model;
 
 use PHPUnit\Framework\TestCase;
+use InvalidArgumentException;
 
 class ConfigTest extends TestCase
 {
@@ -15,7 +16,7 @@ class ConfigTest extends TestCase
     }
 
     function testInvalidConfigException(): void {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Configuration option 'site.url' not set.");
         new Config(TEST_APP_ROOT.DS.'test-data'.DS.'config'.DS.'bad');
     }
