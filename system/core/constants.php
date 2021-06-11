@@ -37,3 +37,6 @@
 \define('REGEX', 'regex');
 \define('HANDLER', 'handler');
 \define('POST_REQ_REGEX', '/^\d{4}\/\d{2}\/.+/i');
+
+// Template Variables Keys
+\define('TEMPLATE_TPLVAR_KEY', 'template');

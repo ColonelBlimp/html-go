@@ -35,11 +35,11 @@ function get_menu(): array {
  * @return int Default value is one (1)
  */
 function get_pagination_pagenumber(): int {
-    $page_num = 1;
+    $pageNum = 1;
     if (($page = get_query_parameter('page')) !== null && \ctype_digit($page)) {
-            $page_num = (int)$page;
+        $pageNum = (int)$page;
     }
-    return $page_num;
+    return $pageNum;
 }
 
 /**
@@ -86,7 +86,7 @@ function get_template_context(\stdClass $content): array {
     return [
         'i18n' => get_i18n(),
         'content' => $content,
-        'template' => $template
+        TEMPLATE_TPLVAR_KEY => $template
     ];
 }
 
@@ -115,8 +115,8 @@ function render(string $template = null, array $vars = []): string {
         $tpl = $template;
     }
     // Front matter from content file takes precendence
-    if (isset($vars['template'])) {
-        $tpl = $vars['template'];
+    if (isset($vars[TEMPLATE_TPLVAR_KEY])) {
+        $tpl = $vars[TEMPLATE_TPLVAR_KEY];
     }
     return get_template_engine()->render($tpl, $vars);
 }
@@ -147,14 +147,14 @@ function get_template_engine(): TemplateEngine {
         $engineName = get_config()->getString(Config::KEY_TPL_ENGINE);
 
         $caching = false;
-        $strict_vars = true;
+        $strict = true;
         if (get_config()->getBool(Config::KEY_TPL_CACHING)) {
             $caching = CACHE_ROOT.DS.'template_cache';
         }
-        $strict_vars = get_config()->getBool(Config::KEY_TPL_STRICT_VARS_TWIG);
+        $strict = get_config()->getBool(Config::KEY_TPL_STRICT_VARS_TWIG);
         $options = [
             'cache' => $caching,
-            'strict_variables' => $strict_vars
+            'strict_variables' => $strict
         ];
         $templateDirs = [THEMES_ROOT.DS.$engineName.DS.$themeName];
         $engine = new TwigTemplateEngine($templateDirs, $options);
