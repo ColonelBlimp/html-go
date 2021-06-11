@@ -31,8 +31,6 @@ function dispatch(string $uri = null, string $method = HTTP_GET): string {
  * @return string
  */
 function route(string $uri, string $method): string {
-    $content = null;
-
     if ($method === HTTP_POST) {
         return not_found();
     }
