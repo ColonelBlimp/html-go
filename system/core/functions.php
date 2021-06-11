@@ -127,13 +127,7 @@ function render(string $template = null, array $vars = []): string {
  * @return string
  */
 function not_found(string $title = '404 Not Found'): string {
-    //TODO: Refactor
-    /*
-    $vars = get_template_vars();
-    $vars['site_title'] = $title . $vars['site_title'];
-    return render('404.html', $vars);
-    */
-    return '404';
+    return render('404.html', ['i18n' => get_i18n()]);
 }
 
 /**
