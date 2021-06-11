@@ -1,6 +1,9 @@
 <?php declare(strict_types=1);
 namespace html_go\model;
 
+use InvalidArgumentException;
+use html_go\exceptions\InternalException;
+
 final class Config
 {
     const KEY_SITE_URL = 'site.url';
@@ -27,16 +30,16 @@ final class Config
     /**
      * Config constructor.
      * @param string $configRoot The root directory containing the 'config.ini' file.
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
+     * @throws InvalidArgumentException
+     * @throws InternalException
      */
     function __construct(string $configRoot) {
         $configFile = $configRoot.DS.'config.ini';
         if (!\is_file($configFile)) {
-            throw new \InvalidArgumentException("Configuration INI file not found [$configFile]");
+            throw new InvalidArgumentException("Configuration INI file not found [$configFile]");
         }
         if (($config = \parse_ini_file($configFile, false, INI_SCANNER_TYPED)) === false) {
-            throw new \RuntimeException("parse_ini_file() failed [$configFile]"); // @codeCoverageIgnore
+            throw new InternalException("parse_ini_file() failed [$configFile]"); // @codeCoverageIgnore
         }
         $this->config = $this->validateConfig($config);
     }
@@ -76,10 +79,11 @@ final class Config
      * Check required options are set and set defaults.
      * @param array<string, string> $config
      * @return array<string, mixed>
+     * @throws InvalidArgumentException::
      */
     private function validateConfig(array $config): array {
         if (isset($config[self::KEY_SITE_URL]) === false) {
-            throw new \RuntimeException("Configuration option 'site.url' not set.");
+            throw new InvalidArgumentException("Configuration option 'site.url' not set.");
         }
         if (isset($config[self::KEY_SITE_TITLE]) === false) {
             $config[self::KEY_SITE_TITLE] = ' | HTML-go';

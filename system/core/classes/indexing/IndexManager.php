@@ -273,7 +273,10 @@ final class IndexManager
     private function orderMenuEntries(array $index): array {
         foreach ($index as $name => $defs) {
             \usort($defs, function($a, $b): int {
-                return $a->weight === $b->weight ? 0 : ($a->weight > $b->weight ? 1 : -1);
+                if ($a->weight === $b->weight) {
+                    return 0;
+                }
+                return  $a->weight > $b->weight ? 1 : -1;
             });
             $index[$name] = $defs;
         }
@@ -286,7 +289,7 @@ final class IndexManager
      * @return array<mixed>
      */
     private function buildCompositeIndexes(): array {
-        $tagIndex = [];
+        $tagInx = [];
         $tag2PostsIndex = [];
         $cat2PostIndex = [];
         foreach ($this->postIndex as $post) {
@@ -295,15 +298,15 @@ final class IndexManager
             }
             foreach ($post->tags as $tag) {
                 $key = 'tag'.FWD_SLASH.(string)$tag;
-                $tagIndex[$key] = $this->createElementClass($key, EMPTY_VALUE, ENUM_TAG);
+                $tagInx[$key] = $this->createElementClass($key, EMPTY_VALUE, ENUM_TAG);
                 $tag2PostsIndex[$key][] = $post->key;
             }
             $cat2PostIndex[$post->category] = $post->key;
         }
-        $this->writeIndex($this->tagInxFile, $tagIndex);
+        $this->writeIndex($this->tagInxFile, $tagInx);
         $this->writeIndex($this->tag2postInxFile, $tag2PostsIndex);
         $this->writeIndex($this->cat2postInxFile, $cat2PostIndex);
-        return [$tagIndex, $tag2PostsIndex, $cat2PostIndex];
+        return [$tagInx, $tag2PostsIndex, $cat2PostIndex];
     }
 
     private function initialize(): void {
@@ -369,7 +372,9 @@ final class IndexManager
         while (($entry = \readdir($handle)) !== false) {
             $path = $rootDir.DS.$entry;
             if (\is_dir($path)) {
-                if ($entry === '.' || $entry === '..') continue;
+                if ($entry === '.' || $entry === '..') {
+                    continue;
+                }
                 $this->scanDirectory($path);
                 continue;
             }
