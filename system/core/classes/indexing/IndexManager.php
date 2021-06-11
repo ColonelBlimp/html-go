@@ -253,7 +253,7 @@ final class IndexManager
         $data = \json_decode($json, true);
         $menus = [];
         if (isset($data['menus'])) {
-            foreach($data['menus'] as $name => $defs) {
+            foreach ($data['menus'] as $name => $defs) {
                 $node = new \stdClass();
                 $node->key = $key;
                 foreach ($defs as $label => $value) {
@@ -272,7 +272,7 @@ final class IndexManager
      */
     private function orderMenuEntries(array $index): array {
         foreach ($index as $name => $defs) {
-            \usort ($defs, function($a, $b): int {
+            \usort($defs, function($a, $b): int {
                 if ($a->weight === $b->weight) {
                     return 0;
                 }
