@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use html_go\model\Config;
+use html_go\exceptions\InternalException;
 
 \define('GET', 'GET');
 \define('POST', 'POST');
@@ -31,13 +32,13 @@ function dispatch(string $uri = null, string $method = GET): string {
  *
  * @param string $uri
  * @param string $method
- * @throws RuntimeException
+ * @throws InternalException
  * @return string
  */
 function route(string $uri, string $method): string {
     $result = \preg_match('/^\d{4}\/\d{2}\/.+/i', $uri);
     if ($result === false) {
-        throw new RuntimeException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
+        throw new InternalException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
     }
     $content = null;
     if ($result === 0) { // some other resource
