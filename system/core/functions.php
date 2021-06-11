@@ -135,10 +135,9 @@ function render(string $template = null, array $vars = []): string {
 
 /**
  * Helper function for 404 page.
- * @param string $title
  * @return string
  */
-function not_found(string $title = '404 Not Found'): string {
+function not_found(): string {
     return render('404.html', ['i18n' => get_i18n()]);
 }
 
