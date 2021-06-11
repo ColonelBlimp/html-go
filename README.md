@@ -2,31 +2,33 @@
 HTML-go is a databaseless, flat-file blogging platform, which is very flexible, simple and fast. Its
 nearest competitor is htmly platform.
 
-[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=ColonelBlimp_html-go-func)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b59227a05de955a954b5/maintainability)](https://codeclimate.com/github/ColonelBlimp/html-go-func/maintainability)
 
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=ColonelBlimp_html-go-func)
+
+
 # Landing Pages
-HTML-go has four editable landing pages for **blog**, **category** and **tag**. The fourth
-landing page is the **index** or **home** page and at the root of all other pages.
+HTML-go has four editable landing pages for **blog**, **category**, **tag** and the **index** or
+**home** page which at the root of all the other static pages.
 All of these pages are listed in the `slugIndex` and the `pageIndex` and are considered
-to be pages by the system.
+to be pages by the html-go.
 ### Home Page (main index)
 The data file is located at `content/common/pages/index.md` and is
 listed in two indexes: `slugIndex` and `pageIndex` under the key `/`.
 ### Category Index Page
 The data file is located at `content/common/landing/category/index.md` and
-is listed in one index: `slugIndex` under the key `category`.
+is listed in two indexes: `slugIndex` and `pageIndex` under the key `category`.
 ### Blog Index Page
-The data file is located at `content/common/landing/posts/index.md` and is
+The data file is located at `content/common/landing/blog/index.md` and is
 lised in one index: `slugIndex` under the key `blog`. Generally,
-this index page is use if the 'blog' link is enabled it will point to this page.
+this index page is use if the 'blog' link is enabled which should link to this page.
 ### Tag Index Page
 This data file is located at `content/common/landing/tags/index.md` and
-is listed in one index: `slugIndex` under the key `tag`.
+is listed in one index: `slugIndex` and `pageIndex` under the key `tag`.
 
 # Routing
 There is no complex router for html-go. Rather, html-go uses a indexing system
-whereby all the content is indexed and the URI used as the index key. Apart from
+whereby all the content is indexed with its unique URI used as the index key. Apart from
 a few special cases such as landing pages, the requested URI is passed to the
 indexing system to check if it exists, if it does it is loaded and rendered.
 Otherwise the *not found* page is rendered.
