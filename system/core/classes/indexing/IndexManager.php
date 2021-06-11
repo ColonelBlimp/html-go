@@ -1,9 +1,8 @@
 <?php declare(strict_types=1);
 namespace html_go\indexing;
 
-use ErrorException;
 use InvalidArgumentException;
-use RuntimeException;
+use html_go\exceptions\InternalException;
 
 final class IndexManager
 {
@@ -54,11 +53,11 @@ final class IndexManager
      * IndexManager constructor.
      * @param string $parentDir The parent directory for the content directory.
      * @throws \InvalidArgumentException If the parent directory is invalid.
-     * @throws \ErrorException
+     * @throws InternalException
      */
     function __construct(string $parentDir) {
         if (($path = \realpath($parentDir)) === false) {
-            throw new \ErrorException("realpath() function failed on [$parentDir]"); // @codeCoverageIgnore
+            throw new InternalException("realpath() function failed on [$parentDir]"); // @codeCoverageIgnore
         }
         $this->parentDir = $path;
 
@@ -181,12 +180,11 @@ final class IndexManager
      * @return array<mixed>
      */
     private function buildPageAndMenuIndexes(): array {
-//        $menuIndex = [];
-//        $pageIndex = [];
         $pageDir = $this->commonDir.DS.'pages';
         $len = \strlen($pageDir) + 1;
         $pages = $this->scanDirectory($pageDir);
         \sort($pages);
+        $menuInx = [];
         foreach ($pages as $filepath) {
             $location = \substr($filepath, $len);
             $key = \str_replace(DS, FWD_SLASH, \substr($location, 0, (\strlen($location) - CONTENT_FILE_EXT_LEN)));
@@ -197,32 +195,32 @@ final class IndexManager
                     $key = FWD_SLASH;
                 }
             }
-            $pageIndex[$key] = $this->createElement($key, $filepath, ENUM_PAGE);
-            $menuIndex = $this->mergeToMenuIndex($menuIndex, $this->buildMenus($key, $filepath));
+            $pageInx[$key] = $this->createElement($key, $filepath, ENUM_PAGE);
+            $menuInx = $this->mergeToMenuIndex($menuInx, $this->buildMenus($key, $filepath));
         }
 
         // Add Tag landing page
         $filepath = $this->commonDir.DS.'landing'.DS.'tags'.DS.'index'.CONTENT_FILE_EXT;
         $key = TAG_INDEX_KEY;
-        $pageIndex[$key] = $this->createElement($key, $filepath, ENUM_TAG);
-        $menuIndex = $this->mergeToMenuIndex($menuIndex, $this->buildMenus($key, $filepath));
+        $pageInx[$key] = $this->createElement($key, $filepath, ENUM_TAG);
+        $menuInx = $this->mergeToMenuIndex($menuInx, $this->buildMenus($key, $filepath));
 
         // Add Category landing page
         $filepath = $this->commonDir.DS.'landing'.DS.'category'.DS.'index'.CONTENT_FILE_EXT;
         $key = CAT_INDEX_KEY;
-        $pageIndex[$key] = $this->createElement($key, $filepath, ENUM_CATEGORY);
-        $menuIndex = $this->mergeToMenuIndex($menuIndex, $this->buildMenus($key, $filepath));
+        $pageInx[$key] = $this->createElement($key, $filepath, ENUM_CATEGORY);
+        $menuInx = $this->mergeToMenuIndex($menuInx, $this->buildMenus($key, $filepath));
 
         // Add Blog (posts) landing page
         $filepath = $this->commonDir.DS.'landing'.DS.'blog'.DS.'index'.CONTENT_FILE_EXT;
         $key = BLOG_INDEX_KEY;
-        $pageIndex[$key] = $this->createElementClass($key, $filepath, ENUM_POST);
-        $menuIndex = $this->mergeToMenuIndex($menuIndex, $this->buildMenus($key, $filepath));
+        $pageInx[$key] = $this->createElementClass($key, $filepath, ENUM_POST);
+        $menuInx = $this->mergeToMenuIndex($menuInx, $this->buildMenus($key, $filepath));
 
-        $this->writeIndex($this->pageInxFile, $pageIndex);
-        $menuIndex = $this->orderMenuEntries($menuIndex);
-        $this->writeIndex($this->menuInxFile, $menuIndex);
-        return [$pageIndex, $menuIndex];
+        $this->writeIndex($this->pageInxFile, $pageInx);
+        $menuInx = $this->orderMenuEntries($menuInx);
+        $this->writeIndex($this->menuInxFile, $menuInx);
+        return [$pageInx, $menuInx];
     }
 
     /**
@@ -247,10 +245,10 @@ final class IndexManager
      */
     private function buildMenus(string $key, string $filepath): array {
         if (empty($key)) {
-            throw new RuntimeException("Key is empty for [$filepath]"); // @codeCoverageIgnore
+            throw new \InvalidArgumentException("Key is empty for [$filepath]"); // @codeCoverageIgnore
         }
         if (($json = \file_get_contents($filepath)) === false) {
-            throw new RuntimeException("file_get_contents() failed reading [$filepath]"); // @codeCoverageIgnore
+            throw new InternalException("file_get_contents() failed reading [$filepath]"); // @codeCoverageIgnore
         }
         $data = \json_decode($json, true);
         $menus = [];
@@ -284,7 +282,7 @@ final class IndexManager
 
     /**
      * Builds three indexes: 'category 2 posts', 'tag 2 posts' and tag index.
-     * @throws \RuntimeException
+     * @throws InternalException
      * @return array<mixed>
      */
     private function buildCompositeIndexes(): array {
@@ -293,7 +291,7 @@ final class IndexManager
         $cat2PostIndex = [];
         foreach ($this->postIndex as $post) {
             if (!isset($post->key, $post->tags, $post->category)) {
-                throw new RuntimeException("Invalid format of index element: " . print_r($post, true)); // @codeCoverageIgnore
+                throw new InternalException("Invalid format of index element: " . print_r($post, true)); // @codeCoverageIgnore
             }
             foreach ($post->tags as $tag) {
                 $key = 'tag'.FWD_SLASH.(string)$tag;
@@ -312,7 +310,7 @@ final class IndexManager
         if ((\is_dir($this->parentDir.DS.'cache'.DS.'indexes')) === false) {
             $dir = $this->parentDir.DS.'cache'.DS.'indexes';
             if (\mkdir($dir, MODE, true) === false) {
-                throw new ErrorException("Unable to create cache/indexes directory [$dir]"); // @codeCoverageIgnore
+                throw new InternalException("Unable to create cache/indexes directory [$dir]"); // @codeCoverageIgnore
             }
             $this->reindex();
         } else {
@@ -330,29 +328,30 @@ final class IndexManager
     /**
      * Load the given index file.
      * @param string $filename
-     * @throws \RuntimeException
-     * @throws \ErrorException
+     * @throws InternalException
+     * @throws InvalidArgumentException
      * @return array<string, Element>
      */
     private function loadIndex(string $filename): array {
         if (\file_exists($filename) === false) {
-            throw new ErrorException("Index file does not exist [$filename]. Call 'redindex()'"); // @codeCoverageIgnore
+            throw new InvalidArgumentException("Index file does not exist [$filename]. Call 'redindex()'"); // @codeCoverageIgnore
         }
         if (($data = \file_get_contents($filename)) === false) {
-            throw new ErrorException("file_get_contents() failed [$filename]"); // @codeCoverageIgnore
+            throw new InternalException("file_get_contents() failed [$filename]"); // @codeCoverageIgnore
         }
         if (($data = \unserialize($data)) === false) {
-            throw new ErrorException("unserialize() failed [$filename]"); // @codeCoverageIgnore
+            throw new InternalException("unserialize() failed [$filename]"); // @codeCoverageIgnore
         }
         return $data;
     }
 
     /**
      * @return array<int, string>
+     * @throws InternalException
      */
     private function parseDirectory(string $pattern): array {
         if (($files = \glob($pattern, GLOB_NOSORT)) === false) {
-            throw new ErrorException("glob() failed [$pattern]"); // @codeCoverageIgnore
+            throw new InternalException("glob() failed [$pattern]"); // @codeCoverageIgnore
         }
         return $files;
     }
@@ -360,11 +359,12 @@ final class IndexManager
     /**
      * Recursively scans a folder heirarchy.
      * @return array<int, string>
+     * @throws InternalException
      */
     private function scanDirectory(string $rootDir): array {
         static $files = [];
         if (($handle = \opendir($rootDir)) === false) {
-            throw new ErrorException("opendir() failed [$rootDir]"); // @codeCoverageIgnore
+            throw new InternalException("opendir() failed [$rootDir]"); // @codeCoverageIgnore
         }
         while (($entry = \readdir($handle)) !== false) {
             $path = $rootDir.DS.$entry;
@@ -383,11 +383,12 @@ final class IndexManager
      * Writes data to an index file, creating the file if necessary.
      * @param string $filepath
      * @param array<mixed> $index
+     * @throws InternalException
      */
     private function writeIndex(string $filepath, array $index): void {
         $index = \serialize($index);
         if (\file_put_contents($filepath, print_r($index, true)) === false) {
-            throw new RuntimeException("file_put_contents() failed [$filepath]"); // @codeCoverageIgnore
+            throw new InternalException("file_put_contents() failed [$filepath]"); // @codeCoverageIgnore
         }
     }
 
@@ -415,13 +416,13 @@ final class IndexManager
      * @param string $key
      * @param string $filepath
      * @param string $section
-     * @throws \RuntimeException
-     * @throws \InvalidArgumentException
+     * @throws InternalException
+     * @throws InvalidArgumentException
      * @return Element
      */
     private function createElement(string $key, string $filepath, string $section): Element {
         if (empty($key)) {
-            throw new ErrorException("Key is empty for [$filepath]"); // @codeCoverageIgnore
+            throw new InternalException("Key is empty for [$filepath]"); // @codeCoverageIgnore
         }
         switch ($section) {
             case ENUM_CATEGORY:
@@ -447,7 +448,7 @@ final class IndexManager
                 $cnt = \count($parts);
                 return $this->createElementClass($key, $filepath, ENUM_POST, $parts[$cnt - 1], $parts[$cnt - 2], $parts[$cnt - 4], $dateString, $tagList);
             default:
-                throw new ErrorException("Unknown section [$section]"); // @codeCoverageIgnore
+                throw new InternalException("Unknown section [$section]"); // @codeCoverageIgnore
         }
     }
 

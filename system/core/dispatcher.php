@@ -73,6 +73,7 @@ function route(string $uri, string $method): string {
     }
     $content->menus = get_menu();
 
+    $template = 'main.html';
     if (isset($content->template)) {
         $template = $content->template;
     }
