@@ -31,34 +31,30 @@ function dispatch(string $uri = null, string $method = HTTP_GET): string {
  * @return string
  */
 function route(string $uri, string $method): string {
-    $template = DEFAULT_TEMPLATE;
     $content = null;
 
     if ($method === HTTP_POST) {
+        return not_found();
+    }
 
-    } else {
-        $result = \preg_match(POST_REQ_REGEX, $uri);
-        if ($result === false) {
-            throw new InternalException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
-        }
+    $result = \preg_match(POST_REQ_REGEX, $uri);
+    if ($result === false) {
+        throw new InternalException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
+    }
 
-        if ($result === 0) { // some other resource
+    switch ($result) {
+        case 1:
             $content = process_blog_post_request($uri, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE));
-        } else { // blog article request
+            break;
+        default:
             $content = get_content_object($uri);
-        }
     }
 
     if ($content === null) {
         return not_found();
     }
-    $content->menus = get_menu();
 
-    if (isset($content->template)) {
-        $template = $content->template;
-    }
-
-    return render($template, get_template_context($content));
+    return render(vars: get_template_context($content));
 }
 
 /**

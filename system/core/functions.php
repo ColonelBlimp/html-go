@@ -79,9 +79,14 @@ function get_categories(int $pageNum = 1, int $perPage = 0): array {
  * @return array<mixed>
  */
 function get_template_context(\stdClass $content): array {
+    $template = DEFAULT_TEMPLATE;
+    if (isset($content->template)) {
+        $template = $content->template;
+    }
     return [
         'i18n' => get_i18n(),
-        'content' => $content
+        'content' => $content,
+        'template' => $template
     ];
 }
 
@@ -99,12 +104,21 @@ function get_i18n(): I18n {
 
 /**
  * Render the given template placing the given variables into the template context.
- * @param string $template
+ * Note: template defined in the front matter of the content file takes precendence.
+ * @param string $template Default is <code>null</code>
  * @param array<mixed> $vars
  * @return string
  */
-function render(string $template, array $vars = []): string {
-    return get_template_engine()->render($template, $vars);
+function render(string $template = null, array $vars = []): string {
+    $tpl = DEFAULT_TEMPLATE;
+    if (!empty($template)) {
+        $tpl = $template;
+    }
+    // Front matter from content file takes precendence
+    if (isset($vars['template'])) {
+        $tpl = $vars['template'];
+    }
+    return get_template_engine()->render($tpl, $vars);
 }
 
 /**
@@ -211,6 +225,7 @@ function get_content_object(string $slug, array $listing = []): ?\stdClass {
     if (!empty($listing)) {
         $content->listing = $listing;
     }
+    $content->menus = get_menu();
     return $content;
 }
 
