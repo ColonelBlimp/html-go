@@ -49,9 +49,11 @@ function get_pagination_pagenumber(): int {
  * @return array<\stdClass>
  */
 function get_tags(int $pageNum = 1, int $perPage = 0): array {
-    $list = [];
-    //TODO: Implement me
-    return $list;
+    $tags = get_index_manager()->getTagIndex();
+    if ($perPage > 0) {
+        $tags = \array_slice($tags, ($pageNum - 1) * $perPage, $perPage);
+    }
+    return get_model_list($tags);
 }
 
 /**
@@ -65,9 +67,19 @@ function get_categories(int $pageNum = 1, int $perPage = 0): array {
     if ($perPage > 0) {
         $cats = \array_slice($cats, ($pageNum - 1) * $perPage, $perPage);
     }
+    return get_model_list($cats);
+}
+
+/**
+ * Takes an array of index <code>Element</code> object and converts them to an array of
+ * <code>stdClass</code> objects.
+ * @param array<string, html_go\indexing\Element> $indexList
+ * @return array<\stdClass>
+ */
+function get_model_list(array $indexList): array {
     $list = [];
     $factory = get_model_factory();
-    foreach ($cats as $obj) {
+    foreach ($indexList as $obj) {
         $list[] = $factory->createContentObject($obj);
     }
     return $list;
