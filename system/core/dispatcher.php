@@ -42,12 +42,10 @@ function route(string $uri, string $method): string {
         throw new InternalException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
     }
 
-    switch ($result) {
-        case 1:
-            $content = process_blog_post_request($uri, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE));
-            break;
-        default:
-            $content = get_content_object($uri);
+    if ($result === 1) {
+        $content = process_blog_post_request($uri, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE));
+    } else {
+        $content = get_content_object($uri);
     }
 
     if ($content === null) {

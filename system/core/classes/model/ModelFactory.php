@@ -82,14 +82,9 @@ final class ModelFactory
     }
 
     private function loadDataFile(Element $indexElement): \stdClass {
-        if (!isset($indexElement->path)) {
+        if (!isset($indexElement->path) || empty($indexElement->path)) {
             throw new InvalidArgumentException("Object does not have 'path' property " . print_r($indexElement, true)); // @codeCoverageIgnore
         }
-        if ($indexElement->path === EMPTY_VALUE) {
-            //TODO: Implement me
-exit('Implement me');
-        }
-
         if (($data = \file_get_contents($indexElement->path)) === false) {
             throw new InternalException("file_get_contents() failed opening [$indexElement->path]"); // @codeCoverageIgnore
         }
