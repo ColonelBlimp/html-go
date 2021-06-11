@@ -312,7 +312,7 @@ final class IndexManager
         if ((\is_dir($this->parentDir.DS.'cache'.DS.'indexes')) === false) {
             $dir = $this->parentDir.DS.'cache'.DS.'indexes';
             if (\mkdir($dir, MODE, true) === false) {
-                throw new RuntimeException("Unable to create cache/indexes directory [$dir]"); // @codeCoverageIgnore
+                throw new ErrorException("Unable to create cache/indexes directory [$dir]"); // @codeCoverageIgnore
             }
             $this->reindex();
         } else {
@@ -336,7 +336,7 @@ final class IndexManager
      */
     private function loadIndex(string $filename): array {
         if (\file_exists($filename) === false) {
-            throw new \RuntimeException("Index file does not exist [$filename]. Call 'redindex()'"); // @codeCoverageIgnore
+            throw new ErrorException("Index file does not exist [$filename]. Call 'redindex()'"); // @codeCoverageIgnore
         }
         if (($data = \file_get_contents($filename)) === false) {
             throw new ErrorException("file_get_contents() failed [$filename]"); // @codeCoverageIgnore
@@ -421,7 +421,7 @@ final class IndexManager
      */
     private function createElement(string $key, string $filepath, string $section): Element {
         if (empty($key)) {
-            throw new RuntimeException("Key is empty for [$filepath]"); // @codeCoverageIgnore
+            throw new ErrorException("Key is empty for [$filepath]"); // @codeCoverageIgnore
         }
         switch ($section) {
             case ENUM_CATEGORY:
@@ -447,7 +447,7 @@ final class IndexManager
                 $cnt = \count($parts);
                 return $this->createElementClass($key, $filepath, ENUM_POST, $parts[$cnt - 1], $parts[$cnt - 2], $parts[$cnt - 4], $dateString, $tagList);
             default:
-                throw new RuntimeException("Unknown section [$section]"); // @codeCoverageIgnore
+                throw new ErrorException("Unknown section [$section]"); // @codeCoverageIgnore
         }
     }
 
