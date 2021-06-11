@@ -272,7 +272,7 @@ final class IndexManager
      */
     private function orderMenuEntries(array $index): array {
         foreach ($index as $name => $defs) {
-            \usort($defs, function($a, $b): int {
+            \usort ($defs, function($a, $b): int {
                 if ($a->weight === $b->weight) {
                     return 0;
                 }

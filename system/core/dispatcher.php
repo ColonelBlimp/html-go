@@ -1,12 +1,7 @@
 <?php declare(strict_types=1);
 
-use html_go\model\Config;
 use html_go\exceptions\InternalException;
-
-\define('GET', 'GET');
-\define('POST', 'POST');
-\define('REGEX', 'regex');
-\define('HANDLER', 'handler');
+use html_go\model\Config;
 
 /**
  * The main entry point. Called from <code>index.php</code> in the application
@@ -15,7 +10,7 @@ use html_go\exceptions\InternalException;
  * @param string $method
  * @return string The html to be rendered.
  */
-function dispatch(string $uri = null, string $method = GET): string {
+function dispatch(string $uri = null, string $method = HTTP_GET): string {
     if ($uri === null) {
         $uri = $_SERVER['REQUEST_URI']; // @codeCoverageIgnore
         $method = \strtoupper($_SERVER['REQUEST_METHOD']); // @codeCoverageIgnore
@@ -29,43 +24,29 @@ function dispatch(string $uri = null, string $method = GET): string {
 }
 
 /**
- *
- * @param string $uri
- * @param string $method
+ * Route the given HTTP request.
+ * @param string $uri The requested URI
+ * @param string $method the HTTP method
  * @throws InternalException
  * @return string
  */
 function route(string $uri, string $method): string {
-    $result = \preg_match('/^\d{4}\/\d{2}\/.+/i', $uri);
-    if ($result === false) {
-        throw new InternalException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
-    }
+    $template = DEFAULT_TEMPLATE;
     $content = null;
-    if ($result === 0) { // some other resource
-        $page_num = get_pagination_pagenumber();
-        $per_page = get_config()->getInt(Config::KEY_POSTS_PERPAGE);
-        switch ($uri) {
-            case HOME_INDEX_KEY:
-                if (get_config()->getBool(Config::KEY_STATIC_INDEX)) {
-                    $content = get_content_object($uri);
-                } else {
-                    $content = get_content_object($uri, get_posts($page_num, $per_page));
-                }
-                break;
-            case BLOG_INDEX_KEY:
-                $content = get_content_object($uri, get_posts($page_num, $per_page));
-                break;
-            case CAT_INDEX_KEY:
-                $content = get_content_object($uri, get_categories($page_num, $per_page));
-                break;
-            case TAG_INDEX_KEY:
-                $content = get_content_object($uri, get_tags($page_num, $per_page));
-                break;
-            default:
-                $content = get_content_object($uri);
+
+    if ($method === HTTP_POST) {
+
+    } else {
+        $result = \preg_match(POST_REQ_REGEX, $uri);
+        if ($result === false) {
+            throw new InternalException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
         }
-    } else { // blog article request
-        $content = get_content_object($uri);
+
+        if ($result === 0) { // some other resource
+            $content = process_blog_post_request($uri, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE));
+        } else { // blog article request
+            $content = get_content_object($uri);
+        }
     }
 
     if ($content === null) {
@@ -73,12 +54,42 @@ function route(string $uri, string $method): string {
     }
     $content->menus = get_menu();
 
-    $template = DEFAULT_TEMPLATE;
     if (isset($content->template)) {
         $template = $content->template;
     }
 
     return render($template, get_template_context($content));
+}
+
+/**
+ * Process a blog-post request
+ * @param string $uri
+ * @param int $pageNum
+ * @param int $perPage
+ * @return \stdClass|NULL
+ */
+function process_blog_post_request(string $uri, int $pageNum, int $perPage): ?\stdClass {
+    switch ($uri) {
+        case HOME_INDEX_KEY:
+            if (get_config()->getBool(Config::KEY_STATIC_INDEX)) {
+                $content = get_content_object($uri);
+            } else {
+                $content = get_content_object($uri, get_posts($pageNum, $perPage));
+            }
+            break;
+        case BLOG_INDEX_KEY:
+            $content = get_content_object($uri, get_posts($pageNum, $perPage));
+            break;
+        case CAT_INDEX_KEY:
+            $content = get_content_object($uri, get_categories($pageNum, $perPage));
+            break;
+        case TAG_INDEX_KEY:
+            $content = get_content_object($uri, get_tags($pageNum, $perPage));
+            break;
+        default:
+            $content = get_content_object($uri);
+    }
+    return $content;
 }
 
 /**

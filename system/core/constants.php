@@ -30,3 +30,10 @@
 \define('BLOG_INDEX_KEY', 'blog');
 \define('CAT_INDEX_KEY', 'category');
 \define('TAG_INDEX_KEY', 'tag');
+
+// dispatcher.php
+\define('HTTP_GET', 'GET');
+\define('HTTP_POST', 'POST');
+\define('REGEX', 'regex');
+\define('HANDLER', 'handler');
+\define('POST_REQ_REGEX', '/^\d{4}\/\d{2}\/.+/i');

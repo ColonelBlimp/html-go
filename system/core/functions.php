@@ -44,11 +44,11 @@ function get_pagination_pagenumber(): int {
 
 /**
  * Returns a pagination page of tags.
- * @param int $page_number The page number
- * @param int $per_page Items per page. Default is 0 (zero) which means return all
+ * @param int $pageNum The page number
+ * @param int $perPage Items per page. Default is 0 (zero) which means return all
  * @return array<\stdClass>
  */
-function get_tags(int $page_number = 1, int $per_page = 0): array {
+function get_tags(int $pageNum = 1, int $perPage = 0): array {
     $list = [];
     //TODO: Implement me
     return $list;
@@ -56,14 +56,14 @@ function get_tags(int $page_number = 1, int $per_page = 0): array {
 
 /**
  * Returns a pagination page of categories.
- * @param int $page_number The page number
- * @param int $per_page Items per page. Default is 0 (zero) which means return all
+ * @param int $pageNum The page number
+ * @param int $perPage Items per page. Default is 0 (zero) which means return all
  * @return array<\stdClass> The resulting list of posts
  */
-function get_categories(int $page_number = 1, int $per_page = 0): array {
+function get_categories(int $pageNum = 1, int $perPage = 0): array {
     $cats = get_index_manager()->getCategoriesIndex();
-    if ($per_page > 0) {
-        $cats = \array_slice($cats, ($page_number - 1) * $per_page, $per_page);
+    if ($perPage > 0) {
+        $cats = \array_slice($cats, ($pageNum - 1) * $perPage, $perPage);
     }
     $list = [];
     $factory = get_model_factory();
@@ -216,13 +216,13 @@ function get_content_object(string $slug, array $listing = []): ?\stdClass {
 
 /**
  * Returns a pagination page of posts.
- * @param int $page_number The page number
- * @param int $per_page Items per page
+ * @param int $pageNum The page number
+ * @param int $perPage Items per page
  * @return array<\stdClass> The resulting list of posts
  */
-function get_posts(int $page_number = 1, int $per_page = 5): array {
+function get_posts(int $pageNum = 1, int $perPage = 5): array {
     $posts = get_index_manager()->getPostsIndex();
-    $posts = \array_slice($posts, ($page_number - 1) * $per_page, $per_page);
+    $posts = \array_slice($posts, ($pageNum - 1) * $perPage, $perPage);
     $list = [];
     $factory = get_model_factory();
     foreach ($posts as $post) {
