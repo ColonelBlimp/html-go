@@ -79,7 +79,7 @@ final class Config
      * Check required options are set and set defaults.
      * @param array<string, string> $config
      * @return array<string, mixed>
-     * @throws InvalidArgumentException::
+     * @throws InvalidArgumentException
      */
     private function validateConfig(array $config): array {
         if (isset($config[self::KEY_SITE_URL]) === false) {
