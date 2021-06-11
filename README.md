@@ -2,6 +2,9 @@
 HTML-go is a databaseless, flat-file blogging platform, which is very flexible, simple and fast. Its
 nearest competitor is htmly platform.
 
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=ColonelBlimp_html-go-func)
+[![Maintainability](https://api.codeclimate.com/v1/badges/b59227a05de955a954b5/maintainability)](https://codeclimate.com/github/ColonelBlimp/html-go-func/maintainability)
+
 # Landing Pages
 HTML-go has four editable landing pages for **blog**, **category** and **tag**. The fourth
 landing page is the **index** or **home** page and at the root of all other pages.
