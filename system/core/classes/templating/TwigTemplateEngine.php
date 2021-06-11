@@ -22,6 +22,6 @@ final class TwigTemplateEngine implements TemplateEngine
     }
 
     function render($template, array $vars): string {
-        return $this->engine->render($template . '.' . $this->ext, $vars);
+        return $this->engine->render($template.'.'.$this->ext, $vars);
     }
 }

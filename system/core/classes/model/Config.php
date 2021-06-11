@@ -72,7 +72,7 @@ final class Config
         if (isset($this->config[$key]) === false) {
             return null;
         }
-       return $this->config[$key];
+        return $this->config[$key];
     }
 
     /**

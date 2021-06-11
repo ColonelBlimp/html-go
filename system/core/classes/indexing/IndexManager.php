@@ -294,7 +294,7 @@ final class IndexManager
         $cat2PostIndex = [];
         foreach ($this->postIndex as $post) {
             if (!isset($post->key, $post->tags, $post->category)) {
-                throw new InternalException("Invalid format of index element: " . print_r($post, true)); // @codeCoverageIgnore
+                throw new InternalException("Invalid format of index element: ".print_r($post, true)); // @codeCoverageIgnore
             }
             foreach ($post->tags as $tag) {
                 $key = 'tag'.FWD_SLASH.(string)$tag;
@@ -444,7 +444,7 @@ final class IndexManager
                 if (($end = \strpos($key, '_', $start)) === false) {
                     throw new InvalidArgumentException("Post content filename syntax error [$key]");
                 }
-                $tagList = \substr($key, $start, $end-$start);
+                $tagList = \substr($key, $start, $end - $start);
                 $title = \substr($key, $end + 1);
                 $year = \substr($dateString, 0, 4);
                 $month = \substr($dateString, 4, 2);
