@@ -41,7 +41,6 @@ function route(string $uri, string $method): string {
     }
     $content = null;
     if ($result === 0) { // some other resource
-        $template = DEFAULT_TEMPLATE;
         $page_num = get_pagination_pagenumber();
         $per_page = get_config()->getInt(Config::KEY_POSTS_PERPAGE);
         switch ($uri) {
@@ -73,7 +72,7 @@ function route(string $uri, string $method): string {
     }
     $content->menus = get_menu();
 
-    $template = 'main.html';
+    $template = DEFAULT_TEMPLATE;
     if (isset($content->template)) {
         $template = $content->template;
     }

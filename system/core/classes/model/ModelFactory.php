@@ -2,9 +2,10 @@
 namespace html_go\model;
 
 use DateTimeInterface;
+use InvalidArgumentException;
+use html_go\exceptions\InternalException;
 use html_go\indexing\Element;
 use html_go\markdown\MarkdownParser;
-use html_go\indexing\IndexManager;
 
 /**
  * Responsible for creating <code>Content</code> objects ready to be used in templates.
@@ -82,18 +83,19 @@ final class ModelFactory
 
     private function loadDataFile(Element $indexElement): \stdClass {
         if (!isset($indexElement->path)) {
-            throw new \RuntimeException("Object does not have 'path' property " . print_r($indexElement, true)); // @codeCoverageIgnore
+            throw new InvalidArgumentException("Object does not have 'path' property " . print_r($indexElement, true)); // @codeCoverageIgnore
         }
         if ($indexElement->path === EMPTY_VALUE) {
+            //TODO: Implement me
 exit('Implement me');
         }
 
         if (($data = \file_get_contents($indexElement->path)) === false) {
-            throw new \RuntimeException("file_get_contents() failed opening [$indexElement->path]"); // @codeCoverageIgnore
+            throw new InternalException("file_get_contents() failed opening [$indexElement->path]"); // @codeCoverageIgnore
         }
         if (($contentObject = \json_decode($data)) === null) {
             $path = $indexElement->path;
-            throw new \RuntimeException("json_decode returned null decoding [$data] from [$path]"); // @codeCoverageIgnore
+            throw new InternalException("json_decode returned null decoding [$data] from [$path]"); // @codeCoverageIgnore
         }
         return $contentObject;
     }
