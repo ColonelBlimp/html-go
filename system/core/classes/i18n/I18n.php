@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace html_go\i18n;
 
-final class i18n
+final class I18n
 {
     /**
      * @var array<string, string>

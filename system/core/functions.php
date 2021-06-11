@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use html_go\i18n\i18n;
+use html_go\i18n\I18n;
 use html_go\indexing\IndexManager;
 use html_go\markdown\MarkdownParser;
 use html_go\markdown\ParsedownParser;
@@ -87,12 +87,12 @@ function get_template_context(\stdClass $content): array {
 
 /**
  * Return the <code>i18n</code> instance.
- * @return i18n
+ * @return I18n
  */
-function get_i18n(): i18n {
+function get_i18n(): I18n {
     static $object = null;
     if (empty($object)) {
-        $object = new i18n(LANG_ROOT.DS.get_config()->getString(Config::KEY_LANG).'.messages.php');
+        $object = new I18n(LANG_ROOT.DS.get_config()->getString(Config::KEY_LANG).'.messages.php');
     }
     return $object;
 }
