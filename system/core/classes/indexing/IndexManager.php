@@ -277,8 +277,6 @@ final class IndexManager extends AbstractIndexer
                 $tagInx[$key] = $this->createElementClass($key, EMPTY_VALUE, ENUM_TAG);
                 $tag2PostsIndex[$key][] = $post->key;
             }
-//            print_r($post);
-//            exit;
             $cat2PostIndex[$post->category] = $post->key;
         }
         $this->writeIndex($this->tagInxFile, $tagInx);
