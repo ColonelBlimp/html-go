@@ -76,6 +76,20 @@ final class Config
     }
 
     /**
+     * @param array<mixed> $config
+     * @param string $key
+     * @param mixed $default
+     * @return array<mixed>
+     */
+    private function checkSetOrDefault(array $config, string $key, mixed $default): array {
+        if (isset($config[$key])) {
+            return $config;
+        }
+        $config[$key] = $default;
+        return $config;
+    }
+
+    /**
      * Check required options are set and set defaults.
      * @param array<string, string> $config
      * @return array<string, mixed>
@@ -85,48 +99,21 @@ final class Config
         if (isset($config[self::KEY_SITE_URL]) === false) {
             throw new InvalidArgumentException("Configuration option 'site.url' not set.");
         }
-        if (isset($config[self::KEY_SITE_TITLE]) === false) {
-            $config[self::KEY_SITE_TITLE] = ' | HTML-go';
-        }
-        if (isset($config[self::KEY_SITE_NAME]) === false) {
-            $config[self::KEY_SITE_NAME] = 'Another HTML-go Site';
-        }
-        if (isset($config[self::KEY_SITE_DESCRIPTION]) === false) {
-            $config[self::KEY_SITE_DESCRIPTION] = 'Powered by HTML-go, a databaseless, flat-file blogging platform';
-        }
-        if (isset($config[self::KEY_SITE_TAGLINE]) === false) {
-            $config[self::KEY_SITE_TAGLINE] = 'Another HTML-go website';
-        }
-        if (isset($config[self::KEY_SITE_COPYRIGHT]) === false) {
-            $config[self::KEY_SITE_COPYRIGHT] = '(c) Copyright, Your Name';
-        }
-        if (isset($config[self::KEY_LANG]) === false) {
-            $config[self::KEY_LANG] = 'en';
-        }
-        if (isset($config[self::KEY_TPL_ENGINE]) === false) {
-            $config[self::KEY_TPL_ENGINE] = 'twig';
-        }
-        if (isset($config[self::KEY_TPL_CACHING]) === false) {
-            $config[self::KEY_TPL_CACHING] = false;
-        }
-        if (isset($config[self::KEY_TPL_FILE_EXT]) === false) {
-            $config[self::KEY_TPL_FILE_EXT] = 'twig';
-        }
-        if (isset($config[self::KEY_TPL_STRICT_VARS_TWIG]) === false) {
-            $config[self::KEY_TPL_STRICT_VARS_TWIG] = true;
-        }
-        if (isset($config[self::KEY_THEME_NAME]) === false) {
-            $config[self::KEY_THEME_NAME] = 'default';
-        }
-        if (isset($config[self::KEY_STATIC_INDEX]) === false) {
-            $config[self::KEY_STATIC_INDEX] = true;
-        }
-        if (isset($config[self::KEY_POSTS_PERPAGE]) === false) {
-            $config[self::KEY_POSTS_PERPAGE] = 5;
-        }
-        if (isset($config[self::KEY_POST_DATE_FMT]) === false) {
-            $config[self::KEY_POST_DATE_FMT] = 'jS M Y';
-        }
+        $config = $this->checkSetOrDefault($config, self::KEY_SITE_TITLE, ' | HTML-go');
+        $config = $this->checkSetOrDefault($config, self::KEY_SITE_NAME, 'Another HTML-go Site');
+        $config = $this->checkSetOrDefault($config, self::KEY_SITE_DESCRIPTION, 'Powered by HTML-go, a databaseless, flat-file blogging platform');
+        $config = $this->checkSetOrDefault($config, self::KEY_SITE_TAGLINE, 'Another HTML-go website');
+        $config = $this->checkSetOrDefault($config, self::KEY_SITE_COPYRIGHT, '(c) Copyright, Your Name');
+        $config = $this->checkSetOrDefault($config, self::KEY_LANG, 'en');
+        $config = $this->checkSetOrDefault($config, self::KEY_TPL_ENGINE, 'twig');
+        $config = $this->checkSetOrDefault($config, self::KEY_TPL_CACHING, false);
+        $config = $this->checkSetOrDefault($config, self::KEY_TPL_FILE_EXT, 'twig');
+        $config = $this->checkSetOrDefault($config, self::KEY_TPL_STRICT_VARS_TWIG, true);
+        $config = $this->checkSetOrDefault($config, self::KEY_THEME_NAME, 'default');
+        $config = $this->checkSetOrDefault($config, self::KEY_STATIC_INDEX, true);
+        $config = $this->checkSetOrDefault($config, self::KEY_POSTS_PERPAGE, 5);
+        $config = $this->checkSetOrDefault($config, self::KEY_POST_DATE_FMT, 'jS M Y');
+
         return $config;
     }
 }
