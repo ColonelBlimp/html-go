@@ -127,14 +127,22 @@ final class IndexManager extends AbstractIndexer
     }
 
     private function initialize(): void {
-        $this->catIndex = $this->loadIndex($this->catInxFile);
-        $this->pageIndex = $this->loadIndex($this->pageInxFile);
-        $this->postIndex = $this->loadIndex($this->postInxFile);
-        $this->tagIndex = $this->loadIndex($this->tagInxFile);
-        $this->cat2postIndex = $this->loadIndex($this->cat2postInxFile);
-        $this->tag2postIndex = $this->loadIndex($this->tag2postInxFile);
-        $this->menuIndex = $this->loadIndex($this->menuInxFile);
-        $this->slugIndex = \array_merge($this->postIndex, $this->catIndex, $this->pageIndex, $this->tagIndex);
+        if ((\is_dir($this->parentDir.DS.'cache'.DS.'indexes')) === false) {
+            $dir = $this->parentDir.DS.'cache'.DS.'indexes';
+            if (\mkdir($dir, MODE, true) === false) {
+                throw new InternalException("Unable to create cache/indexes directory [$dir]"); // @codeCoverageIgnore
+            }
+            $this->reindex();
+        } else {
+            $this->catIndex = $this->loadIndex($this->catInxFile);
+            $this->pageIndex = $this->loadIndex($this->pageInxFile);
+            $this->postIndex = $this->loadIndex($this->postInxFile);
+            $this->tagIndex = $this->loadIndex($this->tagInxFile);
+            $this->cat2postIndex = $this->loadIndex($this->cat2postInxFile);
+            $this->tag2postIndex = $this->loadIndex($this->tag2postInxFile);
+            $this->menuIndex = $this->loadIndex($this->menuInxFile);
+            $this->slugIndex = \array_merge($this->postIndex, $this->catIndex, $this->pageIndex, $this->tagIndex);
+        }
     }
 
     /**

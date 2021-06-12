@@ -41,14 +41,6 @@ abstract class AbstractIndexer
         $this->tag2postInxFile = $indexDir.DS.'tag2post.inx';
         $this->cat2postInxFile = $indexDir.DS.'cat2post.inx';
         $this->menuInxFile = $indexDir.DS.'menu.inx';
-
-        if ((\is_dir($this->parentDir.DS.'cache'.DS.'indexes')) === false) {
-            $dir = $this->parentDir.DS.'cache'.DS.'indexes';
-            if (\mkdir($dir, MODE, true) === false) {
-                throw new InternalException("Unable to create cache/indexes directory [$dir]"); // @codeCoverageIgnore
-            }
-            $this->reindex();
-        }
     }
 
     /**
