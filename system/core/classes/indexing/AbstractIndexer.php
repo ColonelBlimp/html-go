@@ -56,7 +56,7 @@ abstract class AbstractIndexer
      * @param string $filename
      * @throws InternalException
      * @throws InvalidArgumentException
-     * @return array<string, Element>
+     * @return array<string, \stdClass>
      */
     protected function loadIndex(string $filename): array {
         if (\file_exists($filename) === false) {
@@ -135,10 +135,10 @@ abstract class AbstractIndexer
      *   <li>date:</li>
      *   <li>tags:</li>
      * </ul>
-     * @return Element stdClass
+     * @return \stdClass
      */
-    protected function createElementClass(string $key, string $path, string $section, string ...$optional): Element {
-        $obj = new Element();
+    protected function createElementClass(string $key, string $path, string $section, string ...$optional): \stdClass {
+        $obj = new \stdClass();
         $obj->key = $key;
         $obj->path = $path;
         $obj->section = $section;

@@ -4,7 +4,6 @@ namespace html_go\model;
 use DateTimeInterface;
 use InvalidArgumentException;
 use html_go\exceptions\InternalException;
-use html_go\indexing\Element;
 use html_go\markdown\MarkdownParser;
 
 /**
@@ -31,10 +30,10 @@ final class ModelFactory
     /**
      * Create a content object (stdClass) from an index <code>Element</code>
      * object.
-     * @param Element $indexElement As obtained from the <code>IndexManager</code>
+     * @param \stdClass $indexElement As obtained from the <code>IndexManager</code>
      * @return \stdClass
      */
-    function createContentObject(Element $indexElement): \stdClass {
+    function createContentObject(\stdClass $indexElement): \stdClass {
         $contentObject = $this->loadDataFile($indexElement);
         if (isset($indexElement->key)) {
             $contentObject->key = $indexElement->key;
@@ -81,7 +80,7 @@ final class ModelFactory
         return $site;
     }
 
-    private function loadDataFile(Element $indexElement): \stdClass {
+    private function loadDataFile(\stdClass $indexElement): \stdClass {
         if (!isset($indexElement->path) || empty($indexElement->path)) {
             throw new InvalidArgumentException("Object does not have 'path' property ".print_r($indexElement, true)); // @codeCoverageIgnore
         }

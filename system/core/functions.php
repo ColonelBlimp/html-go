@@ -61,7 +61,7 @@ function get_categories(int $pageNum = 1, int $perPage = 0): array {
 /**
  * Takes an array of index <code>Element</code> object and converts them to an array of
  * <code>stdClass</code> objects.
- * @param array<string, html_go\indexing\Element> $indexList
+ * @param array<string, \stdClass> $indexList
  * @return array<\stdClass>
  */
 function get_model_list(array $indexList): array {

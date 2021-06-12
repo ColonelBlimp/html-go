@@ -6,13 +6,13 @@ use html_go\exceptions\InternalException;
 
 final class IndexManager extends AbstractIndexer
 {
-    /** @var array<string, Element> $catIndex */
+    /** @var array<string, \stdClass> $catIndex */
     private array $catIndex;
 
-    /** @var array<string, Element> $pageIndex */
+    /** @var array<string, \stdClass> $pageIndex */
     private array $pageIndex;
 
-    /** @var array<string, Element> $postIndex */
+    /** @var array<string, \stdClass> $postIndex */
     private array $postIndex;
 
     /** @var array<mixed> $menuIndex */
@@ -20,21 +20,21 @@ final class IndexManager extends AbstractIndexer
 
     /**
      * A tag is NOT represented by any file on the physical filessytem.
-     * @var array<string, Element> $tagIndex
+     * @var array<string, \stdClass> $tagIndex
      */
     private array $tagIndex;
 
     /**
      * The slug index holds references to files on the physical filesystem.,
      * and is a combination of the catIndex, postIndex and pageIndex
-     * @var array<string, Element> $slugIndex
+     * @var array<string, \stdClass> $slugIndex
      */
     private array $slugIndex;
 
-    /** @var array<string, Element> $tag2postIndex */
+    /** @var array<string, \stdClass> $tag2postIndex */
     private array $tag2postIndex;
 
-    /** @var array<string, Element> $cat2postIndex */
+    /** @var array<string, \stdClass> $cat2postIndex */
     private array $cat2postIndex;
 
     /**
@@ -68,9 +68,9 @@ final class IndexManager extends AbstractIndexer
      * Returns an object representing an element in the index.
      * @param string $key
      * @throws \InvalidArgumentException If the given $key does not exist in the index.
-     * @return Element
+     * @return \stdClass
      */
-    function getElementFromSlugIndex(string $key): Element {
+    function getElementFromSlugIndex(string $key): \stdClass {
         if (!isset($this->slugIndex[$key])) {
             throw new InvalidArgumentException("Key does not exist in the slugIndex! Use 'elementExists()' before calling this method.");
         }
@@ -88,7 +88,7 @@ final class IndexManager extends AbstractIndexer
 
     /**
      * Return the posts index.
-     * @return array<string, Element>
+     * @return array<string, \stdClass>
      */
     function getPostsIndex(): array {
         return $this->postIndex;
@@ -96,7 +96,7 @@ final class IndexManager extends AbstractIndexer
 
     /**
      * Return the category index.
-     * @return array<string, Element>
+     * @return array<string, \stdClass>
      */
     function getCategoriesIndex(): array {
         return $this->catIndex;
@@ -104,7 +104,7 @@ final class IndexManager extends AbstractIndexer
 
     /**
      * Return the tag index.
-     * @return array<string, Element>
+     * @return array<string, \stdClass>
      */
     function getTagIndex(): array {
         return $this->tagIndex;
@@ -120,7 +120,7 @@ final class IndexManager extends AbstractIndexer
 
     /**
      * Return the tag index.
-     * @return array<string, Element>
+     * @return array<string, \stdClass>
      */
     function getPageIndex(): array {
         return $this->pageIndex;
@@ -138,7 +138,7 @@ final class IndexManager extends AbstractIndexer
     }
 
     /**
-     * @return array<string, Element>
+     * @return array<string, \stdClass>
      */
     private function buildCategoryIndex(): array {
         $index = [];
@@ -201,7 +201,7 @@ final class IndexManager extends AbstractIndexer
 
     /**
      * Builds the post index.
-     * @return array<string, Element>
+     * @return array<string, \stdClass>
      */
     private function buildPostIndex(): array {
         $index = [];
@@ -311,9 +311,9 @@ final class IndexManager extends AbstractIndexer
      * @param string $section
      * @throws InternalException
      * @throws InvalidArgumentException
-     * @return Element
+     * @return \stdClass
      */
-    private function createElement(string $key, string $filepath, string $section): Element {
+    private function createElement(string $key, string $filepath, string $section): \stdClass {
         if (empty($key)) {
             throw new InternalException("Key is empty for [$filepath]"); // @codeCoverageIgnore
         }
