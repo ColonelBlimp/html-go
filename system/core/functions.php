@@ -140,7 +140,6 @@ function get_template_engine(): TemplateEngine {
         $engineName = get_config()->getString(Config::KEY_TPL_ENGINE);
 
         $caching = false;
-        $strict = true;
         if (get_config()->getBool(Config::KEY_TPL_CACHING)) {
             $caching = CACHE_ROOT.DS.'template_cache';
         }

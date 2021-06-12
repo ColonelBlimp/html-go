@@ -312,45 +312,4 @@ final class IndexManager extends AbstractIndexer
         }
         return $initial;
     }
-
-    /**
-     * Create an Element object.
-     * @param string $key
-     * @param string $filepath
-     * @param string $section
-     * @throws InternalException
-     * @throws InvalidArgumentException
-     * @return \stdClass
-     */
-    private function createElement(string $key, string $filepath, string $section): \stdClass {
-        if (empty($key)) {
-            throw new InternalException("Key is empty for [$filepath]"); // @codeCoverageIgnore
-        }
-        switch ($section) {
-            case ENUM_CATEGORY:
-            case ENUM_TAG:
-            case ENUM_PAGE:
-                return $this->createElementClass($key, $filepath, $section);
-            case ENUM_POST:
-                if (\strlen($key) < 17) {
-                    throw new InvalidArgumentException("Post content filename is too short [$key]");
-                }
-                $pathinfo = \pathinfo($filepath);
-                $dateString = \substr($key, 0, 14);
-                $start = 15;
-                if (($end = \strpos($key, '_', $start)) === false) {
-                    throw new InvalidArgumentException("Post content filename syntax error [$key]");
-                }
-                $tagList = \substr($key, $start, $end - $start);
-                $title = \substr($key, $end + 1);
-                $year = \substr($dateString, 0, 4);
-                $month = \substr($dateString, 4, 2);
-                $key = $year.FWD_SLASH.$month.FWD_SLASH.$title;
-                $parts = \explode(DS, $pathinfo['dirname']);
-                $cnt = \count($parts);
-                return $this->createElementClass($key, $filepath, ENUM_POST, type: $parts[$cnt - 1], category: $parts[$cnt - 2], username: $parts[$cnt - 4], date: $dateString, tags: $tagList);
-            default:
-                throw new InternalException("Unknown section [$section]"); // @codeCoverageIgnore
-        }
-    }
 }

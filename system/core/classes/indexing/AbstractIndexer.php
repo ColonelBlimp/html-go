@@ -152,6 +152,33 @@ abstract class AbstractIndexer
     }
 
     /**
+     * Create an Element object.
+     * @param string $key
+     * @param string $filepath
+     * @param string $section
+     * @throws InternalException
+     * @throws InvalidArgumentException
+     * @return \stdClass
+     */
+    protected function createElement(string $key, string $filepath, string $section): \stdClass {
+        if (empty($key)) {
+            throw new InternalException("Key is empty for [$filepath]"); // @codeCoverageIgnore
+        }
+        switch ($section) {
+            case ENUM_CATEGORY:
+            case ENUM_TAG:
+            case ENUM_PAGE:
+                return $this->createElementClass($key, $filepath, $section);
+            case ENUM_POST:
+                $uriDateStringTagList = $this->getPostUriDateStringAndTagListFromIndexKey($key);
+                $typeCatUsername = $this->getTypeCategoryUsernameFromFilepath($filepath);
+                return $this->createElementClass($uriDateStringTagList[0], $filepath, ENUM_POST, type: $typeCatUsername[0], category: $typeCatUsername[1], username: $typeCatUsername[2], date: $uriDateStringTagList[1], tags: $uriDateStringTagList[2]);
+            default:
+                throw new InternalException("Unknown section [$section]"); // @codeCoverageIgnore
+        }
+    }
+
+    /**
      * Checks if the given key is set in the given array. If so, returns the value,
      * otherwise returns the default value.
      * @param array<mixed> $ar
@@ -164,6 +191,42 @@ abstract class AbstractIndexer
             return $ar[$key];
         }
         return $default;
+    }
+
+    /**
+     *
+     * @param string $key
+     * @throws InvalidArgumentException
+     * @return array<string>
+     */
+    private function getPostUriDateStringAndTagListFromIndexKey(string $key): array {
+        if (\strlen($key) < 17) {
+            throw new InvalidArgumentException("Post content filename is too short [$key]");
+        }
+        $dateString = \substr($key, 0, 14);
+        $start = 15;
+        if (($end = \strpos($key, '_', $start)) === false) {
+            throw new InvalidArgumentException("Post content filename syntax error [$key]");
+        }
+        $tagList = \substr($key, $start, $end - $start);
+        $title = \substr($key, $end + 1);
+        $year = \substr($dateString, 0, 4);
+        $month = \substr($dateString, 4, 2);
+        $uri = $year.FWD_SLASH.$month.FWD_SLASH.$title;
+        return [$uri, $dateString, $tagList];
+    }
+
+    /**
+     * Extract the post's type, category and username from its filepath.
+     * @param string $filepath
+     * @return array<string> value index: [0] = type, [1] = category, [2] = username
+     */
+    private function getTypeCategoryUsernameFromFilepath(string $filepath): array {
+        $pathinfo = \pathinfo($filepath);
+        $parts = \explode(DS, $pathinfo['dirname']);
+        $cnt = \count($parts);
+        // type,  category, username
+        return [$parts[$cnt - 1], $parts[$cnt - 2], $parts[$cnt - 4]];
     }
 
     public abstract function reindex(): void;
