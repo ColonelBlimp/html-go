@@ -169,6 +169,7 @@ final class IndexManager extends AbstractIndexer
         $pages = $this->scanDirectory($pageDir);
         \sort($pages);
         $menuInx = [];
+        $pageInx = [];
         foreach ($pages as $filepath) {
             $location = \substr($filepath, $len);
             $key = \str_replace(DS, FWD_SLASH, \substr($location, 0, (\strlen($location) - CONTENT_FILE_EXT_LEN)));
@@ -215,7 +216,7 @@ final class IndexManager extends AbstractIndexer
         $index = [];
         foreach ($this->parseDirectory($this->userDataDir.DS.'*'.DS.'posts'.DS.'*'.DS.'*'.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
             $key = \pathinfo($filepath, PATHINFO_FILENAME);
-            $element = $this->createElement($key, $filepath, ENUM_POST);
+            $element = $this->createElement(/** @scrutinizer ignore-type */ $key, $filepath, ENUM_POST);
             $index[(string)$element->key] = $element;
         }
         $this->writeIndex($this->postInxFile, $index);
@@ -278,7 +279,7 @@ final class IndexManager extends AbstractIndexer
         $cat2PostIndex = [];
         foreach ($this->postIndex as $post) {
             if (!isset($post->key, $post->tags, $post->category)) {
-                throw new InternalException("Invalid format of index element: ".print_r($post, true)); // @codeCoverageIgnore
+                throw new InternalException("Invalid format of index element: "./** @scrutinizer ignore-type */print_r($post, true)); // @codeCoverageIgnore
             }
             foreach ($post->tags as $tag) {
                 $key = 'tag'.FWD_SLASH.(string)$tag;

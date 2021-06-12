@@ -166,5 +166,5 @@ abstract class AbstractIndexer
         return $default;
     }
 
-    abstract function reindex(): void;
+    public abstract function reindex(): void;
 }
