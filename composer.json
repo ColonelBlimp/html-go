@@ -2,7 +2,7 @@
 	"name" : "html-go/html-go",
 	"description" : "Databaseless, flat-file, blogging system",
 	"type" : "project",
-	"homepage" : "https://html-go",
+	"homepage" : "https://html-go.com",
 	"license" : "MIT",
 	"authors" : [{
 			"name" : "Marc L. Veary"

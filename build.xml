@@ -8,9 +8,9 @@
     <property name="vendor.dir" value="${sys.dir}/vendor" />
     <property name="vendor.bin.dir" value="${vendor.dir}/bin" />
 
-	<condition property="stdout" value="System.out" else="/dev/null">
-		<os family="windows" />
-	</condition>
+    <condition property="stdout" value="System.out" else="/dev/null">
+    	<os family="windows" />
+    </condition>
 
     <target name="prepare">
         <mkdir dir="${build.dir}/logs" />
@@ -20,9 +20,9 @@
         <delete file="${basedir}/tests/test-data/content/user-data/@testuser/posts/harvesting/regular/20210101000000_wibble.md" />
     </target>
 
-	<target name="minimum" depends="prepare, php-lint, phpstan, phpcs, phpunit, cleanup">
-		<delete file="${basedir}/System.out" />
-	</target>
+    <target name="minimum" depends="prepare, php-lint, phpstan, phpcs, phpunit, cleanup">
+        <delete file="${basedir}/System.out" />
+    </target>
 
     <target name="php-lint" description="Check for syntax errors">
         <apply executable="php" failonerror="true">
@@ -43,50 +43,15 @@
         </exec>
     </target>
 
-	<target name="phpmd" description="DEV: Perform project mess detection">
-		<exec executable="phpmd.bat" failonerror="false">
-			<arg path="${src.dir}" />
-			<arg value="xml" />
-            <arg value="${build.dir}/phpmd.xml" />
-            <arg value="--reportfile" />
-			<arg value="${build.dir}/logs/phpmd.xml" />
-		</exec>
-	</target>
-
-	<target name="phpcpd" description="DEV: Find code duplication">
-		<exec executable="phpcpd.bat" failonerror="false">
-            <arg value="--log-pmd" />
-            <arg value="${build.dir}/logs/phpcpd.xml" />
-            <arg path="${src.dir}" />
-		</exec>
-	</target>
-
-	<target name="phploc" description="DEV: Sizing the project">
-        <exec executable="phploc.bat" output="${stdout}">
-           <arg value="--log-xml" />
-           <arg value="${build.dir}/logs/phploc.xml" />
-           <arg path="${src.dir}" />
+    <target name="phpstan" description="DEV: PHP Static Analysis Tool">
+	<exec executable="${vendor.bin.dir}/phpstan.bat">
+            <arg value="analyse" />
+            <arg value="-c" />
+            <arg path="${build.dir}/phpstan.neon" />
+            <arg value="--memory-limit" />
+            <arg value="128M" />
         </exec>
-	</target>
-
-	<target name="pdepend" description="DEV: Software metrics">
-		<exec executable="pdepend.bat" output="${stdout}">
-            <arg value="--jdepend-xml=${build.dir}/logs/jdepend.xml" />
-            <arg value="--jdepend-chart=${build.dir}/pdepend/dependencies.svg" />
-            <arg value="--overview-pyramid=${build.dir}/pdepend/overview-pyramid.svg" />
-            <arg path="${src.dir}" />
-		</exec>
-	</target>
-
-	<target name="phpstan" description="DEV: PHP Static Analysis Tool">
-		<exec executable="${vendor.bin.dir}/phpstan.bat">
-		  <arg value="analyse" />
-		  <arg value="-c" />
-		  <arg path="${build.dir}/phpstan.neon" />
-		  <arg value="--memory-limit" />
-		  <arg value="128M" />
-		</exec>
-	</target>
+    </target>
 
     <target name="phpunit" description="Perform unit tests">
         <exec executable="${vendor.bin.dir}/phpunit.bat" failonerror="true">
