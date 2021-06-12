@@ -22,7 +22,7 @@ final class ModelFactory
      * @param MarkdownParser $parser Implementation of the
      * <code>MarkdownParser</code> interface.
      */
-    function __construct(Config $config, MarkdownParser $parser) {
+    public function __construct(Config $config, MarkdownParser $parser) {
         $this->config = $config;
         $this->parser = $parser;
     }
@@ -33,7 +33,7 @@ final class ModelFactory
      * @param \stdClass $indexElement As obtained from the <code>IndexManager</code>
      * @return \stdClass
      */
-    function createContentObject(\stdClass $indexElement): \stdClass {
+    public function createContentObject(\stdClass $indexElement): \stdClass {
         $contentObject = $this->loadDataFile($indexElement);
         if (isset($indexElement->key)) {
             $contentObject->key = $indexElement->key;

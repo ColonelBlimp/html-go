@@ -8,14 +8,14 @@ final class I18n
      */
     private array $bundle = [];
 
-    function __construct(string $bundlePath) {
+    public function __construct(string $bundlePath) {
         if (!\file_exists($bundlePath)) {
             throw new \InvalidArgumentException("i18n bundle file not found [$bundlePath]");
         }
         $this->bundle = include $bundlePath;
     }
 
-    function getText(string $key): string {
+    public function getText(string $key): string {
         if (\array_key_exists($key, $this->bundle)) {
             return $this->bundle[$key];
         }

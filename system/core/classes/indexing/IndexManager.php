@@ -43,7 +43,7 @@ final class IndexManager extends AbstractIndexer
      * @throws \InvalidArgumentException If the parent directory is invalid.
      * @throws InternalException
      */
-    function __construct(string $parentDir) {
+    public function __construct(string $parentDir) {
         parent::__construct($parentDir);
         $this->initialize();
     }
@@ -51,7 +51,7 @@ final class IndexManager extends AbstractIndexer
     /**
      * Rebuild all the indexes.
      */
-    function reindex(): void {
+    public function reindex(): void {
         $this->catIndex = $this->buildCategoryIndex();
         $pageMenuIndex = $this->buildPageAndMenuIndexes();
         $this->pageIndex = $pageMenuIndex[0];
@@ -70,7 +70,7 @@ final class IndexManager extends AbstractIndexer
      * @throws \InvalidArgumentException If the given $key does not exist in the index.
      * @return \stdClass
      */
-    function getElementFromSlugIndex(string $key): \stdClass {
+    public function getElementFromSlugIndex(string $key): \stdClass {
         if (!isset($this->slugIndex[$key])) {
             throw new InvalidArgumentException("Key does not exist in the slugIndex! Use 'elementExists()' before calling this method.");
         }
@@ -82,7 +82,7 @@ final class IndexManager extends AbstractIndexer
      * @param string $key
      * @return bool <code>true</code> if exists, otherwise <code>false</code>
      */
-    function elementExists(string $key): bool {
+    public function elementExists(string $key): bool {
         return isset($this->slugIndex[$key]);
     }
 
@@ -90,7 +90,7 @@ final class IndexManager extends AbstractIndexer
      * Return the posts index.
      * @return array<string, \stdClass>
      */
-    function getPostsIndex(): array {
+    public function getPostsIndex(): array {
         return $this->postIndex;
     }
 
@@ -98,7 +98,7 @@ final class IndexManager extends AbstractIndexer
      * Return the category index.
      * @return array<string, \stdClass>
      */
-    function getCategoriesIndex(): array {
+    public function getCategoriesIndex(): array {
         return $this->catIndex;
     }
 
@@ -106,7 +106,7 @@ final class IndexManager extends AbstractIndexer
      * Return the tag index.
      * @return array<string, \stdClass>
      */
-    function getTagIndex(): array {
+    public function getTagIndex(): array {
         return $this->tagIndex;
     }
 
@@ -114,7 +114,7 @@ final class IndexManager extends AbstractIndexer
      * Return the menus index.
      * @return array<mixed>
      */
-    function getMenusIndex(): array {
+    public function getMenusIndex(): array {
         return $this->menuIndex;
     }
 
@@ -122,7 +122,7 @@ final class IndexManager extends AbstractIndexer
      * Return the tag index.
      * @return array<string, \stdClass>
      */
-    function getPageIndex(): array {
+    public function getPageIndex(): array {
         return $this->pageIndex;
     }
 

@@ -18,7 +18,7 @@ abstract class AbstractIndexer
     protected string $cat2postInxFile;
     protected string $menuInxFile;
 
-    function __construct(string $parentDir) {
+    public function __construct(string $parentDir) {
         if (($path = \realpath($parentDir)) === false) {
             throw new InternalException("realpath() function failed on [$parentDir]"); // @codeCoverageIgnore
         }

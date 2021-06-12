@@ -15,13 +15,13 @@ final class TwigTemplateEngine implements TemplateEngine
      * @param array<mixed> $options
      * @param string $ext the template file extension
      */
-    function __construct(array $templateDirs, array $options, string $ext = 'twig') {
+    public function __construct(array $templateDirs, array $options, string $ext = 'twig') {
         $loader = new FilesystemLoader($templateDirs);
         $this->engine = new Environment($loader, $options);
         $this->ext = $ext;
     }
 
-    function render($template, array $vars): string {
+    public function render($template, array $vars): string {
         return $this->engine->render($template.'.'.$this->ext, $vars);
     }
 }

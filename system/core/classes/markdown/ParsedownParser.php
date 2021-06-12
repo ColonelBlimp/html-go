@@ -12,11 +12,11 @@ final class ParsedownParser implements MarkdownParser
 {
     private Parsedown $parser;
 
-    function __construct() {
+    public function __construct() {
         $this->parser = new Parsedown();
     }
 
-    function parse(string $text): string {
+    public function parse(string $text): string {
         return $this->parser->parse($text);
     }
 }

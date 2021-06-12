@@ -6,21 +6,21 @@ use html_go\exceptions\InternalException;
 
 final class Config
 {
-    const KEY_SITE_URL = 'site.url';
-    const KEY_SITE_NAME = 'site.name';
-    const KEY_SITE_TITLE = 'site.title';
-    const KEY_SITE_DESCRIPTION = 'site.description';
-    const KEY_SITE_TAGLINE = 'site.tagline';
-    const KEY_SITE_COPYRIGHT = 'site.copyright';
-    const KEY_LANG = 'site.language';
-    const KEY_TPL_ENGINE = 'template.engine';
-    const KEY_TPL_CACHING = 'template.engine.caching';
-    const KEY_TPL_FILE_EXT = 'template.engine.file.ext';
-    const KEY_TPL_STRICT_VARS_TWIG = 'template.engine.twig.strict_variables';
-    const KEY_STATIC_INDEX = 'static.index';
-    const KEY_THEME_NAME = 'theme.name';
-    const KEY_POSTS_PERPAGE = 'blog.posts_per_page';
-    const KEY_POST_DATE_FMT = 'blog.post_date_format';
+    public const KEY_SITE_URL = 'site.url';
+    public const KEY_SITE_NAME = 'site.name';
+    public const KEY_SITE_TITLE = 'site.title';
+    public const KEY_SITE_DESCRIPTION = 'site.description';
+    public const KEY_SITE_TAGLINE = 'site.tagline';
+    public const KEY_SITE_COPYRIGHT = 'site.copyright';
+    public const KEY_LANG = 'site.language';
+    public const KEY_TPL_ENGINE = 'template.engine';
+    public const KEY_TPL_CACHING = 'template.engine.caching';
+    public const KEY_TPL_FILE_EXT = 'template.engine.file.ext';
+    public const KEY_TPL_STRICT_VARS_TWIG = 'template.engine.twig.strict_variables';
+    public const KEY_STATIC_INDEX = 'static.index';
+    public const KEY_THEME_NAME = 'theme.name';
+    public const KEY_POSTS_PERPAGE = 'blog.posts_per_page';
+    public const KEY_POST_DATE_FMT = 'blog.post_date_format';
 
     /**
      * @var array<string, string>
@@ -33,7 +33,7 @@ final class Config
      * @throws InvalidArgumentException
      * @throws InternalException
      */
-    function __construct(string $configRoot) {
+    public function __construct(string $configRoot) {
         $configFile = $configRoot.DS.'config.ini';
         if (!\is_file($configFile)) {
             throw new InvalidArgumentException("Configuration INI file not found [$configFile]");
@@ -44,7 +44,7 @@ final class Config
         $this->config = $this->validateConfig($config);
     }
 
-    function getString(string $key, string $default = ''): string {
+    public function getString(string $key, string $default = ''): string {
         $var = $this->checkAndGet($key);
         if (empty($var) || \is_string($var) === false) {
             return $default;
@@ -52,7 +52,7 @@ final class Config
         return $var;
     }
 
-    function getInt(string $key, int $default = -1): int {
+    public function getInt(string $key, int $default = -1): int {
         $var = $this->checkAndGet($key);
         if (empty($var) || \is_int($var) === false) {
             return $default;
@@ -60,7 +60,7 @@ final class Config
         return $var;
     }
 
-    function getBool(string $key, bool $default = false): bool {
+    public function getBool(string $key, bool $default = false): bool {
         $var = $this->checkAndGet($key);
         if (empty($var) || \is_bool($var) === false) {
             return $default;

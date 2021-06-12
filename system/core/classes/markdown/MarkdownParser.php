@@ -13,5 +13,5 @@ interface MarkdownParser
      * @param string $text
      * @return string
      */
-    function parse(string $text): string;
+    public function parse(string $text): string;
 }
