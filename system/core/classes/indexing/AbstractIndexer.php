@@ -121,5 +121,58 @@ abstract class AbstractIndexer
         }
     }
 
+    /**
+     * Creates and populates an index Element class.
+     * @param string $key The index key
+     * @param string $path The filepath
+     * @param string $section 'pages', 'posts', 'categories' or 'tags'
+     * @param string $optional When populating with variable arguments, use the
+     * following <b>named parameters<b>:
+     * <ul>
+     *   <li>type:</li>
+     *   <li>category:</li>
+     *   <li>username:</li>
+     *   <li>date:</li>
+     *   <li>tags:</li>
+     * </ul>
+     * @return Element stdClass
+     */
+    protected function createElementClass(string $key, string $path, string $section, string ...$optional): Element {
+        $obj = new Element();
+        $obj->key = $key;
+        $obj->path = $path;
+        $obj->section = $section;
+        $obj->type = $this->checkSetOrDefault($optional, 'type', EMPTY_VALUE);
+        $obj->category = $this->checkSetOrDefault($optional, 'category', EMPTY_VALUE);
+        $obj->username = $this->checkSetOrDefault($optional, 'username', EMPTY_VALUE);
+        $obj->date = $this->checkSetOrDefault($optional, 'date', EMPTY_VALUE);
+
+        $tags = [];
+        $tagList = EMPTY_VALUE;
+        if (isset($optional['tags'])) {
+            $tagList = $optional['tags'];
+        }
+        if (!empty($tagList)) {
+            $tags = \explode(',', $tagList);
+        }
+        $obj->tags = $tags;
+        return $obj;
+    }
+
+    /**
+     * Checks if the given key is set in the given array. If so, returns the value,
+     * otherwise returns the default value.
+     * @param array<mixed> $ar
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    private function checkSetOrDefault(array $ar, string $key, mixed $default): mixed {
+        if (isset($ar[$key])) {
+            return $ar[$key];
+        }
+        return $default;
+    }
+
     abstract function reindex(): void;
 }

@@ -277,6 +277,8 @@ final class IndexManager extends AbstractIndexer
                 $tagInx[$key] = $this->createElementClass($key, EMPTY_VALUE, ENUM_TAG);
                 $tag2PostsIndex[$key][] = $post->key;
             }
+//            print_r($post);
+//            exit;
             $cat2PostIndex[$post->category] = $post->key;
         }
         $this->writeIndex($this->tagInxFile, $tagInx);
@@ -339,38 +341,9 @@ final class IndexManager extends AbstractIndexer
                 $key = $year.FWD_SLASH.$month.FWD_SLASH.$title;
                 $parts = \explode(DS, $pathinfo['dirname']);
                 $cnt = \count($parts);
-                return $this->createElementClass($key, $filepath, ENUM_POST, $parts[$cnt - 1], $parts[$cnt - 2], $parts[$cnt - 4], $dateString, $tagList);
+                return $this->createElementClass($key, $filepath, ENUM_POST, type: $parts[$cnt - 1], category: $parts[$cnt - 2], username: $parts[$cnt - 4], date: $dateString, tags: $tagList);
             default:
                 throw new InternalException("Unknown section [$section]"); // @codeCoverageIgnore
         }
-    }
-
-    /**
-     * Creates and populates an index Element class.
-     * @param string $key The index key
-     * @param string $path The filepath
-     * @param string $type
-     * @param string $section 'pages', 'posts', 'categories' or 'tags'
-     * @param string $category
-     * @param string $username
-     * @param string $date
-     * @param string $tagList
-     * @return Element stdClass
-     */
-    private function createElementClass(string $key, string $path, string $section, string $type = EMPTY_VALUE, string $category = EMPTY_VALUE, string $username = EMPTY_VALUE, string $date = EMPTY_VALUE, string $tagList = EMPTY_VALUE): Element {
-        $tags = [];
-        if (!empty($tagList)) {
-            $tags = \explode(',', $tagList);
-        }
-        $obj = new Element();
-        $obj->key = $key;
-        $obj->path = $path;
-        $obj->type = $type;
-        $obj->section = $section;
-        $obj->category = $category;
-        $obj->username = $username;
-        $obj->date = $date;
-        $obj->tags = $tags;
-        return $obj;
     }
 }
