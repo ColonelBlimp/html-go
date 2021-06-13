@@ -1,7 +1,0 @@
-    <nav class="flex flex-row space-x-6 font-semibold">
-{% if content.menus.main is defined %}
-{% for main in content.menus.main %}
-        <a href="{{ content.site.url }}{%if main.key starts with '/'%}{{ main.key }}{% else %}/{{ main.key }}{% endif %}">{{ main.name }}</a>
-{% endfor %}
-{% endif %}
-    </nav>

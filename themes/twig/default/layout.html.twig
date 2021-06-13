@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="{{ content.site.language }}" class="bg-white">
   <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{{ content.title }}{{ content.site.title }}</title>
 {% if content.description is empty %}
 {% set description = content.site.description %}
@@ -11,12 +11,15 @@
 {% endif %}
     <meta name="description" content="{{ description }}">
     <link rel="stylesheet" href="{{ content.site.url }}/themes/twig/default/css/main.css">
+    <link rel="icon" href="">
   </head>
   <body>
+    <div>
 {% include "header.html.twig" %}
-    <main class="border-t border-gray-200">
+      <main class="border-t border-gray-200">
 {% block main %}{% endblock %}
-    </main>
+      </main>
 {% include "footer.html.twig" %}
+    </div>
   </body>
 </html>
