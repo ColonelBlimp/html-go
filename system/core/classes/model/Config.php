@@ -100,7 +100,7 @@ final class Config
             throw new InvalidArgumentException("Configuration option 'site.url' not set.");
         }
         $config = $this->checkSetOrDefault($config, self::KEY_SITE_TITLE, ' | HTML-go');
-        $config = $this->checkSetOrDefault($config, self::KEY_SITE_NAME, 'Another HTML-go Site');
+        $config = $this->checkSetOrDefault($config, self::KEY_SITE_NAME, 'HTML-go');
         $config = $this->checkSetOrDefault($config, self::KEY_SITE_DESCRIPTION, 'Powered by HTML-go, a databaseless, flat-file blogging platform');
         $config = $this->checkSetOrDefault($config, self::KEY_SITE_TAGLINE, 'Another HTML-go website');
         $config = $this->checkSetOrDefault($config, self::KEY_SITE_COPYRIGHT, '(c) Copyright, Your Name');

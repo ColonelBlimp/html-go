@@ -11,12 +11,11 @@
 {% endif %}
     <meta name="description" content="{{ description }}">
     <link rel="stylesheet" href="{{ content.site.url }}/themes/twig/default/css/main.css">
-    <link rel="icon" href="">
   </head>
   <body>
     <div>
 {% include "header.html.twig" %}
-      <main class="border-t border-gray-200">
+      <main class="border-t-4 border-red-500">
 {% block main %}{% endblock %}
       </main>
 {% include "footer.html.twig" %}
