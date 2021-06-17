@@ -43,7 +43,11 @@ function route(string $uri, string $method): string {
     if ($result === 1) {
         $content = process_blog_post_request($uri, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE));
     } else {
-        $content = get_content_object($uri);
+        if (HOME_INDEX_KEY === $uri) {
+            $content = get_home_page();
+        } else {
+            $content = get_content_object($uri);
+        }
     }
 
     if ($content === null) {
@@ -51,6 +55,20 @@ function route(string $uri, string $method): string {
     }
 
     return render(vars: get_template_context($content));
+}
+
+/**
+ * Process a request for the home page
+ * @param string $uri
+ * @return \stdClass|NULL
+ */
+function get_home_page(): ?\stdClass {
+    if (get_config()->getBool(Config::KEY_STATIC_INDEX)) {
+        return get_content_object(HOME_INDEX_KEY);
+    }
+    $content = get_content_object(HOME_INDEX_KEY, get_posts());
+    $content->template = 'listing.html';
+    return $content;
 }
 
 /**
