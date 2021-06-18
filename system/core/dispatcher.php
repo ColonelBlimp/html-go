@@ -88,7 +88,7 @@ function process_blog_post_request(string $uri, int $pageNum, int $perPage): ?\s
                 $content = get_content_object($uri, get_posts($pageNum, $perPage));
             }
             break;
-        case BLOG_INDEX_KEY:
+        case POST_INDEX_KEY:
             $content = get_content_object($uri, get_posts($pageNum, $perPage));
             break;
         case CAT_INDEX_KEY:

@@ -29,6 +29,8 @@
 // Landing Page constants for posts and homepage
 \define('HOME_INDEX_KEY', '/');
 \define('POST_INDEX_KEY', 'blog');
+\define('CAT_INDEX_KEY', CATEGORY_SECTION);
+\define('TAG_INDEX_KEY', TAG_SECTION);
 
 // dispatcher.php
 \define('HTTP_GET', 'GET');
