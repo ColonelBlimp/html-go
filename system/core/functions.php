@@ -143,17 +143,7 @@ function get_template_engine(): TemplateEngine {
 
         switch($engineName) {
             case 'twig':
-                $caching = false;
-                if (get_config()->getBool(Config::KEY_TPL_CACHING)) {
-                    $caching = TEMPLATE_CACHE_ROOT;
-                }
-                $strict = get_config()->getBool(Config::KEY_TPL_STRICT_VARS_TWIG);
-                $options = [
-                    'cache' => $caching,
-                    'strict_variables' => $strict
-                ];
-                $templateDirs = [THEMES_ROOT.DS.$engineName.DS.$themeName];
-                $engine = new TwigTemplateEngine($templateDirs, $options);
+                $engine = build_twig_template_engine($themeName);
                 break;
             case 'smarty':
                 throw new InternalException("Implement template engine [$engineName]");
@@ -164,6 +154,25 @@ function get_template_engine(): TemplateEngine {
         }
     }
     return $engine;
+}
+
+/**
+ * Build the twig template engine.
+ * @param string $themeName The name of the configure theme
+ * @return TemplateEngine
+ */
+function build_twig_template_engine(string $themeName): TemplateEngine {
+    $caching = false;
+    if (get_config()->getBool(Config::KEY_TPL_CACHING)) {
+        $caching = TEMPLATE_CACHE_ROOT;
+    }
+    $strict = get_config()->getBool(Config::KEY_TPL_STRICT_VARS_TWIG);
+    $options = [
+        'cache' => $caching,
+        'strict_variables' => $strict
+    ];
+    $templateDirs = [THEMES_ROOT.DS.'twig'.DS.$themeName];
+    return new TwigTemplateEngine($templateDirs, $options);
 }
 
 /**

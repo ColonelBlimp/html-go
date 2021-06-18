@@ -4,8 +4,8 @@ namespace html_go\model;
 use DateTimeInterface;
 use InvalidArgumentException;
 use html_go\exceptions\InternalException;
-use html_go\markdown\MarkdownParser;
 use html_go\indexing\IndexManager;
+use html_go\markdown\MarkdownParser;
 
 /**
  * Responsible for creating <code>Content</code> objects ready to be used in templates.
@@ -40,12 +40,7 @@ final class ModelFactory
         $contentObject = $this->loadDataFile($indexElement);
         $contentObject->key = $indexElement->key;
         if (!empty($indexElement->category)) {
-            if ($this->manager->elementExists($indexElement->category) === false) {
-                throw new \UnexpectedValueException("Content's [$contentObject->key] category [$indexElement->category] does not exist!");
-            }
-            $element = $this->manager->getElementFromSlugIndex($indexElement->category);
-            $category = $this->loadDataFile($element);
-            $contentObject->category = $category;
+            $contentObject->category = $this->getCategoryObject($indexElement->category);
         }
         if (isset($indexElement->tags)) {
             $contentObject->tags = $indexElement->tags;
@@ -65,10 +60,13 @@ final class ModelFactory
         return $contentObject;
     }
 
-    /**
-     * Create the site object.
-     * @return \stdClass
-     */
+    private function getCategoryObject(string $slug): \stdClass {
+        if ($this->manager->elementExists($slug) === false) {
+            throw new \UnexpectedValueException("Element does not exist [$slug]");
+        }
+        return $this->loadDataFile($this->manager->getElementFromSlugIndex($slug));
+    }
+
     private function getSiteObject(): \stdClass {
         static $site = null;
         if (empty($site)) {
