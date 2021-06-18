@@ -19,10 +19,10 @@
 \define('EMPTY_VALUE', '');
 
 // Section constants
-\define ('CATEGORY_SECTION', 'category');
-\define ('TAG_SECTION', 'tag');
-\define ('PAGE_SECTION', 'page');
-\define ('POST_SECTION', 'post');
+\define('CATEGORY_SECTION', 'category');
+\define('TAG_SECTION', 'tag');
+\define('PAGE_SECTION', 'page');
+\define('POST_SECTION', 'post');
 
 // Landing Page constants for posts and homepage
 \define('HOME_INDEX_KEY', '/');

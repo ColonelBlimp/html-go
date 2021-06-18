@@ -1,6 +1,5 @@
 <?php declare(strict_types=1);
 
-use Doctrine\Instantiator\Exception\InvalidArgumentException;
 use html_go\exceptions\InternalException;
 use html_go\i18n\I18n;
 use html_go\indexing\IndexManager;
@@ -141,7 +140,7 @@ function get_template_engine(): TemplateEngine {
         $themeName = get_config()->getString(Config::KEY_THEME_NAME);
         $engineName = get_config()->getString(Config::KEY_TPL_ENGINE);
 
-        switch($engineName) {
+        switch ($engineName) {
             case 'twig':
                 $engine = build_twig_template_engine($themeName);
                 break;
@@ -150,7 +149,7 @@ function get_template_engine(): TemplateEngine {
             case 'php':
                 throw new InternalException("Implement template engine [$engineName]");
             default:
-                throw new InvalidArgumentException("Unsupported template engine [$engineName]");
+                throw new \InvalidArgumentException("Unsupported template engine [$engineName]");
         }
     }
     return $engine;
