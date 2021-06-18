@@ -9,15 +9,12 @@
 \define('LANG_ROOT', APP_ROOT.DS.'lang');
 \define('AUTHOR_ROOT', CONFIG_ROOT.DS.'users');
 
+// General constants
 \define('FWD_SLASH', '/');
 \define('CONTENT_FILE_EXT', '.json');
 \define('CONTENT_FILE_EXT_LEN', \strlen(CONTENT_FILE_EXT));
 \define('MODE', 0777);
 \define('DEFAULT_TEMPLATE', 'main.html');
-
-\define('POST_LIST_TYPE', 0);
-\define('CAT_LIST_TYPE', 1);
-\define('TAG_LIST_TYPE', 2);
 \define('EMPTY_VALUE', '');
 
 // Section constants
@@ -32,7 +29,7 @@
 \define('CAT_INDEX_KEY', CATEGORY_SECTION);
 \define('TAG_INDEX_KEY', TAG_SECTION);
 
-// dispatcher.php
+// dispatcher.php constants
 \define('HTTP_GET', 'GET');
 \define('HTTP_POST', 'POST');
 \define('REGEX', 'regex');
