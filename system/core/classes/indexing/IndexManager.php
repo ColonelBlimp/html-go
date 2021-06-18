@@ -150,10 +150,13 @@ final class IndexManager extends AbstractIndexer
      */
     private function buildCategoryIndex(): array {
         $index = [];
-        foreach ($this->parseDirectory($this->commonDir.DS.'category'.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
+        foreach ($this->parseDirectory($this->commonDir.DS.CATEGORY_SECTION.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
             $root = \substr($filepath, \strlen($this->commonDir) + 1);
             $key = \str_replace(DS, FWD_SLASH, \substr($root, 0, \strlen($root) - CONTENT_FILE_EXT_LEN));
-            $index[$key] = $this->createElement($key, $filepath, ENUM_CATEGORY);
+            if (CATEGORY_SECTION.FWD_SLASH.'index' === $key) {
+                continue; // 'index.json' file is the landing page
+            }
+            $index[$key] = $this->createElement($key, $filepath, CATEGORY_SECTION);
         }
         $this->writeIndex($this->catInxFile, $index);
         return $index;
@@ -164,7 +167,7 @@ final class IndexManager extends AbstractIndexer
      * @return array<mixed>
      */
     private function buildPageAndMenuIndexes(): array {
-        $pageDir = $this->commonDir.DS.'pages';
+        $pageDir = $this->commonDir.DS.PAGE_SECTION;
         $len = \strlen($pageDir) + 1;
         $pages = $this->scanDirectory($pageDir);
         \sort($pages);
@@ -180,27 +183,24 @@ final class IndexManager extends AbstractIndexer
                     $key = FWD_SLASH;
                 }
             }
-            $pageInx[$key] = $this->createElement($key, $filepath, ENUM_PAGE);
+            $pageInx[$key] = $this->createElement($key, $filepath, PAGE_SECTION);
             $menuInx = $this->mergeToMenuIndex($menuInx, $this->buildMenus($key, $filepath));
         }
 
         // Add Tag landing page
-        $filepath = $this->commonDir.DS.'landing'.DS.'tags'.DS.'index'.CONTENT_FILE_EXT;
-        $key = TAG_INDEX_KEY;
-        $pageInx[$key] = $this->createElement($key, $filepath, ENUM_TAG);
-        $menuInx = $this->mergeToMenuIndex($menuInx, $this->buildMenus($key, $filepath));
+        $filepath = $this->commonDir.DS.TAG_SECTION.DS.'index'.CONTENT_FILE_EXT;
+        $pageInx[TAG_SECTION] = $this->createElement(TAG_SECTION, $filepath, TAG_SECTION);
+        $menuInx = $this->mergeToMenuIndex($menuInx, $this->buildMenus(TAG_SECTION, $filepath));
 
         // Add Category landing page
-        $filepath = $this->commonDir.DS.'landing'.DS.'category'.DS.'index'.CONTENT_FILE_EXT;
-        $key = CAT_INDEX_KEY;
-        $pageInx[$key] = $this->createElement($key, $filepath, ENUM_CATEGORY);
-        $menuInx = $this->mergeToMenuIndex($menuInx, $this->buildMenus($key, $filepath));
+        $filepath = $this->commonDir.DS.CATEGORY_SECTION.DS.'index'.CONTENT_FILE_EXT;
+        $pageInx[CATEGORY_SECTION] = $this->createElement(CATEGORY_SECTION, $filepath, CATEGORY_SECTION);
+        $menuInx = $this->mergeToMenuIndex($menuInx, $this->buildMenus(CATEGORY_SECTION, $filepath));
 
         // Add Blog (posts) landing page
-        $filepath = $this->commonDir.DS.'landing'.DS.'blog'.DS.'index'.CONTENT_FILE_EXT;
-        $key = BLOG_INDEX_KEY;
-        $pageInx[$key] = $this->createElementClass($key, $filepath, ENUM_POST);
-        $menuInx = $this->mergeToMenuIndex($menuInx, $this->buildMenus($key, $filepath));
+        $filepath = $this->commonDir.DS.POST_SECTION.DS.'index'.CONTENT_FILE_EXT;
+        $pageInx[POST_INDEX_KEY] = $this->createElementClass(POST_INDEX_KEY, $filepath, POST_SECTION);
+        $menuInx = $this->mergeToMenuIndex($menuInx, $this->buildMenus(POST_INDEX_KEY, $filepath));
 
         $this->writeIndex($this->pageInxFile, $pageInx);
         $menuInx = $this->orderMenuEntries($menuInx);
@@ -214,9 +214,9 @@ final class IndexManager extends AbstractIndexer
      */
     private function buildPostIndex(): array {
         $index = [];
-        foreach ($this->parseDirectory($this->userDataDir.DS.'*'.DS.'posts'.DS.'*'.DS.'*'.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
+        foreach ($this->parseDirectory($this->userDataDir.DS.'*'.DS.POST_SECTION.DS.'*'.DS.'*'.DS.'*'.CONTENT_FILE_EXT) as $filepath) {
             $key = \pathinfo($filepath, PATHINFO_FILENAME);
-            $element = $this->createElement(/** @scrutinizer ignore-type */ $key, $filepath, ENUM_POST);
+            $element = $this->createElement(/** @scrutinizer ignore-type */ $key, $filepath, POST_SECTION);
             $index[(string)$element->key] = $element;
         }
         $this->writeIndex($this->postInxFile, $index);
@@ -282,8 +282,8 @@ final class IndexManager extends AbstractIndexer
                 throw new InternalException("Invalid format of index element: "./** @scrutinizer ignore-type */print_r($post, true)); // @codeCoverageIgnore
             }
             foreach ($post->tags as $tag) {
-                $key = 'tag'.FWD_SLASH.(string)$tag;
-                $tagInx[$key] = $this->createElementClass($key, EMPTY_VALUE, ENUM_TAG);
+                $key = TAG_SECTION.FWD_SLASH.(string)$tag;
+                $tagInx[$key] = $this->createElementClass($key, EMPTY_VALUE, TAG_SECTION);
                 $tag2PostsIndex[$key][] = $post->key;
             }
             $cat2PostIndex[$post->category] = $post->key;

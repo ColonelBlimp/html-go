@@ -21,9 +21,9 @@ class IndexManagerTest extends TestCase
      */
     function testLandingPages(IndexManager $manager): void {
         $this->assertNotNull($manager);
-        $this->assertTrue($manager->elementExists(CAT_INDEX_KEY));
+        $this->assertTrue($manager->elementExists(CATEGORY_SECTION));
         $this->assertTrue($manager->elementExists(HOME_INDEX_KEY));
-        $this->assertTrue($manager->elementExists(BLOG_INDEX_KEY));
+        $this->assertTrue($manager->elementExists(POST_INDEX_KEY));
     }
 
     /**

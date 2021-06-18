@@ -15,21 +15,20 @@
 \define('MODE', 0777);
 \define('DEFAULT_TEMPLATE', 'main.html');
 
-\define('ENUM_PAGE', 'page');
-\define('ENUM_CATEGORY', 'category');
-\define('ENUM_POST', 'post');
-\define('ENUM_TAG', 'tag');
-
 \define('POST_LIST_TYPE', 0);
 \define('CAT_LIST_TYPE', 1);
 \define('TAG_LIST_TYPE', 2);
 \define('EMPTY_VALUE', '');
 
-// Special cases
+// Section constants
+\define ('CATEGORY_SECTION', 'category');
+\define ('TAG_SECTION', 'tag');
+\define ('PAGE_SECTION', 'page');
+\define ('POST_SECTION', 'post');
+
+// Landing Page constants for posts and homepage
 \define('HOME_INDEX_KEY', '/');
-\define('BLOG_INDEX_KEY', 'blog');
-\define('CAT_INDEX_KEY', 'category');
-\define('TAG_INDEX_KEY', 'tag');
+\define('POST_INDEX_KEY', 'blog');
 
 // dispatcher.php
 \define('HTTP_GET', 'GET');

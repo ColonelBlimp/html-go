@@ -30,7 +30,6 @@ more indexes.  The main index is called the `slugIndex` and list all **posts**,
 
 There are some *special* composite indexes for category to posts and tag to posts.
 
-
 # Routing
 There is no complex router for html-go. Rather, HTML-go uses a indexing system
 whereby all the content is indexed with its unique URI used as the index key. Apart from
@@ -89,6 +88,10 @@ and
             <a href="{{ content.site.url }}{%if main.key starts with '/'%}{{ main.key }}{% else %}/{{ main.key }}{% endif %}">{{ main.name }}</a>
     {% endfor %}
     {% endif %}
+
+### Sections
+Content is identified by its *section*. There are currently four sections **page** for static pages,
+**tag** for tags, **category** for categories and **post** for posts.
 
 # Templating
 
