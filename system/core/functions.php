@@ -1,5 +1,7 @@
 <?php declare(strict_types=1);
 
+use Doctrine\Instantiator\Exception\InvalidArgumentException;
+use html_go\exceptions\InternalException;
 use html_go\i18n\I18n;
 use html_go\indexing\IndexManager;
 use html_go\markdown\MarkdownParser;
@@ -139,17 +141,27 @@ function get_template_engine(): TemplateEngine {
         $themeName = get_config()->getString(Config::KEY_THEME_NAME);
         $engineName = get_config()->getString(Config::KEY_TPL_ENGINE);
 
-        $caching = false;
-        if (get_config()->getBool(Config::KEY_TPL_CACHING)) {
-            $caching = CACHE_ROOT.DS.'template_cache';
+        switch($engineName) {
+            case 'twig':
+                $caching = false;
+                if (get_config()->getBool(Config::KEY_TPL_CACHING)) {
+                    $caching = TEMPLATE_CACHE_ROOT;
+                }
+                $strict = get_config()->getBool(Config::KEY_TPL_STRICT_VARS_TWIG);
+                $options = [
+                    'cache' => $caching,
+                    'strict_variables' => $strict
+                ];
+                $templateDirs = [THEMES_ROOT.DS.$engineName.DS.$themeName];
+                $engine = new TwigTemplateEngine($templateDirs, $options);
+                break;
+            case 'smarty':
+                throw new InternalException("Implement template engine [$engineName]");
+            case 'php':
+                throw new InternalException("Implement template engine [$engineName]");
+            default:
+                throw new InvalidArgumentException("Unsupported template engine [$engineName]");
         }
-        $strict = get_config()->getBool(Config::KEY_TPL_STRICT_VARS_TWIG);
-        $options = [
-            'cache' => $caching,
-            'strict_variables' => $strict
-        ];
-        $templateDirs = [THEMES_ROOT.DS.$engineName.DS.$themeName];
-        $engine = new TwigTemplateEngine($templateDirs, $options);
     }
     return $engine;
 }
