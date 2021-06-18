@@ -23,8 +23,16 @@ this index page is use if the 'blog' link is enabled which should link to this p
 This data file is located at `content/common/landing/tags/index.md` and
 is listed in one index: `slugIndex` and `pageIndex` under the key `tag`.
 
+# Indexing
+The indexing system is at the core of HTML-go. All content is listed in one or
+more indexes.  The main index is called the `slugIndex` and list all **posts**,
+**categories**, **pages** and **tags**.
+
+There are some *special* composite indexes for category to posts and tag to posts.
+
+
 # Routing
-There is no complex router for html-go. Rather, html-go uses a indexing system
+There is no complex router for html-go. Rather, HTML-go uses a indexing system
 whereby all the content is indexed with its unique URI used as the index key. Apart from
 a few special cases such as landing pages, the requested URI is passed to the
 indexing system to check if it exists, if it does it is loaded and rendered.

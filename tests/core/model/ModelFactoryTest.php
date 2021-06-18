@@ -10,8 +10,8 @@ class ModelFactoryTest extends TestCase
     function testContentObject(): void {
         $cfg = new Config(TEST_APP_ROOT.DS.'test-data'.DS.'config');
         $parser = new ParsedownParser();
-        $factory = new ModelFactory($cfg, $parser);
         $manager = new IndexManager(TEST_DATA_ROOT);
+        $factory = new ModelFactory($cfg, $parser, $manager);
         $this->assertTrue($manager->elementExists(CAT_INDEX_KEY));
         $element = $manager->getElementFromSlugIndex(CAT_INDEX_KEY);
         $content = $factory->createContentObject($element);

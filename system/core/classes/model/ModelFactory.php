@@ -5,6 +5,7 @@ use DateTimeInterface;
 use InvalidArgumentException;
 use html_go\exceptions\InternalException;
 use html_go\markdown\MarkdownParser;
+use html_go\indexing\IndexManager;
 
 /**
  * Responsible for creating <code>Content</code> objects ready to be used in templates.
@@ -15,6 +16,7 @@ final class ModelFactory
 {
     private Config $config;
     private MarkdownParser $parser;
+    private IndexManager $manager;
 
     /**
      * ModelFactory constructor.
@@ -22,9 +24,10 @@ final class ModelFactory
      * @param MarkdownParser $parser Implementation of the
      * <code>MarkdownParser</code> interface.
      */
-    public function __construct(Config $config, MarkdownParser $parser) {
+    public function __construct(Config $config, MarkdownParser $parser, IndexManager $manager) {
         $this->config = $config;
         $this->parser = $parser;
+        $this->manager = $manager;
     }
 
     /**
@@ -35,11 +38,14 @@ final class ModelFactory
      */
     public function createContentObject(\stdClass $indexElement): \stdClass {
         $contentObject = $this->loadDataFile($indexElement);
-        if (isset($indexElement->key)) {
-            $contentObject->key = $indexElement->key;
-        }
-        if (isset($indexElement->category)) {
-            $contentObject->category = $indexElement->category;
+        $contentObject->key = $indexElement->key;
+        if (!empty($indexElement->category)) {
+            if ($this->manager->elementExists($indexElement->category) === false) {
+                throw new \UnexpectedValueException("Content's [$contentObject->key] category [$indexElement->category] does not exist!");
+            }
+            $element = $this->manager->getElementFromSlugIndex($indexElement->category);
+            $category = $this->loadDataFile($element);
+            $contentObject->category = $category;
         }
         if (isset($indexElement->tags)) {
             $contentObject->tags = $indexElement->tags;

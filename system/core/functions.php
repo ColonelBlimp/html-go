@@ -185,7 +185,7 @@ function get_config(): Config {
 function get_model_factory(): ModelFactory {
     static $factory = null;
     if (empty($factory)) {
-        $factory = new ModelFactory(get_config(), get_markdown_parser());
+        $factory = new ModelFactory(get_config(), get_markdown_parser(), get_index_manager());
     }
     return $factory;
 }

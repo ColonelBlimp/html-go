@@ -226,7 +226,7 @@ abstract class AbstractIndexer
         $parts = \explode(DS, $pathinfo['dirname']);
         $cnt = \count($parts);
         // type,  category, username
-        return [$parts[$cnt - 1], $parts[$cnt - 2], $parts[$cnt - 4]];
+        return [$parts[$cnt - 1], 'category'.FWD_SLASH.$parts[$cnt - 2], $parts[$cnt - 4]];
     }
 
     public abstract function reindex(): void;

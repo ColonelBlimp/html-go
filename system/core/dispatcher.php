@@ -59,14 +59,15 @@ function route(string $uri, string $method): string {
 
 /**
  * Process a request for the home page
- * @param string $uri
  * @return \stdClass|NULL
  */
 function get_home_page(): ?\stdClass {
     if (get_config()->getBool(Config::KEY_STATIC_INDEX)) {
         return get_content_object(HOME_INDEX_KEY);
     }
-    $content = get_content_object(HOME_INDEX_KEY, get_posts());
+    if (($content = get_content_object(HOME_INDEX_KEY, get_posts())) === null) {
+        throw new InternalException("Unable to locate the home index page!");
+    }
     $content->template = 'listing.html';
     return $content;
 }
