@@ -5,7 +5,9 @@
 	"homepage" : "https://html-go.com",
 	"license" : "MIT",
 	"authors" : [{
-			"name" : "Marc L. Veary"
+			"name" : "Marc L. Veary",
+			"homepage" : "https://veary.org",
+			"role" : "Owner"
 		}
 	],
 	"require" : {
@@ -40,5 +42,8 @@
 		"php8",
 		"blog",
 		"databaseless"
-	]
+	],
+	"support" : {
+		"source" : "https://github.com/ColonelBlimp/html-go-func"
+	}
 }
