@@ -13,12 +13,20 @@
     <link rel="stylesheet" href="{{ content.site.url }}/themes/twig/default/css/main.css">
   </head>
   <body>
-    <div>
+    <div class="flex flex-col px-4 md:flex-row">
+      <div>
 {% include "header.html.twig" %}
-      <main class="border-t-4 border-red-500 px-4">
+      <main class="border-t-4 border-red-500">
 {% block main %}{% endblock %}
       </main>
-{% include "footer.html.twig" %}
+      </div>
+      <div>
+{% include "search.html.twig" %}
+      </div>
+      <div>
+{% include "aside.html.twig" %}
+      </div>
     </div>
+{% include "footer.html.twig" %}
   </body>
 </html>
