@@ -1,15 +1,16 @@
 # HTML-go
-HTML-go is a databaseless, flat-file blogging platform, which is very flexible, simple and fast. Its
-nearest competitor is htmly platform.
+HTML-go is a databaseless, flat-file blogging platform, which is very flexible, simple and fast.
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ColonelBlimp/html-go-func/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/ColonelBlimp/html-go-func/?branch=main) [![Build Status](https://scrutinizer-ci.com/g/ColonelBlimp/html-go-func/badges/build.png?b=main)](https://scrutinizer-ci.com/g/ColonelBlimp/html-go-func/build-status/main) [![Code Intelligence Status](https://scrutinizer-ci.com/g/ColonelBlimp/html-go-func/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence) [![Maintainability](https://api.codeclimate.com/v1/badges/b59227a05de955a954b5/maintainability)](https://codeclimate.com/github/ColonelBlimp/html-go-func/maintainability) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ColonelBlimp_html-go-func&metric=alert_status)](https://sonarcloud.io/dashboard?id=ColonelBlimp_html-go-func)
 
 # Features
 
-- Fast and flexible
+- Simple, fast and flexible
+- Supports PHP 8+
 - Multiple template systems supported: Twig, Smarty and PHP
 - Categorization and multiple tags
 - Content format in JSON
+- GitHub flavoured Markdown
 - Content summary through front matter or manual splitting
 - Multiple menus defined through front matter
 - Nested static pages
