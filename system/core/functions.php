@@ -145,7 +145,6 @@ function get_template_engine(): TemplateEngine {
                 $engine = build_twig_template_engine($themeName);
                 break;
             case 'smarty':
-                throw new InternalException("Implement template engine [$engineName]");
             case 'php':
                 throw new InternalException("Implement template engine [$engineName]");
             default:
