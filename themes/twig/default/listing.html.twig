@@ -1,10 +1,11 @@
 {% extends "layout.html.twig" %}
 {% block main %}
+      <div class="divide-y divide-gray-200">
 {% if content.listing is empty %}
       <h2>{{ i18n.getText('no_posts_found') }}</h2>
 {% else %}
 {% for item in content.listing %}
-      <article>
+      <article class="mb-6 pt-3">
         <header>
           <h2 class="font-bold"><a href="{{ item.key }}">{{ item.title }}</a></h2>
 {% if item.date is not empty %}
@@ -18,11 +19,14 @@
             <svg class="inline-block h-5 w-5 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
               <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
             </svg>
-            <span class="inline-block">{{ item.category.title }}</span>
+            <span class="inline-block text-xs text-gray-500">{{ item.category.title }}</span>
           </div>
 {% endif %}
         </header>
+        <p class="pt-2">{{ content.body }}</p>
       </article>
 {% endfor %}
 {% endif %}
+      <div></div>
+      </div>
 {% endblock %}
