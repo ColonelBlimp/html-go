@@ -1,6 +1,7 @@
 {
     "title": "Quote Title",
     "description": "quote description",
+    "summary": "Something different.",
     "body": "Test quote post"
 }
 

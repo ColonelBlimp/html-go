@@ -31,13 +31,13 @@ final class ModelFactory
     }
 
     /**
-     * Create a content object (stdClass) from an index <code>Element</code>
-     * object.
+     * Create a content object (stdClass) from an index object (stdClass).
      * @param \stdClass $indexElement As obtained from the <code>IndexManager</code>
      * @return \stdClass
      */
     public function createContentObject(\stdClass $indexElement): \stdClass {
         $contentObject = $this->loadDataFile($indexElement);
+        $contentObject->body = $this->restoreNewlines($contentObject->body);
         $contentObject->key = $indexElement->key;
         if (!empty($indexElement->category)) {
             $contentObject->category = $this->getCategoryObject($indexElement->category);
@@ -45,19 +45,32 @@ final class ModelFactory
         if (isset($indexElement->tags)) {
             $contentObject->tags = $indexElement->tags;
         }
-        if (isset($indexElement->date)) {
-            if (EMPTY_VALUE === $indexElement->date) {
-                $contentObject->date = $indexElement->date;
-                $contentObject->timestamp = EMPTY_VALUE;
-            } else {
-                $dt = new \DateTime($indexElement->date);
-                $contentObject->date = $dt->format($this->config->getString(Config::KEY_POST_DATE_FMT));
-                $contentObject->timestamp = $dt->format(DateTimeInterface::W3C);
-            }
+        if (!empty($indexElement->date)) {
+            $dt = $this->getContentDate($indexElement->date);
+            $contentObject->date = $dt[0];
+            $contentObject->timestamp = $dt[1];
+        }
+        if (empty($contentObject->summary)) {
+            $contentObject->summary = $this->getSummary($contentObject->body);
         }
         $contentObject->listing = [];
         $contentObject->site = $this->getSiteObject();
         return $contentObject;
+    }
+
+    /**
+     * @param string $dateStr
+     * @return array<string>
+     */
+    private function getContentDate(string $dateStr): array {
+        if (EMPTY_VALUE === $dateStr) {
+            $date = $timestamp = EMPTY_VALUE;
+        } else {
+            $dt = new \DateTime($dateStr);
+            $date = $dt->format($this->config->getString(Config::KEY_POST_DATE_FMT));
+            $timestamp = $dt->format(DateTimeInterface::W3C);
+        }
+        return [$date, $timestamp];
     }
 
     private function getCategoryObject(string $slug): \stdClass {
@@ -96,5 +109,31 @@ final class ModelFactory
             throw new InternalException("json_decode returned null decoding [$data] from [$path]"); // @codeCoverageIgnore
         }
         return $contentObject;
+    }
+
+    /**
+     * Returns the summary for the content object. If '<!--more-->' is used within
+     * the body, then this is removed once the summary obtained.
+     * @param string $body the body with the '<!--more--> removed
+     * @return string The summary text. If no summary is defined, returns an empty string
+     */
+    private function getSummary(string &$body): string {
+        $pos = \strpos($body, '<!--more-->');
+        if ($pos !== false) {
+            $summary = \substr($body, 0, $pos);
+            $body = \str_replace('<!--more-->', '', $body);
+            return $summary;
+        }
+        return '';
+    }
+
+    /**
+     * Newlines must be encoded for PHP functions. So we use '<nl>' to for '\n'.
+     * This method replaces '<nl>' with '\n'.
+     * @param string $text
+     * @return string
+     */
+    private function restoreNewlines(string $text): string {
+        return \str_replace('<nl>', '\n', $text);
     }
 }

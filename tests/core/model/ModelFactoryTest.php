@@ -35,4 +35,26 @@ class ModelFactoryTest extends TestCase
         $this->assertTrue(isset($content->site->copyright));
         $this->assertSame('(c) Copyright, Your Name', $content->site->copyright);
     }
+
+    function testManualSummary(): void {
+        $cfg = new Config(TEST_APP_ROOT.DS.'test-data'.DS.'config');
+        $parser = new ParsedownParser();
+        $manager = new IndexManager(TEST_DATA_ROOT);
+        $factory = new ModelFactory($cfg, $parser, $manager);
+        $this->assertTrue($manager->elementExists('2021/01/harvest-time'));
+        $element = $manager->getElementFromSlugIndex('2021/01/harvest-time');
+        $content = $factory->createContentObject($element);
+        $this->assertSame('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', $content->summary);
+    }
+
+    function testFrontMatterSummary(): void {
+        $cfg = new Config(TEST_APP_ROOT.DS.'test-data'.DS.'config');
+        $parser = new ParsedownParser();
+        $manager = new IndexManager(TEST_DATA_ROOT);
+        $factory = new ModelFactory($cfg, $parser, $manager);
+        $this->assertTrue($manager->elementExists('2021/01/tested-quote'));
+        $element = $manager->getElementFromSlugIndex('2021/01/tested-quote');
+        $content = $factory->createContentObject($element);
+        $this->assertSame('Something different.', $content->summary);
+    }
 }

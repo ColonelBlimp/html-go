@@ -4,6 +4,16 @@ nearest competitor is htmly platform.
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ColonelBlimp/html-go-func/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/ColonelBlimp/html-go-func/?branch=main) [![Build Status](https://scrutinizer-ci.com/g/ColonelBlimp/html-go-func/badges/build.png?b=main)](https://scrutinizer-ci.com/g/ColonelBlimp/html-go-func/build-status/main) [![Code Intelligence Status](https://scrutinizer-ci.com/g/ColonelBlimp/html-go-func/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence) [![Maintainability](https://api.codeclimate.com/v1/badges/b59227a05de955a954b5/maintainability)](https://codeclimate.com/github/ColonelBlimp/html-go-func/maintainability) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ColonelBlimp_html-go-func&metric=alert_status)](https://sonarcloud.io/dashboard?id=ColonelBlimp_html-go-func)
 
+# Features
+
+- Fast and flexible
+- Multiple template systems supported: Twig, Smarty and PHP
+- Categorization and multiple tags
+- Content format in JSON
+- Content summary through front matter or manual splitting
+- Multiple menus defined through front matter
+- Nested static pages
+
 # Landing Pages
 HTML-go has four editable landing pages for **blog**, **category**, **tag** and the **index** or
 **home** page which at the root of all the other static pages.
@@ -45,8 +55,34 @@ The minimum required for a valid content file is:
     {
         "title": "some title",
         "description": "some description",
-        "body": "The content."
+        "body": "The content of this article."
     }
+
+## Summary
+HTML-go automatically generates a summary of the content.
+
+### Front Matter Summary
+If you require the summary to be something different to the opening text of the
+article, you can add the following to the front matter:
+
+    {
+        "title": "some title",
+        "description": "some description",
+        "summary": "Now for something completely different."
+        "body": "The content of this article."
+    }
+
+### Manual Summary
+If the `summary` variable is not defined in the front matter, HTML-go will search
+the `body` for the divider marker `<!--more-->` and split the text.  For example:
+
+    {
+        "title": "some title",
+        "description": "some description",
+        "body": "The content<!--more--> of this article."
+    }
+
+The above will give a `summary` of *"The content"* and the `body` *"The content of the article."*
 
 ### Menus
 Menus entries are valid for *pages* only. A single content page can be listed in as many menus
@@ -100,3 +136,10 @@ Content is identified by its *section*. There are currently four sections **page
 |Twig |Smarty |PHP |Config | Comments|
 |--- | --- | --- | --- | ---|
 |`{{ site.language }}`|?|?|site.language | Default is "en"|
+
+# Technical Data
+
+## Content Object
+The content object is a `stdClass` and has the following public properties:
+
+
