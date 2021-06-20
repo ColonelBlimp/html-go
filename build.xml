@@ -61,7 +61,7 @@
 
     <target name="tailwindcss" description="Tailwind CLI">
         <exec executable="npx.cmd">
-            <arg line="tailwind build ${build.dir}/styles.css -o ${basedir}/themes/twig/default/css/main.css"/>
+            <arg line="tailwindcss -i ${build.dir}/styles.css -o ${basedir}/themes/twig/default/css/main.css"/>
         </exec>
     </target>
 

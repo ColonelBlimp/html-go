@@ -11,5 +11,6 @@
             "weight": 1
         }
     },
+    "template": "single.html",
     "body" : "Welcome to our new website."
 }
