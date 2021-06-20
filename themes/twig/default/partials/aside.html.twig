@@ -2,9 +2,15 @@
 {% include "partials/search.html.twig" %}
         <section class="my-4">
           <h2 class="h-8 font-bold uppercase border-b-2 border-red-500">{{ i18n.getText('widget.recent_posts.title') }}</h2>
+{% if widgets.recent_posts is not empty %}
           <ul>
-
+{% for post in widgets.recent_posts %}
+            <li>{{ post.title }}</li>
+{% endfor %}
           </ul>
+{% else %}
+          <p>{{ i18n.getText('no_posts_found') }}</p>
+{% endif %}
         </section>
         <section class="my-4">
           <h2 class="h-8 font-bold uppercase border-b-2 border-red-500">{{ i18n.getText('widget.category_list.title') }}</h2>

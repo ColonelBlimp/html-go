@@ -85,6 +85,7 @@ function get_template_context(\stdClass $content): array {
         $template = $content->template;
     }
     return [
+        'widgets' => get_widgets(),
         'i18n' => get_i18n(),
         'content' => $content,
         TEMPLATE_TPLVAR_KEY => $template
