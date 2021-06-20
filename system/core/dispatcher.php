@@ -68,7 +68,7 @@ function get_home_page(): ?\stdClass {
     if (($content = get_content_object(HOME_INDEX_KEY, get_posts())) === null) {
         throw new InternalException("Unable to locate the home index page!");
     }
-    $content->template = 'listing.html';
+    $content->template = LIST_TEMPLATE;
     return $content;
 }
 

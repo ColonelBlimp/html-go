@@ -85,6 +85,7 @@ function get_template_context(\stdClass $content): array {
         $template = $content->template;
     }
     return [
+        'widgets' => get_widgets(),
         'i18n' => get_i18n(),
         'content' => $content,
         TEMPLATE_TPLVAR_KEY => $template
@@ -111,7 +112,7 @@ function get_i18n(): I18n {
  * @return string
  */
 function render(string $template = null, array $vars = []): string {
-    $tpl = DEFAULT_TEMPLATE;
+    $tpl = SINGLE_TEMPLATE;
     if (!empty($template)) {
         $tpl = $template;
     }
@@ -234,7 +235,7 @@ function get_content_object(string $slug, array $listing = []): ?\stdClass {
     }
     $content = get_model_factory()->createContentObject($manager->getElementFromSlugIndex($slug));
     if (!empty($listing)) {
-        $content->listing = $listing;
+        $content->list = $listing;
     }
     $content->menus = get_menu();
     return $content;
@@ -264,4 +265,16 @@ function get_posts(int $pageNum = 1, int $perPage = 5): array {
  */
 function slug_exists(string $slug): bool {
     return get_index_manager()->elementExists($slug);
+}
+
+/**
+ * Returns a list of widgets
+ * @return array<mixed>
+ */
+function get_widgets(): array {
+    return [
+        'recent_posts' => get_posts(),
+        'category_list' => get_categories(),
+        'tag_list' => get_tags()
+    ];
 }

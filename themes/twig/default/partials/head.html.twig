@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="{{ content.site.language }}" class="bg-white">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,22 +9,5 @@
 {% endif %}
     <meta name="description" content="{{ description }}">
     <link rel="stylesheet" href="{{ content.site.url }}/themes/twig/default/css/main.css">
+    <script src="{{ content.site.url }}/themes/twig/default/js/funcs.js"></script>
   </head>
-  <body>
-    <div class="flex flex-col px-4 md:flex-row">
-      <div>
-{% include "header.html.twig" %}
-      <main class="border-t-4 border-red-500">
-{% block main %}{% endblock %}
-      </main>
-      </div>
-      <div>
-{% include "search.html.twig" %}
-      </div>
-      <div>
-{% include "aside.html.twig" %}
-      </div>
-    </div>
-{% include "footer.html.twig" %}
-  </body>
-</html>

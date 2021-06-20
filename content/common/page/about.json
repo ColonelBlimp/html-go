@@ -7,5 +7,6 @@
             "weight": 3
         }
     },
+    "template": "single.html",
     "body" : "We are a small bee farming and honey processing business."
 }

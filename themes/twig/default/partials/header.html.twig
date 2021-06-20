@@ -1,0 +1,24 @@
+    <header class="h-16 bg-gray-100 text-gray-700">
+      <div class="flex">
+        <div class="flex-none pl-3">
+          <p class="pt-1 font-bold">{{ content.site.name }}</p>
+          <p class="text-sm">{{ content.site.tagline }}</p>
+        </div>
+        <div class="flex-grow">
+          <div class="float-right px-1 m-4 border border-gray-400 rounded cursor-pointer md:hidden" onclick="toggleMainNav();">
+            <svg class="text-gray-500 h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </div>
+          <nav class="absolute bg-gray-100 top-0 left-0 mt-16 pt-2 pb-4 w-full text-center border-b border-t-4 border-red-500 hidden md:static md:block md:m-0 md:p-0 md:pr-4 md:pt-4 md:text-right md:border-0" id="mainnav">
+            <ul class="pt-1 md:pt-0">
+{% if content.menus.main is defined %}
+{% for main in content.menus.main %}
+              <li class="pb-2 md:inline-block md:px-2 md:pb-0"><a href="{{ content.site.url }}{%if main.key starts with '/'%}{{ main.key }}{% else %}/{{ main.key }}{% endif %}">{{ main.name }}</a></li>
+{% endfor %}
+{% endif %}
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>

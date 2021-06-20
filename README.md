@@ -1,7 +1,7 @@
 # HTML-go
 HTML-go is a databaseless, flat-file blogging platform, which is very flexible, simple and fast.
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ColonelBlimp/html-go/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/ColonelBlimp/html-go/?branch=main) [![Build Status](https://scrutinizer-ci.com/g/ColonelBlimp/html-go/badges/build.png?b=main)](https://scrutinizer-ci.com/g/ColonelBlimp/html-go/build-status/main) [![Code Intelligence Status](https://scrutinizer-ci.com/g/ColonelBlimp/html-go/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence) [![Maintainability](https://api.codeclimate.com/v1/badges/b59227a05de955a954b5/maintainability)](https://codeclimate.com/github/ColonelBlimp/html-go/maintainability) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ColonelBlimp_html-go&metric=alert_status)](https://sonarcloud.io/dashboard?id=ColonelBlimp_html-go)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ColonelBlimp/html-go/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/ColonelBlimp/html-go/?branch=main) [![Build Status](https://scrutinizer-ci.com/g/ColonelBlimp/html-go/badges/build.png?b=main)](https://scrutinizer-ci.com/g/ColonelBlimp/html-go/build-status/main) [![Code Intelligence Status](https://scrutinizer-ci.com/g/ColonelBlimp/html-go/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence) [![Maintainability](https://api.codeclimate.com/v1/badges/39b2879d601a04981542/maintainability)](https://codeclimate.com/github/ColonelBlimp/html-go/maintainability) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ColonelBlimp_html-go&metric=alert_status)](https://sonarcloud.io/dashboard?id=ColonelBlimp_html-go)
 
 # Features
 
@@ -14,6 +14,7 @@ HTML-go is a databaseless, flat-file blogging platform, which is very flexible, 
 - Content summary through front matter or manual splitting
 - Multiple menus defined through front matter
 - Nested static pages
+- i18n support
 
 # Landing Pages
 HTML-go has four editable landing pages for **blog**, **category**, **tag** and the **index** or
@@ -133,10 +134,26 @@ Content is identified by its *section*. There are currently four sections **page
 # Templating
 
 ### Context Variables
+All variables are accessed via the `content` object.
 
 |Twig |Smarty |PHP |Config | Comments|
 |--- | --- | --- | --- | ---|
-|`{{ site.language }}`|?|?|site.language | Default is "en"|
+|`{{ content.site.language }}`|?|?|site.language|Default: "en". Also used for i18n.|
+|`{{ content.site.name }}`|?|?|site.name|Default: "HTML-go". Use for page header.|
+|`{{ content.site.title }}`|?|?|site.title|Default: " \| HTML-go". Use for browser title.|
+|`{{ content.site.url }}`|?|?|site.url|Must be configured manually.|
+|`{{ content.site.description }}`|?|?|site.description|Use if '{{ content.description }}` is empty.|
+|`{{ content.site.copyright }}`|?|?|site.copyright|Default: "(c) Copyright, Your Name"|
+|`{{ content.title }}`|?|?|"title": "xxx"|Content front matter.|
+|`{{ content.description }}`|?|?|"description": "xxx"|Content front matter.|
+|`{{ content.list }}`|?|?|N/A|An array of `content` objects associated with the parent `content` object. E.g. A list of posts.|
+
+### i18n
+The i18n feature is accessed via the `i18n` object. This object has one method which is used to look up the appropriate text
+associated with the given *key*. For example:
+
+    {{ i18n.getText('widget.category_list.title') }}
+
 
 # Technical Data
 

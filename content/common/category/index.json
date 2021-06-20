@@ -2,5 +2,5 @@
     "title": "Categories",
     "description": "Categories list",
     "body": "Categories list.",
-    "template": "listing.html"
+    "template": "list.html"
 }

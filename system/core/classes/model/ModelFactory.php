@@ -53,7 +53,7 @@ final class ModelFactory
         if (empty($contentObject->summary)) {
             $contentObject->summary = $this->getSummary($contentObject->body);
         }
-        $contentObject->listing = [];
+        $contentObject->list = [];
         $contentObject->site = $this->getSiteObject();
         return $contentObject;
     }
