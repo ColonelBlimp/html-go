@@ -10,9 +10,9 @@ class DispatcherFuncTest extends TestCase
         $params = parse_query();
         $this->assertIsArray($params);
         $this->assertCount(3, $params);
-        $this->assertSame(get_query_parameter('test'), '1');
-        $this->assertSame(get_query_parameter('next'), 'wibble');
-        $this->assertSame(get_query_parameter('id'), 'none');
+        $this->assertSame('1', get_query_parameter('test'));
+        $this->assertSame('wibble', get_query_parameter('next'));
+        $this->assertSame('none', get_query_parameter('id'));
     }
 
     /**
@@ -24,6 +24,6 @@ class DispatcherFuncTest extends TestCase
         $params = parse_query();
         $this->assertIsArray($params);
         $this->assertEmpty($params);
-        $this->assertNull(get_query_parameter('test'), '1');
+        $this->assertNull(get_query_parameter('test'));
     }
 }

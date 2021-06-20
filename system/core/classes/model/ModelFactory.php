@@ -75,7 +75,7 @@ final class ModelFactory
 
     private function getCategoryObject(string $slug): \stdClass {
         if ($this->manager->elementExists($slug) === false) {
-            throw new \UnexpectedValueException("Element does not exist [$slug]");
+            throw new \UnexpectedValueException("Element does not exist [$slug]"); // @codeCoverageIgnore
         }
         return $this->loadDataFile($this->manager->getElementFromSlugIndex($slug));
     }
@@ -98,14 +98,14 @@ final class ModelFactory
     }
 
     private function loadDataFile(\stdClass $indexElement): \stdClass {
-        if (!isset($indexElement->path) || empty($indexElement->path)) {
+        if (empty($indexElement->path)) {
             throw new InvalidArgumentException("Object does not have 'path' property "./** @scrutinizer ignore-type */print_r($indexElement, true)); // @codeCoverageIgnore
         }
-        if (($data = \file_get_contents($indexElement->path)) === false) {
-            throw new InternalException("file_get_contents() failed opening [$indexElement->path]"); // @codeCoverageIgnore
+        $path = $indexElement->path;
+        if (($data = \file_get_contents($path)) === false) {
+            throw new InternalException("file_get_contents() failed opening [$path]"); // @codeCoverageIgnore
         }
         if (($contentObject = \json_decode($data)) === null) {
-            $path = $indexElement->path;
             throw new InternalException("json_decode returned null decoding [$data] from [$path]"); // @codeCoverageIgnore
         }
         return $contentObject;
