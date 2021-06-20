@@ -266,3 +266,15 @@ function get_posts(int $pageNum = 1, int $perPage = 5): array {
 function slug_exists(string $slug): bool {
     return get_index_manager()->elementExists($slug);
 }
+
+/**
+ * Returns a list of widgets
+ * @return array<mixed>
+ */
+function get_widgets(): array {
+    return [
+        'recent_posts' => get_posts(),
+        'category_list' => get_categories(),
+        'tag_list' => get_tags()
+    ];
+}
