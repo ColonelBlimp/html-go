@@ -111,7 +111,7 @@ function get_i18n(): I18n {
  * @return string
  */
 function render(string $template = null, array $vars = []): string {
-    $tpl = DEFAULT_TEMPLATE;
+    $tpl = SINGLE_TEMPLATE;
     if (!empty($template)) {
         $tpl = $template;
     }

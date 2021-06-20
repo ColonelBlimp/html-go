@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="{{ content.site.language }}" class="bg-white h-screen">
+{% include "partials/head.html.twig" %}
+  <body class="h-full w-full bg-gray-500">
+{% include "partials/header.html.twig" %}
+    <div class="flex flex-col md:flex-row bg-blue-300">
+{% block main %}{% endblock %}
+{% include "partials/aside.html.twig" %}
+    </div>
+{% include "partials/footer.html.twig" %}
+  </body>
+</html>
