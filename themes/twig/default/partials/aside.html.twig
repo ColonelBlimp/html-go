@@ -1,1 +1,23 @@
-      <aside>ASIDE.HTML.TWIG</aside>
+      <aside class="md:w-1/3">
+        <section>
+{% include "partials/search.html.twig" %}
+        </section>
+        <section>
+          <h2 class="h-8 font-bold uppercase border-b-2 border-red-500">{{ i18n.getText('widget.recent_posts.title') }}</h2>
+          <ul>
+
+          </ul>
+        </section>
+        <section>
+          <h2 class="h-8 font-bold uppercase border-b-2 border-red-500">{{ i18n.getText('widget.category_list.title') }}</h2>
+          <ul>
+          
+          </ul>
+        </section>
+        <section>
+          <h2 class="h-8 font-bold uppercase border-b-2 border-red-500">{{ i18n.getText('widget.tag_list.title') }}</h2>
+          <ul>
+          
+          </ul>
+        </section>
+      </aside>

@@ -234,7 +234,7 @@ function get_content_object(string $slug, array $listing = []): ?\stdClass {
     }
     $content = get_model_factory()->createContentObject($manager->getElementFromSlugIndex($slug));
     if (!empty($listing)) {
-        $content->listing = $listing;
+        $content->list = $listing;
     }
     $content->menus = get_menu();
     return $content;

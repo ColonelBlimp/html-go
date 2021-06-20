@@ -14,6 +14,7 @@ HTML-go is a databaseless, flat-file blogging platform, which is very flexible, 
 - Content summary through front matter or manual splitting
 - Multiple menus defined through front matter
 - Nested static pages
+- i18n support
 
 # Landing Pages
 HTML-go has four editable landing pages for **blog**, **category**, **tag** and the **index** or
@@ -145,6 +146,13 @@ All variables are accessed via the `content` object.
 |`{{ content.site.copyright }}`|?|?|site.copyright|Default: "(c) Copyright, Your Name"|
 |`{{ content.title }}`|?|?|"title": "xxx"|Content front matter.|
 |`{{ content.description }}`|?|?|"description": "xxx"|Content front matter.|
+|`{{ content.list }}`|?|?|N/A|An array of `content` objects associated with the parent `content` object. E.g. A list of posts.|
+
+### i18n
+The i18n feature is accessed via the `i18n` object. This object has one method which is used to look up the appropriate text
+associated with the given *key*. For example:
+
+    {{ i18n.getText('widget.category_list.title') }}
 
 
 # Technical Data
