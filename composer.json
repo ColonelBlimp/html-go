@@ -22,7 +22,8 @@
 		"files" : [
 			"system/core/constants.php",
 			"system/core/dispatcher.php",
-			"system/core/functions.php"
+			"system/core/functions.php",
+			"system/core/widgets.php"
 		],
 		"psr-4" : {
 			"html_go\\" : "system/core/classes"
