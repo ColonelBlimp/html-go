@@ -98,6 +98,9 @@ final class ModelFactory
     }
 
     private function loadDataFile(\stdClass $indexElement): \stdClass {
+        if ($indexElement->section === TAG_SECTION) {
+            exit('IMPLEMENT ME');
+        }
         if (empty($indexElement->path)) {
             throw new InvalidArgumentException("Object does not have 'path' property "./** @scrutinizer ignore-type */print_r($indexElement, true)); // @codeCoverageIgnore
         }
