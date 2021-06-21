@@ -36,9 +36,18 @@ final class ModelFactory
      * @return \stdClass
      */
     public function createContentObject(\stdClass $indexElement): \stdClass {
-        $contentObject = $this->loadDataFile($indexElement);
-        $contentObject->body = $this->restoreNewlines($contentObject->body);
+        if ($indexElement->section === TAG_SECTION) {
+            $contentObject = $this->createEmptyContentObject();
+            $contentObject->title = \substr($indexElement->key, \strlen(TAG_SECTION) + 1);
+        } else {
+            $contentObject = $this->loadDataFile($indexElement);
+            $contentObject->body = $this->restoreNewlines($contentObject->body);
+        }
+
         $contentObject->key = $indexElement->key;
+        $contentObject->list = [];
+        $contentObject->site = $this->getSiteObject();
+
         if (!empty($indexElement->category)) {
             $contentObject->category = $this->getCategoryObject($indexElement->category);
         }
@@ -53,8 +62,7 @@ final class ModelFactory
         if (empty($contentObject->summary)) {
             $contentObject->summary = $this->getSummary($contentObject->body);
         }
-        $contentObject->list = [];
-        $contentObject->site = $this->getSiteObject();
+
         return $contentObject;
     }
 
@@ -98,9 +106,6 @@ final class ModelFactory
     }
 
     private function loadDataFile(\stdClass $indexElement): \stdClass {
-        if ($indexElement->section === TAG_SECTION) {
-            exit('IMPLEMENT ME');
-        }
         if (empty($indexElement->path)) {
             throw new InvalidArgumentException("Object does not have 'path' property "./** @scrutinizer ignore-type */print_r($indexElement, true)); // @codeCoverageIgnore
         }
@@ -112,6 +117,19 @@ final class ModelFactory
             throw new InternalException("json_decode returned null decoding [$data] from [$path]"); // @codeCoverageIgnore
         }
         return $contentObject;
+    }
+
+    /**
+     * This is used for tags only.
+     * @return \stdClass
+     */
+    private function createEmptyContentObject(): \stdClass {
+        $obj = new \stdClass();
+        $obj->key = EMPTY_VALUE;
+        $obj->section = EMPTY_VALUE;
+        $obj->body = EMPTY_VALUE;
+        $obj->title = EMPTY_VALUE;
+        return $obj;
     }
 
     /**
