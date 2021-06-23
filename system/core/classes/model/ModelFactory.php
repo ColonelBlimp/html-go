@@ -120,7 +120,8 @@ final class ModelFactory
     }
 
     /**
-     * This is used for tags only.
+     * This is used for tags only as tags don't have an associated file on the
+     * filesystem.
      * @return \stdClass
      */
     private function createEmptyContentObject(): \stdClass {

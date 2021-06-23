@@ -33,7 +33,9 @@ lised in one index: `slugIndex` under the key `blog`. Generally,
 this index page is use if the 'blog' link is enabled which should link to this page.
 ### Tag Index Page
 This data file is located at `content/common/landing/tags/index.md` and
-is listed in one index: `slugIndex` and `pageIndex` under the key `tag`.
+is listed in one index: `slugIndex` and `pageIndex` under the key `tag`. This
+is the **only** data file associated with tags. A tag does not have an associated
+file on the filesystem.
 
 # Indexing
 The indexing system is at the core of HTML-go. All content is listed in one or
@@ -60,10 +62,10 @@ The minimum required for a valid content file is:
         "body": "The content of this article."
     }
 
-## Summary
+## Content Summary
 HTML-go automatically generates a summary of the content.
 
-### Front Matter Summary
+### Front Matter Content Summary
 If you require the summary to be something different to the opening text of the
 article, you can add the following to the front matter:
 
@@ -74,7 +76,7 @@ article, you can add the following to the front matter:
         "body": "The content of this article."
     }
 
-### Manual Summary
+### Manual Content Summary
 If the `summary` variable is not defined in the front matter, HTML-go will search
 the `body` for the divider marker `<!--more-->` and split the text.  For example:
 
