@@ -28,4 +28,28 @@ class FunctionsTest extends TestCase
             $list[] = $factory->createContentObject($obj);
         }
     }
+
+    /**
+     * @runInSeparateProcess
+     */
+    function testGetTagsFunc(): void {
+        $tags = get_tags();
+        $this->assertEmpty($tags);
+        $this->copyTestData();
+        get_index_manager()->reindex();
+        $tags = get_tags();
+        $this->assertNotEmpty($tags);
+    }
+
+    private function copyTestData(): void {
+        $os = \php_uname('s');
+        if (\str_starts_with(\strtoupper($os), 'WIN')) {
+            $src = \realpath(__DIR__.DS.'..'.DS.'test-data'.DS.'func-data');
+            $dst = \realpath(APP_ROOT.DS.'content'.DS.'user-data');
+            $cmd = 'xcopy '.$src.' /E /Y /Q '.$dst;
+        } else {
+            $cmd = '';
+        }
+        \shell_exec($cmd);
+    }
 }
