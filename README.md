@@ -33,7 +33,9 @@ lised in one index: `slugIndex` under the key `blog`. Generally,
 this index page is use if the 'blog' link is enabled which should link to this page.
 ### Tag Index Page
 This data file is located at `content/common/landing/tags/index.md` and
-is listed in one index: `slugIndex` and `pageIndex` under the key `tag`.
+is listed in one index: `slugIndex` and `pageIndex` under the key `tag`. This
+is the **only** data file associated with tags. A tag does not have an associated
+file on the filesystem.
 
 # Indexing
 The indexing system is at the core of HTML-go. All content is listed in one or
@@ -60,10 +62,10 @@ The minimum required for a valid content file is:
         "body": "The content of this article."
     }
 
-## Summary
+## Content Summary
 HTML-go automatically generates a summary of the content.
 
-### Front Matter Summary
+### Front Matter Content Summary
 If you require the summary to be something different to the opening text of the
 article, you can add the following to the front matter:
 
@@ -74,7 +76,7 @@ article, you can add the following to the front matter:
         "body": "The content of this article."
     }
 
-### Manual Summary
+### Manual Content Summary
 If the `summary` variable is not defined in the front matter, HTML-go will search
 the `body` for the divider marker `<!--more-->` and split the text.  For example:
 
@@ -127,9 +129,14 @@ and
     {% endfor %}
     {% endif %}
 
-### Sections
+### <a id="Sections">Sections</a>
 Content is identified by its *section*. There are currently four sections **page** for static pages,
-**tag** for tags, **category** for categories and **post** for posts.
+**tag** for tags, **category** for categories and **post** for posts. All content belongs to one
+of these sections and this can be used within templates to identify a particular piece of content.
+
+    {% if content.section equals 'post' %}
+    ...
+    {% endif %}
 
 # Templating
 
@@ -142,22 +149,20 @@ All variables are accessed via the `content` object.
 |`{{ content.site.name }}`|?|?|site.name|Default: "HTML-go". Use for page header.|
 |`{{ content.site.title }}`|?|?|site.title|Default: " \| HTML-go". Use for browser title.|
 |`{{ content.site.url }}`|?|?|site.url|Must be configured manually.|
-|`{{ content.site.description }}`|?|?|site.description|Use if '{{ content.description }}` is empty.|
+|`{{ content.site.description }}`|?|?|site.description|Use if `{{ content.description }}` is empty.|
 |`{{ content.site.copyright }}`|?|?|site.copyright|Default: "(c) Copyright, Your Name"|
 |`{{ content.title }}`|?|?|"title": "xxx"|Content front matter.|
 |`{{ content.description }}`|?|?|"description": "xxx"|Content front matter.|
 |`{{ content.list }}`|?|?|N/A|An array of `content` objects associated with the parent `content` object. E.g. A list of posts.|
+|`{{ content.section }}`|?|?|The [section](#Sections) too which the content belongs.|
 
 ### i18n
-The i18n feature is accessed via the `i18n` object. This object has one method which is used to look up the appropriate text
-associated with the given *key*. For example:
+The i18n feature is accessed via the `i18n` object. This object has one method which is used to look up the appropriate text associated with the given *key*. For example:
 
     {{ i18n.getText('widget.category_list.title') }}
-
 
 # Technical Data
 
 ## Content Object
 The content object is a `stdClass` and has the following public properties:
-
 

@@ -1,0 +1,5 @@
+{
+  "title": "This Is The Title",
+  "description": "Test meta description",
+  "body": "Some text for the article goes here<!--more--> while the summary does not go here."
+}

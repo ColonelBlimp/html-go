@@ -244,7 +244,7 @@ final class IndexManager extends AbstractIndexer
                 foreach ($defs as $label => $value) {
                     $node->$label = $value;
                 }
-                $menus[$name][] = $node;
+                $menus[$name][$node->key] = $node;
             }
         }
         return $menus;

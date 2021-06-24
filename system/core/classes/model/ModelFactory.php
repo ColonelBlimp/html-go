@@ -36,9 +36,18 @@ final class ModelFactory
      * @return \stdClass
      */
     public function createContentObject(\stdClass $indexElement): \stdClass {
-        $contentObject = $this->loadDataFile($indexElement);
-        $contentObject->body = $this->restoreNewlines($contentObject->body);
+        if ($indexElement->section === TAG_SECTION) {
+            $contentObject = $this->createEmptyContentObject();
+            $contentObject->title = \substr($indexElement->key, \strlen(TAG_SECTION) + 1);
+        } else {
+            $contentObject = $this->loadDataFile($indexElement);
+            $contentObject->body = $this->restoreNewlines($contentObject->body);
+        }
+
         $contentObject->key = $indexElement->key;
+        $contentObject->list = [];
+        $contentObject->site = $this->getSiteObject();
+
         if (!empty($indexElement->category)) {
             $contentObject->category = $this->getCategoryObject($indexElement->category);
         }
@@ -53,8 +62,7 @@ final class ModelFactory
         if (empty($contentObject->summary)) {
             $contentObject->summary = $this->getSummary($contentObject->body);
         }
-        $contentObject->list = [];
-        $contentObject->site = $this->getSiteObject();
+
         return $contentObject;
     }
 
@@ -112,9 +120,23 @@ final class ModelFactory
     }
 
     /**
+     * This is used for tags only as tags don't have an associated file on the
+     * filesystem.
+     * @return \stdClass
+     */
+    private function createEmptyContentObject(): \stdClass {
+        $obj = new \stdClass();
+        $obj->key = EMPTY_VALUE;
+        $obj->section = EMPTY_VALUE;
+        $obj->body = EMPTY_VALUE;
+        $obj->title = EMPTY_VALUE;
+        return $obj;
+    }
+
+    /**
      * Returns the summary for the content object. If '<!--more-->' is used within
-     * the body, then this is removed once the summary obtained.
-     * @param string $body the body with the '<!--more--> removed
+     * the body, then this is removed once the summary is obtained.
+     * @param string $body the body. The '<!--more--> removed if found thus passed by reference.
      * @return string The summary text. If no summary is defined, returns an empty string
      */
     private function getSummary(string &$body): string {

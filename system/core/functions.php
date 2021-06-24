@@ -225,17 +225,17 @@ function get_markdown_parser(): MarkdownParser {
 /**
  * Get a <code>Content</code> object (if any) associated with the given slug.
  * @param string $slug
- * @param array<\stdClass>$listing
+ * @param array<\stdClass> $list List of <code>Content</code> for this <code>Content</code> object.
  * @return \stdClass|NULL if no content was found associated with the given slug <code>null</code> is returned.
  */
-function get_content_object(string $slug, array $listing = []): ?\stdClass {
+function get_content_object(string $slug, array $list = []): ?\stdClass {
     $manager = get_index_manager();
     if ($manager->elementExists($slug) === false) {
         return null;
     }
     $content = get_model_factory()->createContentObject($manager->getElementFromSlugIndex($slug));
-    if (!empty($listing)) {
-        $content->list = $listing;
+    if (!empty($list)) {
+        $content->list = $list;
     }
     $content->menus = get_menu();
     return $content;
