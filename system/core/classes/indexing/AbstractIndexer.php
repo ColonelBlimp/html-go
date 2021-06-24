@@ -201,12 +201,12 @@ abstract class AbstractIndexer
      */
     private function getPostUriDateStringAndTagListFromIndexKey(string $key): array {
         if (\strlen($key) < 17) {
-            throw new InvalidArgumentException("Post content filename is too short [$key]");
+            throw new InvalidArgumentException("Post content filename is too short [$key]"); // @codeCoverageIgnore
         }
         $dateString = \substr($key, 0, 14);
         $start = 15;
         if (($end = \strpos($key, '_', $start)) === false) {
-            throw new InvalidArgumentException("Post content filename syntax error [$key]");
+            throw new InvalidArgumentException("Post content filename syntax error [$key]"); // @codeCoverageIgnore
         }
         $tagList = \substr($key, $start, $end - $start);
         $title = \substr($key, $end + 1);
