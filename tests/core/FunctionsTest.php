@@ -57,6 +57,24 @@ class FunctionsTest extends TestCase
         $this->assertSame('No tags found', $obj->getText('no_tags_found'));
     }
 
+    /**
+     * @runInSeparateProcess
+     */
+    function testGetCategoriesFunc(): void {
+        $cats = get_categories(perPage: 1);
+        $this->assertNotEmpty($cats);
+        $this->assertCount(1, $cats);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    function testGetPostsFunc(): void {
+        $posts = get_posts();
+        $this->assertNotEmpty($posts);
+        $this->assertCount(1, $posts);
+    }
+
     private function copyTestData(): void {
         $os = \php_uname('s');
         if (\str_starts_with(\strtoupper($os), 'WIN')) {
