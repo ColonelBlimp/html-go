@@ -42,6 +42,21 @@ class FunctionsTest extends TestCase
         $this->assertCount(4, $tags);
     }
 
+    /**
+     * @depends testGetTagsFunc
+     */
+    function testSlugExists(): void {
+        $this->assertTrue(slug_exists('2021/06/this-is-the-title'));
+    }
+
+    function testI18n(): void {
+        $this->assertSame('en', get_config()->getString(Config::KEY_LANG));
+        $this->assertNotNull(get_i18n());
+        $obj = get_i18n();
+        $this->assertNotNull($obj);
+        $this->assertSame('No tags found', $obj->getText('no_tags_found'));
+    }
+
     private function copyTestData(): void {
         $os = \php_uname('s');
         if (\str_starts_with(\strtoupper($os), 'WIN')) {
