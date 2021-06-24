@@ -130,6 +130,7 @@ final class ModelFactory
         $obj->section = EMPTY_VALUE;
         $obj->body = EMPTY_VALUE;
         $obj->title = EMPTY_VALUE;
+        $obj->description = EMPTY_VALUE;
         return $obj;
     }
 

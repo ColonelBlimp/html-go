@@ -38,6 +38,6 @@
 
 // Template Variables Keys
 \define('TEMPLATE_TPLVAR_KEY', 'template');
-\define('DEFAULT_TEMPLATE', 'main.html');
+\define('DEFAULT_TEMPLATE', 'list.html');
 \define('LIST_TEMPLATE', 'list.html');
 \define('SINGLE_TEMPLATE', 'single.html');

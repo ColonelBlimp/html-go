@@ -3,9 +3,9 @@
         <section class="my-4">
           <h2 class="h-8 font-bold uppercase border-b-2 border-red-500">{{ i18n.getText('widget.recent_posts.title') }}</h2>
 {% if widgets.recent_posts is not empty %}
-          <ul>
+          <ul class="my-2">
 {% for item in widgets.recent_posts %}
-            <li>{{ item.title }}</li>
+            <li><a class="hover:text-red-600" href="{{ content.site.url }}/{{ item.key }}">{{ item.title }}</a></li>
 {% endfor %}
           </ul>
 {% else %}
@@ -15,9 +15,9 @@
         <section class="my-4">
           <h2 class="h-8 font-bold uppercase border-b-2 border-red-500">{{ i18n.getText('widget.category_list.title') }}</h2>
 {% if widgets.category_list is not empty %}
-          <ul>
+          <ul class="my-2">
 {% for item in widgets.category_list %}
-            <li>{{ item.title }}</li>
+            <li><a class="hover:text-red-600" href="{{ content.site.url }}/{{ item.key }}">{{ item.title }}</a></li>
 {% endfor %}
           </ul>
 {% endif %}
@@ -25,9 +25,9 @@
         <section class="my-4">
           <h2 class="h-8 font-bold uppercase border-b-2 border-red-500">{{ i18n.getText('widget.tag_list.title') }}</h2>
 {% if widgets.tag_list is not empty %}
-          <ul>
+          <ul class="py-2">
 {% for item in widgets.tag_list %}
-            <li>{{ item.title }}</li>
+            <li class="inline-grid bg-gray-800 text-white font-bold text-xs uppercase p-2 mx-0.5 my-1 hover:bg-red-600"><a href="{{ content.site.url }}/{{ item.key }}">{{ item.title }}</a></li>
 {% endfor %}
           </ul>
 {% else %}
