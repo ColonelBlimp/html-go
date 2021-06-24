@@ -52,7 +52,6 @@ final class IndexManager extends AbstractIndexer
      * Rebuild all the indexes.
      */
     public function reindex(): void {
-        echo 'CALLED'.PHP_EOL;
         $this->catIndex = $this->buildCategoryIndex();
         $pageMenuIndex = $this->buildPageAndMenuIndexes();
         $this->pageIndex = $pageMenuIndex[0];
@@ -311,7 +310,6 @@ final class IndexManager extends AbstractIndexer
                 $initial[$name] = $def;
             }
         }
-        print_r($initial);
         return $initial;
     }
 }
