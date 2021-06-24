@@ -41,13 +41,9 @@ function route(string $uri, string $method): string {
     }
 
     if ($result === 1) {
-        $content = process_blog_post_request($uri, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE));
+        $content = get_content_object($uri);
     } else {
-        if (HOME_INDEX_KEY === $uri) {
-            $content = get_home_page();
-        } else {
-            $content = get_content_object($uri);
-        }
+        $content = process_request($uri, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE));
     }
 
     if ($content === null) {
@@ -58,47 +54,60 @@ function route(string $uri, string $method): string {
 }
 
 /**
- * Process a request for the home page
- * @return \stdClass|NULL
- */
-function get_home_page(): ?\stdClass {
-    if (get_config()->getBool(Config::KEY_STATIC_INDEX)) {
-        return get_content_object(HOME_INDEX_KEY);
-    }
-    if (($content = get_content_object(HOME_INDEX_KEY, get_posts())) === null) {
-        throw new InternalException("Unable to locate the home index page!");
-    }
-    $content->template = LIST_TEMPLATE;
-    return $content;
-}
-
-/**
- * Process a blog-post request
+ * Process a request for a single blog-post.
  * @param string $uri
  * @param int $pageNum
  * @param int $perPage
  * @return \stdClass|NULL
  */
-function process_blog_post_request(string $uri, int $pageNum, int $perPage): ?\stdClass {
-    switch ($uri) {
-        case HOME_INDEX_KEY:
-            if (get_config()->getBool(Config::KEY_STATIC_INDEX)) {
-                $content = get_content_object($uri);
-            } else {
-                $content = get_content_object($uri, get_posts($pageNum, $perPage));
-            }
+function process_request(string $uri, int $pageNum, int $perPage): ?\stdClass {
+    $template = LIST_TEMPLATE;
+
+    switch (true) {
+        case \str_starts_with($uri, POST_INDEX_KEY.FWD_SLASH):
+            $list = get_posts($pageNum, $perPage);
             break;
-        case POST_INDEX_KEY:
-            $content = get_content_object($uri, get_posts($pageNum, $perPage));
+        case \str_starts_with($uri, CAT_INDEX_KEY.FWD_SLASH):
+            $list = get_categories($pageNum, $perPage);
             break;
-        case CAT_INDEX_KEY:
-            $content = get_content_object($uri, get_categories($pageNum, $perPage));
+        case \str_starts_with($uri, TAG_INDEX_KEY.FWD_SLASH):
+            $list = get_tags($pageNum, $perPage);
             break;
-        case TAG_INDEX_KEY:
-            $content = get_content_object($uri, get_tags($pageNum, $perPage));
-            break;
-        default:
-            $content = get_content_object($uri);
+        default: // home page or static page
+            $list = [];
+            $template = SINGLE_TEMPLATE;
+    }
+
+    if ($uri === HOME_INDEX_KEY) {
+        $content = get_homepage($pageNum, $perPage);
+    } else {
+        $content = get_content_object($uri, $list);
+    }
+
+    if (!empty($content) && empty($content->template)) {
+        $content->template = $template;
+    }
+
+    return $content;
+}
+
+function get_homepage(int $pageNum, int $perPage): \stdClass {
+    if (get_config()->getBool(Config::KEY_STATIC_INDEX)) {
+        $content = get_content_object(HOME_INDEX_KEY);
+        if ($content === null) {
+            throw new InternalException("Unable to find the home index page!");
+        }
+        if (empty($content->template)) {
+            $content->template = SINGLE_TEMPLATE;
+        }
+    } else {
+        $content = get_content_object(HOME_INDEX_KEY, get_posts($pageNum, $perPage));
+        if ($content === null) {
+            throw new InternalException("Unable to find the home index page!");
+        }
+        if (empty($content->template)) {
+            $content->template = LIST_TEMPLATE;
+        }
     }
     return $content;
 }
