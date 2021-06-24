@@ -135,8 +135,8 @@ final class ModelFactory
 
     /**
      * Returns the summary for the content object. If '<!--more-->' is used within
-     * the body, then this is removed once the summary obtained.
-     * @param string $body the body with the '<!--more--> removed
+     * the body, then this is removed once the summary is obtained.
+     * @param string $body the body. The '<!--more--> removed if found thus passed by reference.
      * @return string The summary text. If no summary is defined, returns an empty string
      */
     private function getSummary(string &$body): string {
