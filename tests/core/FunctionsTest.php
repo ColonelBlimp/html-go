@@ -37,8 +37,9 @@ class FunctionsTest extends TestCase
         $this->assertEmpty($tags);
         $this->copyTestData();
         get_index_manager()->reindex();
-        $tags = get_tags();
+        $tags = get_tags(perPage: 4);
         $this->assertNotEmpty($tags);
+        $this->assertCount(4, $tags);
     }
 
     private function copyTestData(): void {
