@@ -48,7 +48,7 @@ abstract class AbstractIndexer
      * @param string $filename
      * @throws InternalException
      * @throws InvalidArgumentException
-     * @return array<string, \stdClass>
+     * @return array<mixed>
      */
     protected function loadIndex(string $filename): array {
         if (\file_exists($filename) === false) {

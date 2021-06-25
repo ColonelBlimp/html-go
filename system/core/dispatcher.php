@@ -67,43 +67,20 @@ function process_request(string $uri, int $pageNum, int $perPage): ?\stdClass {
         return get_homepage($pageNum, $perPage);
     }
 
-    $list = is_landing_page($uri);
-    if (empty($list) === false) {
-        $content = get_content_object($uri, $list, $template);
-    } else {
-
-    }
-
-    /*
-    switch (true) {
-        case \str_starts_with($uri, POST_INDEX_KEY):
-        case \str_starts_with($uri, CAT_INDEX_KEY.FWD_SLASH):
-            $list = get_posts($pageNum, $perPage);
-            break;
-
-            $list = get_categories($pageNum, $perPage);
-            break;
-        case \str_starts_with($uri, TAG_INDEX_KEY.FWD_SLASH):
-            $list = get_tags($pageNum, $perPage);
-            break;
-        default: // home page or static page
-            $list = [];
+    $list = is_landing_page($uri, $pageNum, $perPage);
+    if (empty($list)) {
+        $list = is_list_page($uri, $pageNum, $perPage);
+        if (empty($list)) {
             $template = SINGLE_TEMPLATE;
+        }
     }
 
-    if ($uri === HOME_INDEX_KEY) {
-        $content = get_homepage($pageNum, $perPage);
-    } else {
-        $content = get_content_object($uri, $list, $template);
-    }
-    */
-
-    return $content;
+    return get_content_object($uri, $list, $template);
 }
 
 /**
- * Checks if the given URI is a landing page, if so returns a list of the appropriate content objects
- * for that page.
+ * Checks if the given URI is a landing page (excluding the home page), if so returns a list of the
+ * appropriate content objects for that page.
  * @param string $uri
  * @return array<\stdClass>
  */
@@ -114,11 +91,36 @@ function is_landing_page(string $uri, int $pageNum = 1, int $perPage = 0): array
             $list = get_categories($pageNum, $perPage);
             break;
         case $uri === POST_INDEX_KEY:
-            echo 'blog landing page';
+            $list = get_posts($pageNum, $perPage);
             break;
         case $uri === TAG_INDEX_KEY:
-            echo 'tag landing page';
+            $list = get_tags($pageNum, $perPage);
             break;
+        default:
+            // Do nothing
+    }
+    return $list;
+}
+
+/**
+ * Checks if the given URI is a list page (excluding the home page), if so returns a list of the
+ * approriate content object for that page.
+ * @param string $uri
+ * @param int $pageNum
+ * @param int $perPage
+ * @return array<\stdClass>
+ */
+function is_list_page(string $uri, int $pageNum = 1, int $perPage = 0): array {
+    $list = [];
+    switch (true) {
+        case \str_starts_with($uri, POST_INDEX_KEY):
+            $list = get_posts($pageNum, $perPage);
+            break;
+        case \str_starts_with($uri, CAT_INDEX_KEY.FWD_SLASH):
+            $list = get_posts_for_category($uri, $pageNum, $perPage);
+            break;
+        case \str_starts_with($uri, TAG_INDEX_KEY.FWD_SLASH):
+            exit('POST for TAG');
         default:
             // Do nothing
     }

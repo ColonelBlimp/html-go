@@ -283,3 +283,21 @@ function get_widgets(): array {
         'tag_list' => get_tags()
     ];
 }
+
+/**
+ *
+ * @param string $uri
+ * @param int $pageNum
+ * @param int $perPage
+ * @throws InternalException
+ * @return array<\stdClass>
+ */
+function get_posts_for_category(string $uri, int $pageNum = 1, int $perPage = 5): array {
+    $manager = get_index_manager();
+    if ($manager->elementExists($uri) === false) {
+        throw new InternalException("Category does not exist [$uri]");
+    }
+    $index = $manager->getPostsForCategoryIndex();
+    print_r($index);
+    return $index[$uri];
+}

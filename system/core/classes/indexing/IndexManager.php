@@ -34,7 +34,7 @@ final class IndexManager extends AbstractIndexer
     /** @var array<string, \stdClass> $tag2postIndex */
     private array $tag2postIndex;
 
-    /** @var array<string, \stdClass> $cat2postIndex */
+    /** @var array<string, array> $cat2postIndex */
     private array $cat2postIndex;
 
     /**
@@ -124,6 +124,14 @@ final class IndexManager extends AbstractIndexer
      */
     public function getPageIndex(): array {
         return $this->pageIndex;
+    }
+
+    /**
+     * Return the posts for category index.
+     * @return array<string, array>
+     */
+    public function getPostsForCategoryIndex(): array {
+        return $this->cat2postIndex;
     }
 
     private function initialize(): void {
@@ -286,7 +294,7 @@ final class IndexManager extends AbstractIndexer
                 $tagInx[$key] = $this->createElementClass($key, EMPTY_VALUE, TAG_SECTION);
                 $tag2PostsIndex[$key][] = $post->key;
             }
-            $cat2PostIndex[$post->category] = $post->key;
+            $cat2PostIndex[$post->category][] = $post->key;
         }
         $this->writeIndex($this->tagInxFile, $tagInx);
         $this->writeIndex($this->tag2postInxFile, $tag2PostsIndex);

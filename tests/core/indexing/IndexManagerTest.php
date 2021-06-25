@@ -88,4 +88,15 @@ class IndexManagerTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $manager->getElementFromSlugIndex('category/wibble');
     }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testPostsForCategoryIndex(IndexManager $manager): void {
+        $this->assertNotNull($manager);
+        $index = $manager->getPostsForCategoryIndex();
+        $this->assertNotEmpty($index);
+        $list = $index['category/uncategorized'];
+        $this->assertIsArray($list);
+    }
 }
