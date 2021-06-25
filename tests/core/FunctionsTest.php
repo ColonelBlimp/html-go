@@ -35,7 +35,10 @@ class FunctionsTest extends TestCase
     function testGetTagsFunc(): void {
         $tags = get_tags();
         $this->assertEmpty($tags);
-        $this->copyTestData();
+
+        $src = \realpath(__DIR__.DS.'..'.DS.'test-data'.DS.'func-data');
+        $dst = \realpath(APP_ROOT.DS.'content'.DS.'user-data');
+        $this->copyTestData($src, $dst);
         get_index_manager()->reindex();
         $tags = get_tags(perPage: 4);
         $this->assertNotEmpty($tags);
@@ -75,6 +78,37 @@ class FunctionsTest extends TestCase
         $this->assertCount(1, $posts);
     }
 
+    private function copyTestData(string $src, string $dst, string $childFolder = '') {
+        $dir = \opendir($src);
+        @mkdir($dst);
+        if ($childFolder!='') {
+            @mkdir($dst.'/'.$childFolder);
+
+            while (false !== ( $file = \readdir($dir)) ) {
+                if (( $file != '.' ) && ( $file != '..' )) {
+                    if ( \is_dir($src . '/' . $file) ) {
+                        $this->copyTestData($src . '/' . $file,$dst.'/'.$childFolder . '/' . $file);
+                    }
+                    else {
+                        \copy($src . '/' . $file, $dst.'/'.$childFolder . '/' . $file);
+                    }
+                }
+            }
+        } else {
+            while (false !== ($file = \readdir($dir)) ) {
+                if (( $file != '.' ) && ( $file != '..' )) {
+                    if ( \is_dir($src . '/' . $file) ) {
+                        $this->copyTestData($src . '/' . $file,$dst . '/' . $file);
+                    }
+                    else {
+                        \copy($src . '/' . $file, $dst . '/' . $file);
+                    }
+                }
+            }
+        }
+        \closedir($dir);
+    }
+/*
     private function copyTestData(): void {
         $os = \php_uname('s');
         if (\str_starts_with(\strtoupper($os), 'WIN')) {
@@ -86,4 +120,5 @@ class FunctionsTest extends TestCase
         }
         \shell_exec($cmd);
     }
+*/
 }
