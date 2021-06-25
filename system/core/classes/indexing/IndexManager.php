@@ -189,12 +189,12 @@ final class IndexManager extends AbstractIndexer
 
         // Add Tag landing page
         $filepath = $this->commonDir.DS.TAG_SECTION.DS.'index'.CONTENT_FILE_EXT;
-        $pageInx[TAG_SECTION] = $this->createElement(TAG_SECTION, $filepath, TAG_SECTION);
+        $pageInx[TAG_INDEX_KEY] = $this->createElement(TAG_SECTION, $filepath, TAG_SECTION);
         $menuInx = $this->mergeToMenuIndex($menuInx, $this->buildMenus(TAG_SECTION, $filepath));
 
         // Add Category landing page
         $filepath = $this->commonDir.DS.CATEGORY_SECTION.DS.'index'.CONTENT_FILE_EXT;
-        $pageInx[CATEGORY_SECTION] = $this->createElement(CATEGORY_SECTION, $filepath, CATEGORY_SECTION);
+        $pageInx[CAT_INDEX_KEY] = $this->createElement(CATEGORY_SECTION, $filepath, CATEGORY_SECTION);
         $menuInx = $this->mergeToMenuIndex($menuInx, $this->buildMenus(CATEGORY_SECTION, $filepath));
 
         // Add Blog (posts) landing page

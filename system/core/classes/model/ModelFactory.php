@@ -109,18 +109,24 @@ final class ModelFactory
         return $site;
     }
 
+    /**
+     * This loads the content's associated file and merges it with the index element.
+     * @param \stdClass $indexElement
+     * @throws InvalidArgumentException
+     * @throws InternalException
+     * @return \stdClass
+     */
     private function loadDataFile(\stdClass $indexElement): \stdClass {
         if (empty($indexElement->path)) {
             throw new InvalidArgumentException("Object does not have 'path' property "./** @scrutinizer ignore-type */print_r($indexElement, true)); // @codeCoverageIgnore
         }
-        $path = $indexElement->path;
-        if (($data = \file_get_contents($path)) === false) {
-            throw new InternalException("file_get_contents() failed opening [$path]"); // @codeCoverageIgnore
+        if (($data = \file_get_contents($indexElement->path)) === false) {
+            throw new InternalException("file_get_contents() failed opening [$indexElement->path]"); // @codeCoverageIgnore
         }
-        if (($contentObject = \json_decode($data)) === null) {
-            throw new InternalException("json_decode returned null decoding [$data] from [$path]"); // @codeCoverageIgnore
+        if (($fileData = \json_decode($data, true)) === null) {
+            throw new InternalException("json_decode returned null decoding [$fileData] from [$indexElement->path]"); // @codeCoverageIgnore
         }
-        return $contentObject;
+        return (object)\array_merge((array)$indexElement, $fileData);
     }
 
     /**
@@ -131,7 +137,7 @@ final class ModelFactory
     private function createEmptyContentObject(): \stdClass {
         $obj = new \stdClass();
         $obj->key = EMPTY_VALUE;
-        $obj->section = EMPTY_VALUE;
+        $obj->section = TAG_SECTION;
         $obj->body = EMPTY_VALUE;
         $obj->title = EMPTY_VALUE;
         $obj->description = EMPTY_VALUE;

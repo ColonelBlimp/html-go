@@ -164,6 +164,9 @@ abstract class AbstractIndexer
         if (empty($key)) {
             throw new InternalException("Key is empty for [$filepath]"); // @codeCoverageIgnore
         }
+        if (empty($section)) {
+            throw new InternalException("Section is empty for [$filepath]"); // @codeCoverageIgnore
+        }
         switch ($section) {
             case CATEGORY_SECTION:
             case TAG_SECTION:
