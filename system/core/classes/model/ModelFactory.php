@@ -47,11 +47,10 @@ final class ModelFactory
         if (isset($indexElement->tags)) {
             $contentObject->tags = $indexElement->tags;
         }
-        if (!empty($indexElement->date)) {
-            $dt = $this->getContentDate($indexElement->date);
-            $contentObject->date = $dt[0];
-            $contentObject->timestamp = $dt[1];
-        }
+        $dt = $this->getContentDateAndTimestamp($indexElement);
+        $contentObject->date = $dt[0];
+        $contentObject->timestamp = $dt[1];
+
         if (empty($contentObject->summary)) {
             $contentObject->summary = $this->getSummary($contentObject->body);
         }
@@ -67,20 +66,21 @@ final class ModelFactory
             $contentObject = $this->loadDataFile($indexElement);
             $contentObject->body = $this->restoreNewlines($contentObject->body);
         }
+        $contentObject->template = EMPTY_VALUE;
         return $contentObject;
     }
 
     /**
-     * @param string $dateStr
+     * @param \stdClass $indexElement
      * @return array<string>
      */
-    private function getContentDate(string $dateStr): array {
-        if (EMPTY_VALUE === $dateStr) {
-            $date = $timestamp = EMPTY_VALUE;
-        } else {
-            $dt = new \DateTime($dateStr);
+    private function getContentDateAndTimestamp(\stdClass $indexElement): array {
+        if (empty($indexElement->timestamp) === false) {
+            $dt = new \DateTime($indexElement->timestamp);
             $date = $dt->format($this->config->getString(Config::KEY_POST_DATE_FMT));
             $timestamp = $dt->format(DateTimeInterface::W3C);
+        } else {
+            $date = $timestamp = EMPTY_VALUE;
         }
         return [$date, $timestamp];
     }

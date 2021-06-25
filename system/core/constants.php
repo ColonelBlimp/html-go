@@ -18,6 +18,7 @@
 \define('EMPTY_VALUE', '');
 \define('NEWLINE_MARKER', '<nl>');
 \define('SUMMARY_MARKER', '<!--more-->');
+\define('SINGLE_POST_REQUEST', 1);
 
 // Section constants
 \define('CATEGORY_SECTION', 'category');

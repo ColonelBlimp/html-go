@@ -40,7 +40,7 @@ function route(string $uri, string $method): string {
         throw new InternalException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
     }
 
-    if ($result === 1) {
+    if ($result === SINGLE_POST_REQUEST) {
         $content = get_content_object($uri);
     } else {
         $content = process_request($uri, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE));
@@ -63,11 +63,24 @@ function route(string $uri, string $method): string {
 function process_request(string $uri, int $pageNum, int $perPage): ?\stdClass {
     $template = LIST_TEMPLATE;
 
+    if (HOME_INDEX_KEY === $uri) {
+        return get_homepage($pageNum, $perPage);
+    }
+
+    $list = is_landing_page($uri);
+    if (empty($list) === false) {
+        $content = get_content_object($uri, $list, $template);
+    } else {
+
+    }
+
+    /*
     switch (true) {
-        case \str_starts_with($uri, POST_INDEX_KEY.FWD_SLASH):
+        case \str_starts_with($uri, POST_INDEX_KEY):
+        case \str_starts_with($uri, CAT_INDEX_KEY.FWD_SLASH):
             $list = get_posts($pageNum, $perPage);
             break;
-        case \str_starts_with($uri, CAT_INDEX_KEY.FWD_SLASH):
+
             $list = get_categories($pageNum, $perPage);
             break;
         case \str_starts_with($uri, TAG_INDEX_KEY.FWD_SLASH):
@@ -83,10 +96,42 @@ function process_request(string $uri, int $pageNum, int $perPage): ?\stdClass {
     } else {
         $content = get_content_object($uri, $list, $template);
     }
+    */
 
     return $content;
 }
 
+/**
+ * Checks if the given URI is a landing page, if so returns a list of the appropriate content objects
+ * for that page.
+ * @param string $uri
+ * @return array<\stdClass>
+ */
+function is_landing_page(string $uri, int $pageNum = 1, int $perPage = 0): array {
+    $list = [];
+    switch (true) {
+        case $uri === CAT_INDEX_KEY:
+            $list = get_categories($pageNum, $perPage);
+            break;
+        case $uri === POST_INDEX_KEY:
+            echo 'blog landing page';
+            break;
+        case $uri === TAG_INDEX_KEY:
+            echo 'tag landing page';
+            break;
+        default:
+            // Do nothing
+    }
+    return $list;
+}
+
+/**
+ * Returns the home page.
+ * @param int $pageNum
+ * @param int $perPage
+ * @throws InternalException
+ * @return \stdClass
+ */
 function get_homepage(int $pageNum, int $perPage): \stdClass {
     if (get_config()->getBool(Config::KEY_STATIC_INDEX)) {
         if (($content = get_content_object(HOME_INDEX_KEY, /** @scrutinizer ignore-type */ template: SINGLE_TEMPLATE)) === null) {

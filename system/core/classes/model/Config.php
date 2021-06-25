@@ -112,7 +112,7 @@ final class Config
         $config = $this->checkSetOrDefault($config, self::KEY_THEME_NAME, 'default');
         $config = $this->checkSetOrDefault($config, self::KEY_STATIC_INDEX, true);
         $config = $this->checkSetOrDefault($config, self::KEY_POSTS_PERPAGE, 5);
-        $config = $this->checkSetOrDefault($config, self::KEY_POST_DATE_FMT, 'jS M Y');
+        $config = $this->checkSetOrDefault($config, self::KEY_POST_DATE_FMT, 'F d, Y');
 
         return $config;
     }

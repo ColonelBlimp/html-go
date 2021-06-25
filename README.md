@@ -62,7 +62,7 @@ The minimum required for a valid content file is:
         "body": "The content of this article."
     }
 
-## Content Summary
+## <a id="Summary">Content Summary</a>
 HTML-go automatically generates a summary of the content.
 
 ### Front Matter Content Summary
@@ -154,7 +154,10 @@ All variables are accessed via the `content` object.
 |`{{ content.title }}`|?|?|"title": "xxx"|Content front matter.|
 |`{{ content.description }}`|?|?|"description": "xxx"|Content front matter.|
 |`{{ content.list }}`|?|?|N/A|An array of `content` objects associated with this parent `content` object. E.g. A list of posts.|
-|`{{ content.section }}`|?|?|N/A|The [section](#Sections) too which the content belongs.
+|`{{ content.section }}`|?|?|N/A|The [section](#Sections) too which the content belongs.|
+|`{{ content.summary }}`|?|?|N/A|A summary of the content if defined. See [summary](#Summary).|
+|`{{ content.timestamp }}`|?|?|N/A|A W3C formatted timestamp from the filename.|
+|`{{ content.date }}`|?|?|blog.post_date_format|Default "F d, Y"|
 
 ### i18n
 The i18n feature is accessed via the `i18n` object. This object has one method which is used to look up the appropriate text associated with the given *key*. For example:

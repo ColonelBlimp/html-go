@@ -128,6 +128,7 @@ function render(string $template = null, array $vars = []): string {
  * @return string
  */
 function not_found(): string {
+    //FIXME: no $content object in the context!!!
     return render('404.html', ['i18n' => get_i18n()]);
 }
 
@@ -239,7 +240,9 @@ function get_content_object(string $slug, array $list = [], string $template = D
         $content->list = $list;
     }
     $content->menus = get_menu();
-    $content->template = $template;
+    if ($content !== null && empty($content->template)) {
+        $content->template = $template;
+    }
     return $content;
 }
 
