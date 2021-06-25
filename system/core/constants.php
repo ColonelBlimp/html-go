@@ -19,6 +19,7 @@
 \define('NEWLINE_MARKER', '<nl>');
 \define('SUMMARY_MARKER', '<!--more-->');
 \define('SINGLE_POST_REQUEST', 1);
+\define('TIMESTAMP_LEN', 14);
 
 // Section constants
 \define('CATEGORY_SECTION', 'category');

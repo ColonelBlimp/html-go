@@ -236,7 +236,7 @@ function get_content_object(string $slug, array $list = [], string $template = D
         return null;
     }
     $content = get_model_factory()->createContentObject($manager->getElementFromSlugIndex($slug));
-    if (!empty($list)) {
+    if (empty($list) === false) {
         $content->list = $list;
     }
     $content->menus = get_menu();
@@ -285,7 +285,7 @@ function get_widgets(): array {
 }
 
 /**
- *
+ * Returns an array of post objects for the given category URI.
  * @param string $uri
  * @param int $pageNum
  * @param int $perPage
@@ -297,7 +297,15 @@ function get_posts_for_category(string $uri, int $pageNum = 1, int $perPage = 5)
     if ($manager->elementExists($uri) === false) {
         throw new InternalException("Category does not exist [$uri]");
     }
-    $index = $manager->getPostsForCategoryIndex();
-    print_r($index);
-    return $index[$uri];
+    $posts = $manager->getPostsForCategoryIndex()[$uri];
+    if ($perPage > 0) {
+        $posts = \array_slice($posts, ($pageNum - 1) * $perPage, $perPage);
+    }
+    $factory = get_model_factory();
+    $list = [];
+    foreach ($posts as $slug) {
+        $indexElement = $manager->getElementFromSlugIndex($slug);
+        $list[] = $factory->createContentObject($indexElement);
+    }
+    return $list;
 }

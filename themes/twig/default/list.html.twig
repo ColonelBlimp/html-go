@@ -1,27 +1,10 @@
 {% extends "baseof.html.twig" %}
 {% block main %}
       <main class="md:w-2/3">
-{% if content.list is not empty %}
 {% for item in content.list %}
-        <article>
-          <header>
-            <h2>{{ item.title }}</h2>
-{% if content.section == 'post' %}
-            <div class="">
-                <svg class="inline-block h-5 w-5 pb-1 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <time class="inline-block text-gray-500" datetime="{{ item.timestamp }}">{{ item.date }}</time>
-            </div>
-{% else %}
-
+{% if content.section is same as 'post' %}
+{% include "partials/post-summary.html.twig" %}
 {% endif %}
-          </header>
-          <p>{{ item.summary }}</p>
-        </article>
 {% endfor %}
-{% else %}
-
-{% endif %}
       </main>
 {% endblock %}

@@ -137,7 +137,7 @@ abstract class AbstractIndexer
         $obj->type = $this->checkSetOrDefault($optional, 'type', EMPTY_VALUE);
         $obj->category = $this->checkSetOrDefault($optional, 'category', EMPTY_VALUE);
         $obj->username = $this->checkSetOrDefault($optional, 'username', EMPTY_VALUE);
-        $obj->date = $this->checkSetOrDefault($optional, 'date', EMPTY_VALUE);
+        $obj->timestamp = $this->checkSetOrDefault($optional, 'timestamp', EMPTY_VALUE);
 
         $tags = [];
         $tagList = EMPTY_VALUE;
@@ -152,7 +152,8 @@ abstract class AbstractIndexer
     }
 
     /**
-     * Create an Element object.
+     * Create an Element object. The type of element and what properties are poplutated and
+     * persisted to the index is determined by the <code>section</code>.
      * @param string $key
      * @param string $filepath
      * @param string $section
@@ -162,10 +163,10 @@ abstract class AbstractIndexer
      */
     protected function createElement(string $key, string $filepath, string $section): \stdClass {
         if (empty($key)) {
-            throw new InternalException("Key is empty for [$filepath]"); // @codeCoverageIgnore
+            throw new \InvalidArgumentException("Key is empty for [$filepath]"); // @codeCoverageIgnore
         }
         if (empty($section)) {
-            throw new InternalException("Section is empty for [$filepath]"); // @codeCoverageIgnore
+            throw new \InvalidArgumentException("Section is empty for [$filepath]"); // @codeCoverageIgnore
         }
         switch ($section) {
             case CATEGORY_SECTION:
@@ -175,7 +176,7 @@ abstract class AbstractIndexer
             case POST_SECTION:
                 $uriDateStringTagList = $this->getPostUriDateStringAndTagListFromIndexKey($key);
                 $typeCatUsername = $this->getTypeCategoryUsernameFromFilepath($filepath);
-                return $this->createElementClass($uriDateStringTagList[0], $filepath, POST_SECTION, type: $typeCatUsername[0], category: $typeCatUsername[1], username: $typeCatUsername[2], date: $uriDateStringTagList[1], tags: $uriDateStringTagList[2]);
+                return $this->createElementClass($uriDateStringTagList[0], $filepath, POST_SECTION, type: $typeCatUsername[0], category: $typeCatUsername[1], username: $typeCatUsername[2], timestamp: $uriDateStringTagList[1], tags: $uriDateStringTagList[2]);
             default:
                 throw new InternalException("Unknown section [$section]"); // @codeCoverageIgnore
         }
@@ -206,7 +207,7 @@ abstract class AbstractIndexer
         if (\strlen($key) < 17) {
             throw new InvalidArgumentException("Post content filename is too short [$key]"); // @codeCoverageIgnore
         }
-        $dateString = \substr($key, 0, 14);
+        $dateString = \substr($key, 0, TIMESTAMP_LEN);
         $start = 15;
         if (($end = \strpos($key, '_', $start)) === false) {
             throw new InvalidArgumentException("Post content filename syntax error [$key]"); // @codeCoverageIgnore

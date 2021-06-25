@@ -60,13 +60,12 @@ final class ModelFactory
 
     private function getContentObject(\stdClass $indexElement): \stdClass {
         if ($indexElement->section === TAG_SECTION) {
-            $contentObject = $this->createEmptyContentObject();
+            $contentObject = $this->createEmptyContentObject($indexElement);
             $contentObject->title = \substr($indexElement->key, \strlen(TAG_SECTION) + 1);
         } else {
             $contentObject = $this->loadDataFile($indexElement);
             $contentObject->body = $this->restoreNewlines($contentObject->body);
         }
-        $contentObject->template = EMPTY_VALUE;
         return $contentObject;
     }
 
@@ -134,14 +133,15 @@ final class ModelFactory
      * filesystem.
      * @return \stdClass
      */
-    private function createEmptyContentObject(): \stdClass {
+    private function createEmptyContentObject(\stdClass $indexElement): \stdClass {
         $obj = new \stdClass();
         $obj->key = EMPTY_VALUE;
         $obj->section = TAG_SECTION;
         $obj->body = EMPTY_VALUE;
         $obj->title = EMPTY_VALUE;
         $obj->description = EMPTY_VALUE;
-        return $obj;
+        $obj->timestamp = EMPTY_VALUE;
+        return (object)\array_merge((array)$indexElement, (array)$obj);
     }
 
     /**
