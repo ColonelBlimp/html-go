@@ -36,14 +36,7 @@ final class ModelFactory
      * @return \stdClass
      */
     public function createContentObject(\stdClass $indexElement): \stdClass {
-        if ($indexElement->section === TAG_SECTION) {
-            $contentObject = $this->createEmptyContentObject();
-            $contentObject->title = \substr($indexElement->key, \strlen(TAG_SECTION) + 1);
-        } else {
-            $contentObject = $this->loadDataFile($indexElement);
-            $contentObject->body = $this->restoreNewlines($contentObject->body);
-        }
-
+        $contentObject = $this->getContentObject($indexElement);
         $contentObject->key = $indexElement->key;
         $contentObject->list = [];
         $contentObject->site = $this->getSiteObject();
@@ -63,6 +56,17 @@ final class ModelFactory
             $contentObject->summary = $this->getSummary($contentObject->body);
         }
 
+        return $contentObject;
+    }
+
+    private function getContentObject(\stdClass $indexElement): \stdClass {
+        if ($indexElement->section === TAG_SECTION) {
+            $contentObject = $this->createEmptyContentObject();
+            $contentObject->title = \substr($indexElement->key, \strlen(TAG_SECTION) + 1);
+        } else {
+            $contentObject = $this->loadDataFile($indexElement);
+            $contentObject->body = $this->restoreNewlines($contentObject->body);
+        }
         return $contentObject;
     }
 
