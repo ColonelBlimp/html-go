@@ -226,9 +226,10 @@ function get_markdown_parser(): MarkdownParser {
  * Get a <code>Content</code> object (if any) associated with the given slug.
  * @param string $slug
  * @param array<\stdClass> $list List of <code>Content</code> for this <code>Content</code> object.
+ * @param string $template
  * @return \stdClass|NULL if no content was found associated with the given slug <code>null</code> is returned.
  */
-function get_content_object(string $slug, array $list = []): ?\stdClass {
+function get_content_object(string $slug, array $list = [], string $template = DEFAULT_TEMPLATE): ?\stdClass {
     $manager = get_index_manager();
     if ($manager->elementExists($slug) === false) {
         return null;
@@ -238,6 +239,7 @@ function get_content_object(string $slug, array $list = []): ?\stdClass {
         $content->list = $list;
     }
     $content->menus = get_menu();
+    $content->template = $template;
     return $content;
 }
 

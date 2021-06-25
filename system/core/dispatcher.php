@@ -81,11 +81,7 @@ function process_request(string $uri, int $pageNum, int $perPage): ?\stdClass {
     if ($uri === HOME_INDEX_KEY) {
         $content = get_homepage($pageNum, $perPage);
     } else {
-        $content = get_content_object($uri, $list);
-    }
-
-    if (!empty($content) && empty($content->template)) {
-        $content->template = $template;
+        $content = get_content_object($uri, $list, $template);
     }
 
     return $content;
@@ -93,20 +89,12 @@ function process_request(string $uri, int $pageNum, int $perPage): ?\stdClass {
 
 function get_homepage(int $pageNum, int $perPage): \stdClass {
     if (get_config()->getBool(Config::KEY_STATIC_INDEX)) {
-        $content = get_content_object(HOME_INDEX_KEY);
-        if ($content === null) {
+        if (($content = get_content_object(HOME_INDEX_KEY, template: SINGLE_TEMPLATE)) === null) {
             throw new InternalException("Unable to find the home index page!");
-        }
-        if (empty($content->template)) {
-            $content->template = SINGLE_TEMPLATE;
         }
     } else {
-        $content = get_content_object(HOME_INDEX_KEY, get_posts($pageNum, $perPage));
-        if ($content === null) {
+        if (($content = get_content_object(HOME_INDEX_KEY, get_posts($pageNum, $perPage), LIST_TEMPLATE)) === null) {
             throw new InternalException("Unable to find the home index page!");
-        }
-        if (empty($content->template)) {
-            $content->template = LIST_TEMPLATE;
         }
     }
     return $content;
