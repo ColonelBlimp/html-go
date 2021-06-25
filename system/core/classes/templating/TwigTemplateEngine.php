@@ -13,7 +13,7 @@ final class TwigTemplateEngine implements TemplateEngine
      * TwigTemplateEngine Constructor.
      * @param array<mixed> $templateDirs
      * @param array<mixed> $options
-     * @param string $ext the template file extension
+     * @param string $ext the template file extension. Default is <code>twig</code>.
      */
     public function __construct(array $templateDirs, array $options, string $ext = 'twig') {
         $loader = new FilesystemLoader($templateDirs);

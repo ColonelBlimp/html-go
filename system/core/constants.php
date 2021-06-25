@@ -16,6 +16,8 @@
 \define('CONTENT_FILE_EXT_LEN', \strlen(CONTENT_FILE_EXT));
 \define('MODE', 0777);
 \define('EMPTY_VALUE', '');
+\define('NEWLINE_MARKER', '<nl>');
+\define('SUMMARY_MARKER', '<!--more-->');
 
 // Section constants
 \define('CATEGORY_SECTION', 'category');

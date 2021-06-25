@@ -44,6 +44,8 @@
 		"databaseless"
 	],
 	"support" : {
-		"source" : "https://github.com/ColonelBlimp/html-go-func"
+		"source" : "https://github.com/ColonelBlimp/html-go",
+		"issues" : "https://github.com/ColonelBlimp/html-go/issues",
+		"wiki" : "https://github.com/ColonelBlimp/html-go/wiki"
 	}
 }

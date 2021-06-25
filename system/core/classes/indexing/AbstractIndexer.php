@@ -229,5 +229,8 @@ abstract class AbstractIndexer
         return [$parts[$cnt - 1], CATEGORY_SECTION.FWD_SLASH.$parts[$cnt - 2], $parts[$cnt - 4]];
     }
 
+    /**
+     * Reindex the whole system. Generally called when new content has been added.
+     */
     public abstract function reindex(): void;
 }

@@ -1,5 +1,5 @@
 # HTML-go
-HTML-go is a databaseless, flat-file blogging platform, which is very flexible, simple and fast.
+HTML-go is a databaseless, flat-file blogging platform, which is very simple, fast and flexible.
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ColonelBlimp/html-go/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/ColonelBlimp/html-go/?branch=main) [![Build Status](https://scrutinizer-ci.com/g/ColonelBlimp/html-go/badges/build.png?b=main)](https://scrutinizer-ci.com/g/ColonelBlimp/html-go/build-status/main) [![Code Intelligence Status](https://scrutinizer-ci.com/g/ColonelBlimp/html-go/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence) [![Maintainability](https://api.codeclimate.com/v1/badges/39b2879d601a04981542/maintainability)](https://codeclimate.com/github/ColonelBlimp/html-go/maintainability) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ColonelBlimp_html-go&metric=alert_status)](https://sonarcloud.io/dashboard?id=ColonelBlimp_html-go)
 
@@ -153,8 +153,8 @@ All variables are accessed via the `content` object.
 |`{{ content.site.copyright }}`|?|?|site.copyright|Default: "(c) Copyright, Your Name"|
 |`{{ content.title }}`|?|?|"title": "xxx"|Content front matter.|
 |`{{ content.description }}`|?|?|"description": "xxx"|Content front matter.|
-|`{{ content.list }}`|?|?|N/A|An array of `content` objects associated with the parent `content` object. E.g. A list of posts.|
-|`{{ content.section }}`|?|?|The [section](#Sections) too which the content belongs.|
+|`{{ content.list }}`|?|?|N/A|An array of `content` objects associated with this parent `content` object. E.g. A list of posts.|
+|`{{ content.section }}`|?|?|N/A|The [section](#Sections) too which the content belongs.
 
 ### i18n
 The i18n feature is accessed via the `i18n` object. This object has one method which is used to look up the appropriate text associated with the given *key*. For example:
@@ -166,3 +166,65 @@ The i18n feature is accessed via the `i18n` object. This object has one method w
 ## Content Object
 The content object is a `stdClass` and has the following public properties:
 
+## JSON and Markdown
+PHP's `decode_json()` function does not like newline characters (`\n`) and will return an error if it encounters this in the data being decoded. Therefore, HTML-go uses a marker (acceptable to JSON) within the markdown text to indicate a newline character. After decoding, this marker is replaced witin the text by a newline character.
+
+## File Naming Convention
+Filenames have significance in HTML-go.
+
+### Filename
+    | Timestamp   | Tag list    | Slug   | Ext |
+    20210223123423_tagone,tagtwo_the-slug.json
+
+### Timestamp
+    year(4)
+    month(2)
+    day(2)
+    hour(2)
+    minute(2)
+    seconds(2)
+
+### Comma-separated Tag List
+The list of tags for this content, separated by a comma.
+
+### Slug
+The slug for this content. This must be **unique** within the system. Slugs are expected use the dash ( `-` ) as a spearator because the underscore ( `_` ) is used as a separator between the *timestamp*, *tag list* and the *slug*; and this is recommended for good SEO.
+
+### Extension
+All content files use the JSON format and must have the `.json` file extension.
+
+## File Location
+File locations have significance in HTML-go.The content directory is expected to follow a particular layout. This layout is as follows:
+
+    content
+    ├───common
+    │   ├───category
+    │   │   ├───index.json
+    │   │   ├───uncategorized.json
+    │   │   ├───[category name].json
+    │   │   ├───...
+    │   ├───page
+    │   │   ├───index.json
+    │   │   ├───[page name].json
+    │   │   ├───[dir name]
+    │   │   │   ├───index.json
+    │   │   │   └───...
+    │   │   └───...
+    │   ├───post
+    │   │   └───index.json
+    │   └───tag
+    │       └───index.json
+    └───user-data
+        └───[username]
+            └───post
+                └───[category name]
+                    └───[post type]
+
+### index.json
+In the representation above, `index.json` file are landing pages for the various [sections](#Sections). The `index.json` directly under the `page` section (`content/common/page`) is the **home page** for the website.
+
+### Categories
+There is a default category with the title `Uncategorized` and the slug `category/uncategorized` (i.e. `section/filename` minus extension).  The content file is located in `content/common/category/uncategorized.json`.
+
+### Pages
+In theory, pages can have infinite depth (limited only by the host OS filesystem), in practice it might be a little slow to index deeply nested pages. 

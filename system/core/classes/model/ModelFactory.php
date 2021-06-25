@@ -145,10 +145,10 @@ final class ModelFactory
      * @return string The summary text. If no summary is defined, returns an empty string
      */
     private function getSummary(string &$body): string {
-        $pos = \strpos($body, '<!--more-->');
+        $pos = \strpos($body, SUMMARY_MARKER);
         if ($pos !== false) {
             $summary = \substr($body, 0, $pos);
-            $body = \str_replace('<!--more-->', '', $body);
+            $body = \str_replace(SUMMARY_MARKER, '', $body);
             return $summary;
         }
         return '';
@@ -161,6 +161,6 @@ final class ModelFactory
      * @return string
      */
     private function restoreNewlines(string $text): string {
-        return \str_replace('<nl>', '\n', $text);
+        return \str_replace(NEWLINE_MARKER, '\n', $text);
     }
 }
