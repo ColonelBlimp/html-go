@@ -1,8 +1,8 @@
 {% extends "baseof.html.twig" %}
 {% block main %}
         <article>
-          <header class="">
-            <h2 class="font-bold">{{ content.title }}</h2>
+          <header>
+            <h2 class="font-bold py-2">{{ content.title }}</h2>
 {% if content.section is same as 'post' %}
             <div>
                 <svg class="inline-block text-gray-400 h-5 w-5 pb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -22,6 +22,8 @@
                 <a class="hover:text-red-600 text-gray-500 pl-2" href="{{ content.site.url }}/tag/{{ tag }}">{{ tag }}</a>
 {% endfor %}
             </div>
+{% else %}
+<p>What goes here?</p>
 {% endif %}
           </header>
           <p>{{ content.body }}</p>
