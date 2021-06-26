@@ -77,7 +77,7 @@ class IndexManagerTest extends TestCase
     function testElementExists(IndexManager $manager): void {
         $this->assertNotNull($manager);
         $this->assertFalse($manager->elementExists('unknown'));
-        $this->assertTrue($manager->elementExists('category/harvesting'));
+        $this->assertTrue($manager->elementExists(CAT_INDEX_KEY.FWD_SLASH.'harvesting'));
     }
 
     /**
@@ -86,7 +86,7 @@ class IndexManagerTest extends TestCase
     function testGetElementException(IndexManager $manager): void {
         $this->assertNotNull($manager);
         $this->expectException(\InvalidArgumentException::class);
-        $manager->getElementFromSlugIndex('category/wibble');
+        $manager->getElementFromSlugIndex(CAT_INDEX_KEY.FWD_SLASH.'wibble');
     }
 
     /**
@@ -96,7 +96,18 @@ class IndexManagerTest extends TestCase
         $this->assertNotNull($manager);
         $index = $manager->getPostsForCategoryIndex();
         $this->assertNotEmpty($index);
-        $list = $index['category/uncategorized'];
+        $list = $index[CAT_INDEX_KEY.FWD_SLASH.'uncategorized'];
+        $this->assertIsArray($list);
+    }
+
+    /**
+     * @depends testInstantiation
+     */
+    function testPostsForTagIndex(IndexManager $manager): void {
+        $this->assertNotNull($manager);
+        $index = $manager->getPostsForTagIndex();
+        $this->assertNotEmpty($index);
+        $list = $index[TAG_INDEX_KEY.FWD_SLASH.'tagone'];
         $this->assertIsArray($list);
     }
 }

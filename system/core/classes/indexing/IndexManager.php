@@ -31,7 +31,7 @@ final class IndexManager extends AbstractIndexer
      */
     private array $slugIndex;
 
-    /** @var array<string, \stdClass> $tag2postIndex */
+    /** @var array<string, array> $tag2postIndex */
     private array $tag2postIndex;
 
     /** @var array<string, array> $cat2postIndex */
@@ -132,6 +132,14 @@ final class IndexManager extends AbstractIndexer
      */
     public function getPostsForCategoryIndex(): array {
         return $this->cat2postIndex;
+    }
+
+    /**
+     * Return the posts for tag index.
+     * @return array<string, array>
+     */
+    public function getPostsForTagIndex(): array {
+        return $this->tag2postIndex;
     }
 
     private function initialize(): void {

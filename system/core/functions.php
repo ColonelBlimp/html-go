@@ -42,7 +42,7 @@ function get_tags(int $pageNum = 1, int $perPage = 0): array {
     if ($perPage > 0) {
         $tags = \array_slice($tags, ($pageNum - 1) * $perPage, $perPage);
     }
-    return get_model_list($tags);
+    return get_model_list_from_index($tags);
 }
 
 /**
@@ -56,20 +56,37 @@ function get_categories(int $pageNum = 1, int $perPage = 0): array {
     if ($perPage > 0) {
         $cats = \array_slice($cats, ($pageNum - 1) * $perPage, $perPage);
     }
-    return get_model_list($cats);
+    return get_model_list_from_index($cats);
 }
 
 /**
- * Takes an array of index <code>Element</code> object and converts them to an array of
- * <code>stdClass</code> objects.
+ * Takes an array of index objects (<code>stdClass</code>) and converts them to an array of
+ * <code>stdClass</code> content objects.
  * @param array<string, \stdClass> $indexList
  * @return array<\stdClass>
  */
-function get_model_list(array $indexList): array {
+function get_model_list_from_index(array $indexList): array {
     $list = [];
     $factory = get_model_factory();
     foreach ($indexList as $obj) {
         $list[] = $factory->createContentObject($obj);
+    }
+    return $list;
+}
+
+/**
+ * Takes an array of URIs (<code>string</code>) and translates them to an array of
+ * <code>stdClass</code> content objects.
+ * @param array<string> $uris
+ * @return array<\stdClass>
+ */
+function get_model_list_from_uris(array $uris): array {
+    $manager = get_index_manager();
+    $factory = get_model_factory();
+    $list = [];
+    foreach ($uris as $slug) {
+        $indexElement = $manager->getElementFromSlugIndex($slug);
+        $list[] = $factory->createContentObject($indexElement);
     }
     return $list;
 }
@@ -298,14 +315,24 @@ function get_posts_for_category(string $uri, int $pageNum = 1, int $perPage = 5)
         throw new InternalException("Category does not exist [$uri]");
     }
     $posts = $manager->getPostsForCategoryIndex()[$uri];
-    if ($perPage > 0) {
-        $posts = \array_slice($posts, ($pageNum - 1) * $perPage, $perPage);
+    $posts = \array_slice($posts, ($pageNum - 1) * $perPage, $perPage);
+    return get_model_list_from_uris($posts);
+}
+
+/**
+ * Returns an array of post object for the given tag URI.
+ * @param string $uri
+ * @param int $pageNum
+ * @param int $perPage
+ * @throws InternalException
+ * @return array<\stdClass>
+ */
+function get_posts_for_tag(string $uri, int $pageNum = 1, int $perPage = 5): array {
+    $manager = get_index_manager();
+    if ($manager->elementExists($uri) === false) {
+        throw new InternalException("Tag does not exist [$uri]");
     }
-    $factory = get_model_factory();
-    $list = [];
-    foreach ($posts as $slug) {
-        $indexElement = $manager->getElementFromSlugIndex($slug);
-        $list[] = $factory->createContentObject($indexElement);
-    }
-    return $list;
+    $tags = $manager->getPostsForTagIndex()[$uri];
+    $tags = \array_slice($tags, ($pageNum - 1) * $perPage, $perPage);
+    return get_model_list_from_uris($tags);
 }

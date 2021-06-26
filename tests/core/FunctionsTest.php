@@ -35,7 +35,6 @@ class FunctionsTest extends TestCase
     function testGetTagsFunc(): void {
         $tags = get_tags();
         $this->assertEmpty($tags);
-
         $src = \realpath(__DIR__.DS.'..'.DS.'test-data'.DS.'func-data');
         $dst = \realpath(APP_ROOT.DS.'content'.DS.'user-data');
         $this->copyTestData($src, $dst);
@@ -88,8 +87,7 @@ class FunctionsTest extends TestCase
                 if (( $file != '.' ) && ( $file != '..' )) {
                     if ( \is_dir($src . '/' . $file) ) {
                         $this->copyTestData($src . '/' . $file,$dst.'/'.$childFolder . '/' . $file);
-                    }
-                    else {
+                    } else {
                         \copy($src . '/' . $file, $dst.'/'.$childFolder . '/' . $file);
                     }
                 }
@@ -99,8 +97,7 @@ class FunctionsTest extends TestCase
                 if (( $file != '.' ) && ( $file != '..' )) {
                     if ( \is_dir($src . '/' . $file) ) {
                         $this->copyTestData($src . '/' . $file,$dst . '/' . $file);
-                    }
-                    else {
+                    } else {
                         \copy($src . '/' . $file, $dst . '/' . $file);
                     }
                 }
@@ -108,17 +105,4 @@ class FunctionsTest extends TestCase
         }
         \closedir($dir);
     }
-/*
-    private function copyTestData(): void {
-        $os = \php_uname('s');
-        if (\str_starts_with(\strtoupper($os), 'WIN')) {
-            $src = \realpath(__DIR__.DS.'..'.DS.'test-data'.DS.'func-data');
-            $dst = \realpath(APP_ROOT.DS.'content'.DS.'user-data');
-            $cmd = 'xcopy '.$src.' /E /Y /Q '.$dst;
-        } else {
-            $cmd = '';
-        }
-        \shell_exec($cmd);
-    }
-*/
 }

@@ -120,7 +120,8 @@ function is_list_page(string $uri, int $pageNum = 1, int $perPage = 0): array {
             $list = get_posts_for_category($uri, $pageNum, $perPage);
             break;
         case \str_starts_with($uri, TAG_INDEX_KEY.FWD_SLASH):
-            exit('POST for TAG');
+            $list = get_posts_for_tag($uri, $pageNum, $perPage);
+            break;
         default:
             // Do nothing
     }
