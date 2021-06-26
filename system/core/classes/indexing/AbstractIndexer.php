@@ -162,11 +162,8 @@ abstract class AbstractIndexer
      * @return \stdClass
      */
     protected function createElement(string $key, string $filepath, string $section): \stdClass {
-        if (empty($key)) {
-            throw new \InvalidArgumentException("Key is empty for [$filepath]"); // @codeCoverageIgnore
-        }
-        if (empty($section)) {
-            throw new \InvalidArgumentException("Section is empty for [$filepath]"); // @codeCoverageIgnore
+        if (empty($key) || empty($section)) {
+            throw new \InvalidArgumentException("A parameter is empty for [$key][$filepath][$section]"); // @codeCoverageIgnore
         }
         switch ($section) {
             case CATEGORY_SECTION:
