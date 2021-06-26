@@ -4,7 +4,9 @@
   <body class="h-full w-full md:flex md:flex-col">
 {% include "partials/header.html.twig" %}
     <div class="p-4 md:flex md:flex-auto border-t-4 border-red-500">
+      <main class="md:w-2/3">
 {% block main %}{% endblock %}
+      </main>
 {% include "partials/aside.html.twig" %}
     </div>
 {% include "partials/footer.html.twig" %}

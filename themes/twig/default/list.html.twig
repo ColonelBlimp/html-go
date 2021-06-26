@@ -1,6 +1,5 @@
 {% extends "baseof.html.twig" %}
 {% block main %}
-      <main class="md:w-2/3">
 {% for item in content.list %}
 {% if content.section is same as 'post' %}
 {% include "partials/post-summary.html.twig" %}
@@ -10,5 +9,4 @@
 <p>tag section</p>
 {% endif %}
 {% endfor %}
-      </main>
 {% endblock %}

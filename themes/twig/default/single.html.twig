@@ -1,8 +1,7 @@
 {% extends "baseof.html.twig" %}
 {% block main %}
-      <main class="md:w-2/3 border-b border-gray-200 md:border-0 pt-1 pb-6">
         <article>
-          <header class="pb-2">
+          <header class="">
             <h2 class="font-bold">{{ content.title }}</h2>
 {% if content.section is same as 'post' %}
             <div>
@@ -27,5 +26,4 @@
           </header>
           <p>{{ content.body }}</p>
         </article>
-      </main>
 {% endblock %}
