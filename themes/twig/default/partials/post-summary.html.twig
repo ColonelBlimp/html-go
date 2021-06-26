@@ -1,7 +1,7 @@
-        <article>
-          <header>
-            <h2>{{ item.title }}</h2>
-            <div class="text-sm">
+        <article class="border-b border-gray-200">
+          <header class="text-sm">
+            <h2 class="font-bold text-lg py-2">{{ item.title }}</h2>
+            <div>
                 <svg class="inline-block text-gray-400 h-5 w-5 pb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -9,16 +9,18 @@
                 <svg class="inline-block text-gray-400 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                 </svg>
-                <span class="inline-block text-gray-500">{{ item.category.title }}</span>
-                <svg class="text-gray-400 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <span class="inline-block text-gray-500"><a class="hover:text-red-600" href="{{ content.site.url }}/{{ item.key }}">{{ item.category.title }}</a></span>
+            </div>
+            <div>
+                <svg class="inline-block text-gray-400 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
                 </svg>
                 <div class="inline-block text-gray-500">
 {% for tag in item.tags %}
-        <span class="inline-block pr-2"><a href="{{ content.site.url }}/tag/{{ tag }}">{{ tag }}</a></span>
+        <span class="pr-2"><a class="hover:text-red-600" href="{{ content.site.url }}/tag/{{ tag }}">{{ tag }}</a></span>
 {% endfor %}
               </div>
             </div>
           </header>
-          <p>{{ item.summary }}</p>
+          <p class="pt-3 pb-8">{{ item.summary }}</p>
         </article>
