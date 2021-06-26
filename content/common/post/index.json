@@ -1,6 +1,6 @@
 {
-    "title": "Latest Posts",
-    "description": "Latest blog posts",
+    "title": "Posts",
+    "description": "Blog posts",
     "template": "list.html",
     "menus": {
         "main": {

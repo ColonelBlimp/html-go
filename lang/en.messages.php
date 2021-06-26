@@ -8,5 +8,7 @@ return [
     'no_tags_found' => 'No tags found',
     '404_site_title' => "Oops! We can't find that!",
     '404_main_heading' => '404',
-    '404_main_message' => "Oops! We can't find that!"
+    '404_main_message' => "Oops! We can't find that!",
+    'header.category.prefix' => 'Category: ',
+    'header.tag.prefix' => 'Tag: '
 ];
