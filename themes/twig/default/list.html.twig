@@ -14,11 +14,11 @@
         </header>
 {% endif %}
 {% for item in content.list %}
-        <article class="border-b border-gray-200">
-          <header>
+        <article class="border-b border-gray-200 pb-6">
+          <header class="mb-3">
             <h2 class="font-bold py-2"><a href="{{ content.site.url }}/{{ item.key }}">{{ item.title }}</a></h2>
 {% if content.section is same as 'post' %}
-            <div>
+            <div class="text-sm">
                 <svg class="inline-block text-gray-400 h-5 w-5 pb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -28,7 +28,7 @@
                 </svg>
                 <span class="inline-block text-gray-500"><a class="hover:text-red-600" href="{{ content.site.url }}/{{ item.key }}">{{ item.category.title }}</a></span>
             </div>
-            <div class="inline-flex flex-wrap">
+            <div class="inline-flex flex-wrap text-sm">
               <svg class="flex-none text-gray-400 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
               </svg>

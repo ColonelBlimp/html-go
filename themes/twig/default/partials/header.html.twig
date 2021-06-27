@@ -14,7 +14,7 @@
             <ul class="pt-1 md:pt-0">
 {% if content.menus.main is defined %}
 {% for main in content.menus.main %}
-              <li class="pb-2 md:inline-block md:px-2 md:pb-0"><a href="{{ content.site.url }}{%if main.key starts with '/'%}{{ main.key }}{% else %}/{{ main.key }}{% endif %}">{{ main.name }}</a></li>
+              <li class="pb-2 md:inline-block md:px-2 md:pb-0"><a class="hover:text-red-600" href="{{ content.site.url }}{%if main.key starts with '/'%}{{ main.key }}{% else %}/{{ main.key }}{% endif %}">{{ main.name }}</a></li>
 {% endfor %}
 {% endif %}
             </ul>
