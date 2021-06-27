@@ -15,7 +15,7 @@ use html_go\templating\TwigTemplateEngine;
  * second level is an array of stdClass objects each representing a menu node.
  * @return array<mixed>
  */
-function get_menu(): array {
+function get_menus(): array {
     return get_index_manager()->getMenusIndex();
 }
 
@@ -256,7 +256,7 @@ function get_content_object(string $slug, array $list = [], string $template = D
     if (empty($list) === false) {
         $content->list = $list;
     }
-    $content->menus = get_menu();
+    $content->menus = get_menus();
     if ($content !== null && empty($content->template)) {
         $content->template = $template;
     }

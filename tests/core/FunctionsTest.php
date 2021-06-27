@@ -6,6 +6,7 @@ use html_go\indexing\IndexManager;
 use html_go\markdown\ParsedownParser;
 use html_go\model\Config;
 use html_go\model\ModelFactory;
+use html_go\exceptions\InternalException;
 
 class FunctionsTest extends TestCase
 {
@@ -76,6 +77,31 @@ class FunctionsTest extends TestCase
         $this->assertNotEmpty($posts);
         $this->assertCount(1, $posts);
     }
+
+    /**
+     * @runInSeparateProcess
+     */
+    function testPostsForCategory(): void {
+        $posts = get_posts_for_category(CATEGORY_SECTION.FWD_SLASH.'uncategorized');
+        $this->assertIsArray($posts);
+        $this->assertNotEmpty($posts);
+        $this->assertCount(1, $posts);
+        $this->expectException(InternalException::class);
+        get_posts_for_category(CATEGORY_SECTION.FWD_SLASH.'unknown');
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    function testPostsForTag(): void {
+        $posts = get_posts_for_tag(TAG_SECTION.FWD_SLASH.'mytag');
+        $this->assertIsArray($posts);
+        $this->assertNotEmpty($posts);
+        $this->assertCount(1, $posts);
+        $this->expectException(InternalException::class);
+        get_posts_for_tag(TAG_SECTION.FWD_SLASH.'unknown');
+    }
+
 
     private function copyTestData(string $src, string $dst, string $childFolder = '') {
         $dir = \opendir($src);
