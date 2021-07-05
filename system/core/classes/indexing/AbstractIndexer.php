@@ -165,18 +165,15 @@ abstract class AbstractIndexer
         if (empty($key) || empty($section)) {
             throw new \InvalidArgumentException("A parameter is empty for [$key][$filepath][$section]"); // @codeCoverageIgnore
         }
-        switch ($section) {
-            case CATEGORY_SECTION:
-            case TAG_SECTION:
-            case PAGE_SECTION:
-                return $this->createElementClass($key, $filepath, $section);
-            case POST_SECTION:
+        if ($section === CATEGORY_SECTION || $section === TAG_SECTION || $section === PAGE_SECTION) {
+            return $this->createElementClass($key, $filepath, $section);
+        }
+        if( $section === POST_SECTION) {
                 $uriDateStringTagList = $this->getPostUriDateStringAndTagListFromIndexKey($key);
                 $typeCatUsername = $this->getTypeCategoryUsernameFromFilepath($filepath);
                 return $this->createElementClass($uriDateStringTagList[0], $filepath, POST_SECTION, type: $typeCatUsername[0], category: $typeCatUsername[1], username: $typeCatUsername[2], timestamp: $uriDateStringTagList[1], tags: $uriDateStringTagList[2]);
-            default:
-                throw new InternalException("Unknown section [$section]"); // @codeCoverageIgnore
         }
+        throw new InternalException("Unknown section [$section]"); // @codeCoverageIgnore
     }
 
     /**
