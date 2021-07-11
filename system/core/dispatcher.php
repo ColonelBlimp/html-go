@@ -40,8 +40,11 @@ function route(string $uri, string $method): string {
         throw new InternalException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
     }
 
+    $adminCtx = get_config()->getString(Config::KEY_ADMIN_CONTEXT);
     if ($result === SINGLE_POST_REQUEST) {
         $content = get_content_object($uri);
+    } elseif (\str_starts_with($uri, $adminCtx)) {
+        $content = process_admin_request($uri, $method);
     } else {
         $content = process_request($uri, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE));
     }
@@ -76,6 +79,17 @@ function process_request(string $uri, int $pageNum, int $perPage): ?\stdClass {
     }
 
     return get_content_object($uri, $list, $template);
+}
+
+/**
+ * Process a request for an admin page.
+ * @param string $uri
+ * @param string $method
+ * @return \stdClass|NULL
+ */
+function process_admin_request(string $uri, string $method): ?\stdClass {
+    require_once ADMIN_SYS_ROOT.DS.'functions.php';
+    exit('admin page');
 }
 
 /**

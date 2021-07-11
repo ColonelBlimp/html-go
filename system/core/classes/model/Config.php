@@ -4,7 +4,7 @@ namespace html_go\model;
 use InvalidArgumentException;
 use html_go\exceptions\InternalException;
 
-final class Config
+final class Config extends AdminConfig
 {
     public const KEY_SITE_URL = 'site.url';
     public const KEY_SITE_NAME = 'site.name';
@@ -23,25 +23,14 @@ final class Config
     public const KEY_POST_DATE_FMT = 'blog.post_date_format';
 
     /**
-     * @var array<string, string>
-     */
-    private array $config;
-
-    /**
      * Config constructor.
      * @param string $configRoot The root directory containing the 'config.ini' file.
      * @throws InvalidArgumentException
      * @throws InternalException
      */
     public function __construct(string $configRoot) {
-        $configFile = $configRoot.DS.'config.ini';
-        if (!\is_file($configFile)) {
-            throw new InvalidArgumentException("Configuration INI file not found [$configFile]");
-        }
-        if (($config = \parse_ini_file($configFile, false, INI_SCANNER_TYPED)) === false) {
-            throw new InternalException("parse_ini_file() failed [$configFile]"); // @codeCoverageIgnore
-        }
-        $this->config = $this->validateConfig($config);
+        parent::__construct($configRoot);
+        $this->config = $this->validateConfig($this->config);
     }
 
     public function getString(string $key, string $default = ''): string {
@@ -68,30 +57,9 @@ final class Config
         return $var;
     }
 
-    private function checkAndGet(string $key): mixed {
-        if (isset($this->config[$key]) === false) {
-            return null;
-        }
-        return $this->config[$key];
-    }
-
-    /**
-     * @param array<mixed> $config
-     * @param string $key
-     * @param mixed $default
-     * @return array<mixed>
-     */
-    private function checkSetOrDefault(array $config, string $key, mixed $default): array {
-        if (isset($config[$key])) {
-            return $config;
-        }
-        $config[$key] = $default;
-        return $config;
-    }
-
     /**
      * Check required options are set and set defaults.
-     * @param array<string, string> $config
+     * @param array<string, mixed> $config
      * @return array<string, mixed>
      * @throws InvalidArgumentException
      */

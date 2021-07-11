@@ -9,6 +9,7 @@
 \define('LANG_ROOT', APP_ROOT.DS.'lang');
 \define('AUTHOR_ROOT', CONFIG_ROOT.DS.'users');
 \define('TEMPLATE_CACHE_ROOT', CACHE_ROOT.DS.'template_cache');
+\define('ADMIN_SYS_ROOT', APP_ROOT.DS.'system'.DS.'admin');
 
 // General constants
 \define('FWD_SLASH', '/');
