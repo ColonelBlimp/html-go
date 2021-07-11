@@ -1,16 +1,16 @@
 {% extends "baseof.html.twig" %}
 {% block main %}
 {% if content.section is same as 'post' %}
-        <header>
+        <header class="border-b border-gray-200 pb-6">
           <h1 class="text-xl font-bold">{{ content.title }}</h1>
         </header>
 {% elseif content.section is same as 'category' %}
-        <header>
+        <header class="border-b border-gray-200 pb-6">
           <h1 class="text-xl font-bold">{{ i18n.getText('header.category.prefix') }}{{ content.title }}</h1>
           <p>{{ content.description }}</p>
         </header>
 {% elseif content.section is same as 'tag' %}
-        <header>
+        <header class="border-b border-gray-200 pb-6">
           <h1 class="text-xl font-bold">{{ i18n.getText('header.tag.prefix') }}{{ content.title }}</h1>
         </header>
 {% endif %}
