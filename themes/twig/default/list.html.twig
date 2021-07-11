@@ -7,6 +7,7 @@
 {% elseif content.section is same as 'category' %}
         <header>
           <h1 class="text-xl font-bold">{{ i18n.getText('header.category.prefix') }}{{ content.title }}</h1>
+          <p>{{ content.description }}</p>
         </header>
 {% elseif content.section is same as 'tag' %}
         <header>
@@ -17,11 +18,7 @@
         <article class="border-b border-gray-200 pb-6">
           <header class="mb-3">
             <h2 class="font-bold py-2"><a href="{{ content.site.url }}/{{ item.key }}">{{ item.title }}</a></h2>
-{% if content.section is same as 'post' %}
 {% include "partials/post-meta.html.twig" %}
-{% elseif content.section is same as 'category' %}
-            <p>{{ content.description }}</p>
-{% endif %}
           </header>
           <p>{{ item.body }}</p>
         </article>

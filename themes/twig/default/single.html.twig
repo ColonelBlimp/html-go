@@ -1,8 +1,8 @@
 {% extends "baseof.html.twig" %}
 {% block main %}
         <article>
-          <header>
-            <h1 class="text-xl font-bold">{{ content.title }}</h1>
+          <header class="mb-3">
+            <h1 class="font-bold py-2">{{ content.title }}</h1>
 {% if content.section is same as 'post' %}
 {% include "partials/post-meta.html.twig" %}
 {% endif %}
