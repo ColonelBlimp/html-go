@@ -131,6 +131,7 @@ final class ModelFactory
     /**
      * This is used for tags only as tags don't have an associated file on the
      * filesystem.
+     * @param \stdClass $indexElement
      * @return \stdClass
      */
     private function createEmptyContentObject(\stdClass $indexElement): \stdClass {

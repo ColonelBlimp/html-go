@@ -141,9 +141,9 @@ function render(array $vars = []): string {
  * @return string
  */
 function not_found(): string {
-    //FIXME: no $content object in the context!!!
-//    return render('404.html', ['i18n' => get_i18n()]);
-    return 'Implement me: ' . __FUNCTION__;
+    $content = new \stdClass();
+    $content->template = '404.html';
+    return render(get_template_context($content));
 }
 
 /**
