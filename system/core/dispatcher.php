@@ -53,7 +53,7 @@ function route(string $uri, string $method): string {
         return not_found();
     }
 
-    return render(vars: get_template_context($content));
+    return render(get_template_context($content));
 }
 
 /**
@@ -88,8 +88,8 @@ function process_request(string $uri, int $pageNum, int $perPage): ?\stdClass {
  * @return \stdClass|NULL
  */
 function process_admin_request(string $uri, string $method): ?\stdClass {
-    require_once ADMIN_SYS_ROOT.DS.'functions.php';
-    exit('admin page');
+    require_once ADMIN_SYS_ROOT.DS.'bootstrap.php';
+    return admin_route($uri, $method);
 }
 
 /**
@@ -151,7 +151,7 @@ function is_list_page(string $uri, int $pageNum = 1, int $perPage = 0): array {
  */
 function get_homepage(int $pageNum, int $perPage): \stdClass {
     if (get_config()->getBool(Config::KEY_STATIC_INDEX)) {
-        if (($content = get_content_object(HOME_INDEX_KEY, /** @scrutinizer ignore-type */ template: SINGLE_TEMPLATE)) === null) {
+        if (($content = get_content_object(HOME_INDEX_KEY)) === null) {
             throw new InternalException("Unable to find the home index page!");
         }
     } else {

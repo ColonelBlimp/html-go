@@ -124,15 +124,11 @@ function get_i18n(): I18n {
 /**
  * Render the given template placing the given variables into the template context.
  * Note: template defined in the front matter of the content file takes precendence.
- * @param string $template Default is <code>null</code>
  * @param array<mixed> $vars
  * @return string
  */
-function render(string $template = null, array $vars = []): string {
+function render(array $vars = []): string {
     $tpl = SINGLE_TEMPLATE;
-    if (!empty($template)) {
-        $tpl = $template;
-    }
     // Front matter from content file takes precendence
     if (isset($vars[TEMPLATE_TPLVAR_KEY])) {
         $tpl = $vars[TEMPLATE_TPLVAR_KEY];
@@ -146,7 +142,8 @@ function render(string $template = null, array $vars = []): string {
  */
 function not_found(): string {
     //FIXME: no $content object in the context!!!
-    return render('404.html', ['i18n' => get_i18n()]);
+//    return render('404.html', ['i18n' => get_i18n()]);
+    return 'Implement me: ' . __FUNCTION__;
 }
 
 /**

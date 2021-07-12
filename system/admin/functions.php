@@ -1,2 +1,2 @@
 <?php
-echo 'admin functions';
+echo __FILE__;

@@ -2,6 +2,7 @@ parameters:
     level: max
     paths:
         - ../system/core
+        - ../system/admin
     bootstrapFiles:
         - phpstan_constants.php
     excludes_analyse:
