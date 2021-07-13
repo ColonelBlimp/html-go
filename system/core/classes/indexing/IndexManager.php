@@ -65,7 +65,6 @@ final class IndexManager extends AbstractIndexer
         $this->tag2postIndex = $compositeIndex[1];
         $this->cat2postIndex = $compositeIndex[2];
         $this->slugIndex = \array_merge($this->postIndex, $this->catIndex, $this->pageIndex, $this->tagIndex);
-        $this->slugIndex[NOT_FOUND_KEY] = $this->createElement(NOT_FOUND_KEY, EMPTY_VALUE, PAGE_SECTION);
     }
 
     /**
@@ -162,7 +161,6 @@ final class IndexManager extends AbstractIndexer
             $this->tag2postIndex = $this->loadIndex($this->tag2postInxFile);
             $this->menuIndex = $this->loadIndex($this->menuInxFile);
             $this->slugIndex = \array_merge($this->postIndex, $this->catIndex, $this->pageIndex, $this->tagIndex);
-            $this->slugIndex[NOT_FOUND_KEY] = $this->createElement(NOT_FOUND_KEY, EMPTY_VALUE, PAGE_SECTION);
         }
     }
 
