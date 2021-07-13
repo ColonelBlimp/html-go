@@ -33,6 +33,7 @@
 \define('POST_INDEX_KEY', 'blog');
 \define('CAT_INDEX_KEY', CATEGORY_SECTION);
 \define('TAG_INDEX_KEY', TAG_SECTION);
+\define('NOT_FOUND_KEY', 'not-found');
 
 // dispatcher.php constants
 \define('HTTP_GET', 'GET');

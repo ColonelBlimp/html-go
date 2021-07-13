@@ -141,7 +141,7 @@ function render(array $vars = []): string {
  * @return string
  */
 function not_found(): string {
-    $indexElement = get_index_manager()->getElementFromSlugIndex('404');
+    $indexElement = get_index_manager()->getElementFromSlugIndex(NOT_FOUND_KEY);
     return render(get_template_context(get_model_factory()->createContentObject($indexElement)));
 }
 
