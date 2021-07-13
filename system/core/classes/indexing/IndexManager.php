@@ -49,7 +49,6 @@ final class IndexManager extends AbstractIndexer
     public function __construct(string $parentDir) {
         parent::__construct($parentDir);
         $this->initialize();
-        print_r($this->slugIndex);
     }
 
     /**
