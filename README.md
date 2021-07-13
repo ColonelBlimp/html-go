@@ -37,6 +37,18 @@ is listed in one index: `slugIndex` and `pageIndex` under the key `tag`. This
 is the **only** data file associated with tags. A tag does not have an associated
 file on the filesystem.
 
+# Special Pages
+HTML-go has some *special* pages:
+## 404 Not Found
+This page **must** be named ``not-found.json`` and located as shown below:
+
+    content
+    ├───common
+    │   ├───page
+    │   │   ├───not-found.json
+
+Internally, a resouce which cannot be located is mapped to the key ``not-found``.
+
 # Indexing
 The indexing system is at the core of HTML-go. All content is listed in one or
 more indexes.  The main index is called the `slugIndex` and list all **posts**,
