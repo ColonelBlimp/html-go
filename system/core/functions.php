@@ -141,9 +141,8 @@ function render(array $vars = []): string {
  * @return string
  */
 function not_found(): string {
-    $content = new \stdClass();
-    $content->template = '404.html';
-    return render(get_template_context($content));
+    $indexElement = get_index_manager()->getElementFromSlugIndex('404');
+    return render(get_template_context(get_model_factory()->createContentObject($indexElement)));
 }
 
 /**

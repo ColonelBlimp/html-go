@@ -27,6 +27,9 @@ final class IndexManager extends AbstractIndexer
     /**
      * The slug index holds references to files on the physical filesystem.,
      * and is a combination of the catIndex, postIndex and pageIndex
+     *
+     * The key is the uri, the value is the associated content object.
+     *
      * @var array<string, \stdClass> $slugIndex
      */
     private array $slugIndex;
@@ -46,6 +49,7 @@ final class IndexManager extends AbstractIndexer
     public function __construct(string $parentDir) {
         parent::__construct($parentDir);
         $this->initialize();
+        print_r($this->slugIndex);
     }
 
     /**
@@ -62,6 +66,7 @@ final class IndexManager extends AbstractIndexer
         $this->tag2postIndex = $compositeIndex[1];
         $this->cat2postIndex = $compositeIndex[2];
         $this->slugIndex = \array_merge($this->postIndex, $this->catIndex, $this->pageIndex, $this->tagIndex);
+        $this->slugIndex['not-found'] = $this->createElement('not-found', EMPTY_VALUE, PAGE_SECTION);
     }
 
     /**
@@ -158,6 +163,7 @@ final class IndexManager extends AbstractIndexer
             $this->tag2postIndex = $this->loadIndex($this->tag2postInxFile);
             $this->menuIndex = $this->loadIndex($this->menuInxFile);
             $this->slugIndex = \array_merge($this->postIndex, $this->catIndex, $this->pageIndex, $this->tagIndex);
+            $this->slugIndex['not-found'] = $this->createElement('not-found', EMPTY_VALUE, PAGE_SECTION);
         }
     }
 
