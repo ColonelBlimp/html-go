@@ -38,4 +38,9 @@ class ConfigTest extends TestCase
         $this->assertSame(false, $cfg->getBool('unknown'));
         $this->assertSame(true, $cfg->getBool('var.bool'));
     }
+
+    function testGetAdminContext(): void {
+        $cfg = new Config(TEST_APP_ROOT.DS.'test-data'.DS.'config');
+        $this->assertSame('admin', $cfg->getString(Config::KEY_ADMIN_CONTEXT));
+    }
 }

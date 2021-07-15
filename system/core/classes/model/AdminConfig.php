@@ -25,7 +25,7 @@ abstract class AdminConfig
     }
 
     protected function checkAndGet(string $key): mixed {
-        if (isset($this->config[$key]) === false) {
+        if (empty($this->config[$key])) {
             return null;
         }
         return $this->config[$key];
@@ -38,7 +38,7 @@ abstract class AdminConfig
      * @return array<mixed>
      */
     protected function checkSetOrDefault(array $config, string $key, mixed $default): array {
-        if (isset($config[$key])) {
+        if (empty($config[$key]) === false) {
             return $config;
         }
         $config[$key] = $default;
