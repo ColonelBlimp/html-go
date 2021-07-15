@@ -7,6 +7,7 @@ use html_go\markdown\ParsedownParser;
 use html_go\model\Config;
 use html_go\model\ModelFactory;
 use html_go\exceptions\InternalException;
+use html_go\templating\TemplateEngine;
 
 class FunctionsTest extends TestCase
 {
@@ -129,6 +130,21 @@ class FunctionsTest extends TestCase
         $this->assertNotNull($content);
         $content = get_content_object('unknown');
         $this->assertNull($content);
+    }
+
+    function testGetWidgets(): void {
+        $wid = get_widgets();
+        $this->assertNotNull($wid);
+        $this->assertIsArray($wid);
+        $this->assertCount(3, $wid);
+    }
+
+    function testGetTemplateEngine(): void {
+        $eng = get_template_engine();
+        $this->assertNotNull($eng);
+        $this->assertInstanceOf(TemplateEngine::class, $eng);
+        $eng = get_template_engine();
+        $this->assertNotNull($eng);
     }
 
     private function copyTestData(string $src, string $dst, string $childFolder = '') {

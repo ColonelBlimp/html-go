@@ -158,11 +158,11 @@ function get_template_engine(): TemplateEngine {
             case 'twig':
                 $engine = build_twig_template_engine($themeName);
                 break;
-            case 'smarty':
-            case 'php':
-                throw new InternalException("Implement template engine [$engineName]");
+            case 'smarty': // @codeCoverageIgnore
+            case 'php': // @codeCoverageIgnore
+                throw new InternalException("Implement template engine [$engineName]"); // @codeCoverageIgnore
             default:
-                throw new \InvalidArgumentException("Unsupported template engine [$engineName]");
+                throw new \InvalidArgumentException("Unsupported template engine [$engineName]"); // @codeCoverageIgnore
         }
     }
     return $engine;
