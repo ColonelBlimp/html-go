@@ -32,7 +32,8 @@ function dispatch(string $uri = null, string $method = HTTP_GET): string {
  */
 function route(string $uri, string $method): string {
     if ($method === HTTP_POST) {
-        return not_found();
+        not_found();
+        exit;
     }
 
     $result = \preg_match(POST_REQ_REGEX, $uri);
@@ -50,7 +51,8 @@ function route(string $uri, string $method): string {
     }
 
     if ($content === null) {
-        return not_found();
+        not_found();
+        exit;
     }
 
     return render(get_template_context($content));

@@ -138,11 +138,9 @@ function render(array $vars = []): string {
 
 /**
  * Helper function for 404 page.
- * @return string
  */
-function not_found(): string {
-    $indexElement = get_index_manager()->getElementFromSlugIndex(NOT_FOUND_KEY);
-    return render(get_template_context(get_model_factory()->createContentObject($indexElement)));
+function not_found(): void {
+    header('Location: '.get_config()->getString(Config::KEY_SITE_URL).FWD_SLASH.'not-found');
 }
 
 /**
