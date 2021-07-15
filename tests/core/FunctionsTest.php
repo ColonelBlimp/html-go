@@ -82,24 +82,24 @@ class FunctionsTest extends TestCase
      * @runInSeparateProcess
      */
     function testPostsForCategory(): void {
-        $posts = get_posts_for_category(CATEGORY_SECTION.FWD_SLASH.'uncategorized');
+        $posts = get_posts_for_section(CATEGORY_SECTION, CATEGORY_SECTION.FWD_SLASH.'uncategorized');
         $this->assertIsArray($posts);
         $this->assertNotEmpty($posts);
         $this->assertCount(1, $posts);
         $this->expectException(InternalException::class);
-        get_posts_for_category(CATEGORY_SECTION.FWD_SLASH.'unknown');
+        get_posts_for_section(CATEGORY_SECTION, CATEGORY_SECTION.FWD_SLASH.'unknown');
     }
 
     /**
      * @runInSeparateProcess
      */
     function testPostsForTag(): void {
-        $posts = get_posts_for_tag(TAG_SECTION.FWD_SLASH.'mytag');
+        $posts = get_posts_for_section(TAG_SECTION, TAG_SECTION.FWD_SLASH.'mytag');
         $this->assertIsArray($posts);
         $this->assertNotEmpty($posts);
         $this->assertCount(1, $posts);
         $this->expectException(InternalException::class);
-        get_posts_for_tag(TAG_SECTION.FWD_SLASH.'unknown');
+        get_posts_for_section(TAG_SECTION, TAG_SECTION.FWD_SLASH.'unknown');
     }
 
 
