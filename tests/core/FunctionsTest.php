@@ -102,6 +102,23 @@ class FunctionsTest extends TestCase
         get_posts_for_section(TAG_SECTION, TAG_SECTION.FWD_SLASH.'unknown');
     }
 
+    function testPostForSectionException(): void {
+        $this->expectException(\InvalidArgumentException::class);
+        get_posts_for_section(PAGE_SECTION, 'about');
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    function testPaginationPageNumber(): void {
+        $this->assertStringContainsString("http://localhost", strip_url_parameters('http://localhost?page=2'));
+        $params = parse_query();
+        $this->assertIsArray($params);
+        $this->assertCount(1, $params);
+        $num = get_pagination_pagenumber();
+        $this->assertIsInt($num);
+        $this->assertSame(2, $num);
+    }
 
     private function copyTestData(string $src, string $dst, string $childFolder = '') {
         $dir = \opendir($src);
