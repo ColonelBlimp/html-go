@@ -32,8 +32,7 @@ function dispatch(string $uri = null, string $method = HTTP_GET): string {
  */
 function route(string $uri, string $method): string {
     if ($method === HTTP_POST) {
-        not_found();
-        exit;
+        return not_found();
     }
 
     $result = \preg_match(POST_REQ_REGEX, $uri);
@@ -51,8 +50,7 @@ function route(string $uri, string $method): string {
     }
 
     if ($content === null) {
-        not_found();
-        exit;
+        return not_found();
     }
 
     return render(get_template_context($content));
@@ -133,10 +131,10 @@ function is_list_page(string $uri, int $pageNum = 1, int $perPage = 0): array {
             $list = get_posts($pageNum, $perPage);
             break;
         case \str_starts_with($uri, CAT_INDEX_KEY.FWD_SLASH):
-            $list = get_posts_for_category($uri, $pageNum, $perPage);
+            $list = get_posts_for_section(CATEGORY_SECTION, $uri, $pageNum, $perPage);
             break;
         case \str_starts_with($uri, TAG_INDEX_KEY.FWD_SLASH):
-            $list = get_posts_for_tag($uri, $pageNum, $perPage);
+            $list = get_posts_for_section(TAG_SECTION, $uri, $pageNum, $perPage);
             break;
         default:
             // Do nothing

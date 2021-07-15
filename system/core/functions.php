@@ -139,8 +139,9 @@ function render(array $vars = []): string {
 /**
  * Helper function for 404 page.
  */
-function not_found(): void {
+function not_found(): string {
     header('Location: '.get_config()->getString(Config::KEY_SITE_URL).FWD_SLASH.'not-found');
+    return '';
 }
 
 /**
@@ -296,37 +297,32 @@ function get_widgets(): array {
 }
 
 /**
- * Returns an array of post objects for the given category URI.
+ * Returns an array of post objects for the given section URI.
+ * @param string $section
  * @param string $uri
  * @param int $pageNum
  * @param int $perPage
  * @throws InternalException
+ * @throws \InvalidArgumentException
  * @return array<\stdClass>
  */
-function get_posts_for_category(string $uri, int $pageNum = 1, int $perPage = 5): array {
+function get_posts_for_section(string $section, string $uri, int $pageNum = 1, int $perPage = 5): array {
     $manager = get_index_manager();
     if ($manager->elementExists($uri) === false) {
-        throw new InternalException("Category does not exist [$uri]");
+        throw new InternalException("Element does not exist [$uri]");
     }
-    $posts = $manager->getPostsForCategoryIndex()[$uri];
+
+    switch ($section) {
+        case CATEGORY_SECTION:
+            $posts = $manager->getPostsForCategoryIndex()[$uri];
+            break;
+        case TAG_SECTION:
+            $posts = $manager->getPostsForTagIndex()[$uri];
+            break;
+        default:
+            throw new \InvalidArgumentException("Unsupported section [$section]");
+    }
+
     $posts = \array_slice($posts, ($pageNum - 1) * $perPage, $perPage);
     return get_model_list_from_uris($posts);
-}
-
-/**
- * Returns an array of post object for the given tag URI.
- * @param string $uri
- * @param int $pageNum
- * @param int $perPage
- * @throws InternalException
- * @return array<\stdClass>
- */
-function get_posts_for_tag(string $uri, int $pageNum = 1, int $perPage = 5): array {
-    $manager = get_index_manager();
-    if ($manager->elementExists($uri) === false) {
-        throw new InternalException("Tag does not exist [$uri]");
-    }
-    $tags = $manager->getPostsForTagIndex()[$uri];
-    $tags = \array_slice($tags, ($pageNum - 1) * $perPage, $perPage);
-    return get_model_list_from_uris($tags);
 }
