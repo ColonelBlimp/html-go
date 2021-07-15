@@ -153,14 +153,15 @@ function is_list_page(string $uri, int $pageNum = 1, int $perPage = 0): array {
  */
 function get_homepage(int $pageNum, int $perPage): \stdClass {
     if (get_config()->getBool(Config::KEY_STATIC_INDEX)) {
-        if (($content = get_content_object(HOME_INDEX_KEY)) === null) {
-            throw new InternalException("Unable to find the home index page!");
-        }
+        $content = get_content_object(HOME_INDEX_KEY);
     } else {
-        if (($content = get_content_object(HOME_INDEX_KEY, get_posts($pageNum, $perPage), LIST_TEMPLATE)) === null) {
-            throw new InternalException("Unable to find the home index page!");
-        }
+        $content = get_content_object(HOME_INDEX_KEY, get_posts($pageNum, $perPage), LIST_TEMPLATE);
     }
+
+    if ($content === null) {
+        throw new InternalException("Unable to find the home index page!");
+    }
+
     return $content;
 }
 
