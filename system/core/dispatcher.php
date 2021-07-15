@@ -31,19 +31,8 @@ function dispatch(string $uri = null, string $method = HTTP_GET): string {
  * @return string
  */
 function route(string $uri, string $method): string {
-    if ($method === HTTP_POST) {
-        return not_found();
-    }
-
-    $result = \preg_match(POST_REQ_REGEX, $uri);
-    if ($result === false) {
-        throw new InternalException("preg_match() failed checking [$uri]"); // @codeCoverageIgnore
-    }
-
     $adminCtx = get_config()->getString(Config::KEY_ADMIN_CONTEXT);
-    if ($result === SINGLE_POST_REQUEST) {
-        $content = get_content_object($uri);
-    } elseif (\str_starts_with($uri, $adminCtx)) {
+    if (\str_starts_with($uri, $adminCtx)) {
         $content = process_admin_request($uri, $method);
     } else {
         $content = process_request($uri, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE));
@@ -93,7 +82,7 @@ function process_admin_request(string $uri, string $method): ?\stdClass {
 }
 
 /**
- * Checks if the given URI is a landing page (excluding the home page), if so returns a list of the
+ * Checks if the given URI is a landing page (excluding the home page). If so, returns a list of the
  * appropriate content objects for that page.
  * @param string $uri
  * @return array<\stdClass>
