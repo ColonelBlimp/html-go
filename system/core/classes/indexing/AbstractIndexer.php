@@ -130,6 +130,9 @@ abstract class AbstractIndexer
      * @return \stdClass
      */
     protected function createElementClass(string $key, string $path, string $section, string ...$optional): \stdClass {
+        if (\in_array($section, [CATEGORY_SECTION, TAG_SECTION, PAGE_SECTION, POST_SECTION]) === false) {
+            throw new \InvalidArgumentException("Unknown section [$section]");
+        }
         $obj = new \stdClass();
         $obj->key = $key;
         $obj->path = $path;
@@ -140,13 +143,10 @@ abstract class AbstractIndexer
         $obj->timestamp = $this->checkSetOrDefault($optional, 'timestamp', EMPTY_VALUE);
 
         $tags = [];
-        $tagList = EMPTY_VALUE;
-        if (isset($optional['tags'])) {
-            $tagList = $optional['tags'];
+        if (!empty($optional['tags'])) {
+            $tags = \explode(',', $optional['tags']);
         }
-        if (!empty($tagList)) {
-            $tags = \explode(',', $tagList);
-        }
+
         $obj->tags = $tags;
         return $obj;
     }
@@ -165,15 +165,12 @@ abstract class AbstractIndexer
         if (empty($key) || empty($section)) {
             throw new \InvalidArgumentException("A parameter is empty for [$key][$filepath][$section]"); // @codeCoverageIgnore
         }
-        if ($section === CATEGORY_SECTION || $section === TAG_SECTION || $section === PAGE_SECTION) {
-            return $this->createElementClass($key, $filepath, $section);
-        }
         if( $section === POST_SECTION) {
                 $uriDateStringTagList = $this->getPostUriDateStringAndTagListFromIndexKey($key);
                 $typeCatUsername = $this->getTypeCategoryUsernameFromFilepath($filepath);
                 return $this->createElementClass($uriDateStringTagList[0], $filepath, POST_SECTION, type: $typeCatUsername[0], category: $typeCatUsername[1], username: $typeCatUsername[2], timestamp: $uriDateStringTagList[1], tags: $uriDateStringTagList[2]);
         }
-        throw new InternalException("Unknown section [$section]"); // @codeCoverageIgnore
+        return $this->createElementClass($key, $filepath, $section);
     }
 
     /**
