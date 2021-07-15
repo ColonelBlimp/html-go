@@ -120,6 +120,17 @@ class FunctionsTest extends TestCase
         $this->assertSame(2, $num);
     }
 
+    function testGetContentObject(): void {
+        $content = get_content_object(HOME_INDEX_KEY);
+        $this->assertNotNull($content);
+        $content = get_content_object(HOME_INDEX_KEY, ['test', 'west']);
+        $this->assertNotNull($content);
+        $content = get_content_object('about', ['post1', 'post2']);
+        $this->assertNotNull($content);
+        $content = get_content_object('unknown');
+        $this->assertNull($content);
+    }
+
     private function copyTestData(string $src, string $dst, string $childFolder = '') {
         $dir = \opendir($src);
         @mkdir($dst);
