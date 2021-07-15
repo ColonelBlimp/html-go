@@ -165,6 +165,7 @@ abstract class AbstractIndexer
         if (empty($key) || empty($section)) {
             throw new \InvalidArgumentException("A parameter is empty for [$key][$filepath][$section]"); // @codeCoverageIgnore
         }
+
         if( $section === POST_SECTION) {
                 $uriDateStringTagList = $this->getPostUriDateStringAndTagListFromIndexKey($key);
                 $typeCatUsername = $this->getTypeCategoryUsernameFromFilepath($filepath);
