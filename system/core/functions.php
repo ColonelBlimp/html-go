@@ -137,11 +137,11 @@ function render(array $vars = []): string {
 }
 
 /**
- * Helper function for 404 page.
+ * Helper function for 404 page. The function issues an <code>exit</code> after doing a redirect.
  */
-function not_found(): string {
+function not_found(): void {
     header('Location: '.get_config()->getString(Config::KEY_SITE_URL).FWD_SLASH.'not-found');
-    return '';
+    exit;
 }
 
 /**

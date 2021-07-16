@@ -20,7 +20,11 @@ function dispatch(string $uri = null, string $method = HTTP_GET): string {
     if (empty($uri)) {
         $uri = HOME_INDEX_KEY;
     }
-    return route($uri, $method);
+    $result = route($uri, $method);
+    if(empty($result)) {
+        exit;
+    }
+    return $result;
 }
 
 /**
@@ -28,7 +32,8 @@ function dispatch(string $uri = null, string $method = HTTP_GET): string {
  * @param string $uri The requested URI
  * @param string $method the HTTP method
  * @throws InternalException
- * @return string
+ * @return string If the return value is an empty string (''), then an 'Location: ...' has been
+ * done by t
  */
 function route(string $uri, string $method): string {
     $adminCtx = get_config()->getString(Config::KEY_ADMIN_CONTEXT);
@@ -39,18 +44,19 @@ function route(string $uri, string $method): string {
     }
 
     if ($content === null) {
-        return not_found();
+        not_found();
     }
 
     return render(get_template_context($content));
 }
 
 /**
- * Process a request for a single blog-post.
+ * Process a request for a public resource. This method assumes HTTP_GET only as request are for
+ * the public site, not the admin.
  * @param string $uri
  * @param int $pageNum
  * @param int $perPage
- * @return \stdClass|NULL
+ * @return \stdClass|NULL Returns <code>null</code> if the resource is not found
  */
 function process_request(string $uri, int $pageNum, int $perPage): ?\stdClass {
     $template = LIST_TEMPLATE;
