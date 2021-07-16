@@ -10,7 +10,7 @@ use html_go\model\Config;
  * @param string $method
  * @return string The html to be rendered.
  */
-function dispatch(string $uri = null, string $method = HTTP_GET): string {
+function dispatch(string $uri = null, string $method = HTTP_GET): ?string {
     if ($uri === null) {
         $uri = $_SERVER['REQUEST_URI']; // @codeCoverageIgnore
         $method = \strtoupper($_SERVER['REQUEST_METHOD']); // @codeCoverageIgnore
@@ -20,11 +20,8 @@ function dispatch(string $uri = null, string $method = HTTP_GET): string {
     if (empty($uri)) {
         $uri = HOME_INDEX_KEY;
     }
-    $result = route($uri, $method);
-    if(empty($result)) {
-        exit;
-    }
-    return $result;
+
+    return route($uri, $method);
 }
 
 /**
@@ -32,10 +29,10 @@ function dispatch(string $uri = null, string $method = HTTP_GET): string {
  * @param string $uri The requested URI
  * @param string $method the HTTP method
  * @throws InternalException
- * @return string If the return value is an empty string (''), then an 'Location: ...' has been
+ * @return string|NULL If the return value is an empty string (''), then an 'Location: ...' has been
  * done by t
  */
-function route(string $uri, string $method): string {
+function route(string $uri, string $method): ?string {
     $adminCtx = get_config()->getString(Config::KEY_ADMIN_CONTEXT);
     if (\str_starts_with($uri, $adminCtx)) {
         $content = process_admin_request($uri, $method);
