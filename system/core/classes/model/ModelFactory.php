@@ -12,9 +12,8 @@ use html_go\markdown\MarkdownParser;
  * @author Marc L. Veary
  * @since 1.0
  */
-final class ModelFactory
+final class ModelFactory extends AdminModelFactory
 {
-    private Config $config;
     private MarkdownParser $parser;
     private IndexManager $manager;
 
@@ -25,7 +24,7 @@ final class ModelFactory
      * <code>MarkdownParser</code> interface.
      */
     public function __construct(Config $config, MarkdownParser $parser, IndexManager $manager) {
-        $this->config = $config;
+        parent::__construct($config);
         $this->parser = $parser;
         $this->manager = $manager;
     }
@@ -89,23 +88,6 @@ final class ModelFactory
             throw new \UnexpectedValueException("Element does not exist [$slug]"); // @codeCoverageIgnore
         }
         return $this->loadDataFile($this->manager->getElementFromSlugIndex($slug));
-    }
-
-    private function getSiteObject(): \stdClass {
-        static $site = null;
-        if (empty($site)) {
-            $site = new \stdClass();
-            $site->url = $this->config->getString(Config::KEY_SITE_URL);
-            $site->name = $this->config->getString(Config::KEY_SITE_NAME);
-            $site->title = $this->config->getString(Config::KEY_SITE_TITLE);
-            $site->description = $this->config->getString(Config::KEY_SITE_DESCRIPTION);
-            $site->tagline = $this->config->getString(Config::KEY_SITE_TAGLINE);
-            $site->copyright = $this->config->getString(Config::KEY_SITE_COPYRIGHT);
-            $site->language = $this->config->getString(Config::KEY_LANG);
-            $site->theme = $this->config->getString(Config::KEY_THEME_NAME);
-            $site->tpl_engine = $this->config->getString(Config::KEY_TPL_ENGINE);
-        }
-        return $site;
     }
 
     /**

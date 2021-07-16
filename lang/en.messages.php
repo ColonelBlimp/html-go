@@ -10,5 +10,8 @@ return [
     '404_main_heading' => '404',
     '404_main_message' => "Oops! We can't find that!",
     'header.category.prefix' => 'Category: ',
-    'header.tag.prefix' => 'Tag: '
+    'header.tag.prefix' => 'Tag: ',
+
+    'admin.title.prefix' => 'HTML-go Admin | ',
+    'admin.dashboard.title' => 'Dashboard'
 ];

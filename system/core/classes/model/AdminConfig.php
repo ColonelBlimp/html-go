@@ -7,6 +7,7 @@ use html_go\exceptions\InternalException;
 abstract class AdminConfig
 {
     public const KEY_ADMIN_CONTEXT = 'admin.context';
+    public const KEY_ADMIN_THEME_NAME = 'admin.theme.name';
 
     /**
      * @var array<string, string>
@@ -53,6 +54,7 @@ abstract class AdminConfig
      */
     protected function validateAdminConfig(array $config): array {
         $config = $this->checkSetOrDefault($config, self::KEY_ADMIN_CONTEXT, 'admin');
+        $config = $this->checkSetOrDefault($config, self::KEY_ADMIN_THEME_NAME, 'default');
         return $config;
     }
 }

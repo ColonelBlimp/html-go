@@ -45,6 +45,7 @@ function route(string $uri, string $method): string {
 
     if ($content === null) {
         not_found();
+        exit;
     }
 
     return render(get_template_context($content));

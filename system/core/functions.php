@@ -137,11 +137,10 @@ function render(array $vars = []): string {
 }
 
 /**
- * Helper function for 404 page. The function issues an <code>exit</code> after doing a redirect.
+ * Helper function doing a redirect to the 404 page.
  */
 function not_found(): void {
     header('Location: '.get_config()->getString(Config::KEY_SITE_URL).FWD_SLASH.'not-found');
-    exit;
 }
 
 /**
@@ -152,11 +151,12 @@ function get_template_engine(): TemplateEngine {
     static $engine = null;
     if (empty($engine)) {
         $themeName = get_config()->getString(Config::KEY_THEME_NAME);
+        $adminThemeName = get_config()->getString(Config::KEY_ADMIN_THEME_NAME);
         $engineName = get_config()->getString(Config::KEY_TPL_ENGINE);
 
         switch ($engineName) {
             case 'twig':
-                $engine = build_twig_template_engine($themeName);
+                $engine = build_twig_template_engine($themeName, $adminThemeName);
                 break;
             case 'smarty': // @codeCoverageIgnore
             case 'php': // @codeCoverageIgnore
@@ -171,9 +171,10 @@ function get_template_engine(): TemplateEngine {
 /**
  * Build the twig template engine.
  * @param string $themeName The name of the configure theme
+ * @param string $adminThemeName
  * @return TemplateEngine
  */
-function build_twig_template_engine(string $themeName): TemplateEngine {
+function build_twig_template_engine(string $themeName, string $adminThemeName): TemplateEngine {
     $caching = false;
     if (get_config()->getBool(Config::KEY_TPL_CACHING)) {
         $caching = TEMPLATE_CACHE_ROOT;
@@ -183,7 +184,7 @@ function build_twig_template_engine(string $themeName): TemplateEngine {
         'cache' => $caching,
         'strict_variables' => $strict
     ];
-    $templateDirs = [THEMES_ROOT.DS.'twig'.DS.$themeName];
+    $templateDirs = [THEMES_ROOT.DS.'twig'.DS.$themeName, ADMIN_THEMES_ROOT.DS.$adminThemeName];
     return new TwigTemplateEngine($templateDirs, $options);
 }
 

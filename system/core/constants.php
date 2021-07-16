@@ -9,7 +9,10 @@
 \define('LANG_ROOT', APP_ROOT.DS.'lang');
 \define('AUTHOR_ROOT', CONFIG_ROOT.DS.'users');
 \define('TEMPLATE_CACHE_ROOT', CACHE_ROOT.DS.'template_cache');
+
+// Admin Console paths
 \define('ADMIN_SYS_ROOT', APP_ROOT.DS.'system'.DS.'admin');
+\define('ADMIN_THEMES_ROOT', ADMIN_SYS_ROOT.DS.'themes');
 
 // General constants
 \define('FWD_SLASH', '/');
