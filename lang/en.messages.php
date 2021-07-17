@@ -13,5 +13,7 @@ return [
     'header.tag.prefix' => 'Tag: ',
 
     'admin.title.prefix' => 'HTML-go Admin | ',
-    'admin.dashboard.title' => 'Dashboard'
+    'admin.dashboard.title' => 'Dashboard',
+
+    'admin.toolbar.category.title' => 'Categories'
 ];
