@@ -30,7 +30,10 @@
 	},
 	"autoload-dev" : {
 		"psr-4" : {
-			"html_go\\" : "tests/core"
+			"html_go\\" : [
+				"tests/admin",
+				"tests/core"
+			]
 		}
 	},
 	"require-dev" : {

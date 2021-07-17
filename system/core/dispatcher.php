@@ -35,7 +35,7 @@ function dispatch(string $uri = null, string $method = HTTP_GET): ?string {
 function route(string $uri, string $method): ?string {
     $adminCtx = get_config()->getString(Config::KEY_ADMIN_CONTEXT);
     if (\str_starts_with($uri, $adminCtx)) {
-        $content = process_admin_request($uri, $method);
+        $content = process_admin_request($adminCtx, $uri, $method);
     } else {
         $content = process_request($uri, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE));
     }
@@ -75,14 +75,14 @@ function process_request(string $uri, int $pageNum, int $perPage): ?\stdClass {
 }
 
 /**
- * Process a request for an admin page.
+ * Process a request for an admin page. This call bootstraps the admin console code.
  * @param string $uri
  * @param string $method
  * @return \stdClass|NULL
  */
-function process_admin_request(string $uri, string $method): ?\stdClass {
+function process_admin_request(string $context, string $uri, string $method): ?\stdClass {
     require_once ADMIN_SYS_ROOT.DS.'bootstrap.php';
-    return admin_route($uri, $method);
+    return admin_route($context, $uri, $method);
 }
 
 /**

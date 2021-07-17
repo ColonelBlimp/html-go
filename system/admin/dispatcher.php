@@ -1,11 +1,9 @@
 <?php declare(strict_types=1);
 
 use html_go\exceptions\InternalException;
-use html_go\model\Config;
 require_once ADMIN_SYS_ROOT.DS.'functions.php';
 
-function admin_route(string $uri, string $method = HTTP_GET): ?\stdClass {
-    $context = get_config()->getString(Config::KEY_ADMIN_CONTEXT);
+function admin_route(string $context, string $uri, string $method = HTTP_GET): ?\stdClass {
     if (\str_starts_with($uri, $context) === false) {
         return null;
     }
@@ -27,11 +25,21 @@ function admin_route(string $uri, string $method = HTTP_GET): ?\stdClass {
 function admin_process_get_request(string $context, string $uri): ?\stdClass {
     $resource = \substr($uri, \strlen($context));
     $i18n = get_i18n();
-    $pageTitle = $i18n->getText('admin.title.prefix').$i18n->getText('admin.dashboard.title');
-    if ($resource === DASHBOARD_INDEX_KEY) {
-        $content = get_admin_content_object(template: 'dashboard.html', context: $context, title: $pageTitle);
-    } else {
-        $content = null;
+    $pageTitlePrefix = $i18n->getText('admin.title.prefix');
+    switch ($resource) {
+        case DASHBOARD_INDEX_KEY:
+            $content = get_admin_content_object(template: 'dashboard.html', context: $context, title: $pageTitlePrefix.$i18n->getText('admin.dashboard.title'));
+            break;
+        case CATEGORY_SECTION:
+            $list = get_categories();
+            $content = get_admin_content_object(
+                template: 'list.html',
+                context: $context,
+                title: $pageTitlePrefix.$i18n->getText('admin.toolbar.category.title'),
+                list: $list);
+            break;
+        default:
+            $content = null;
     }
 
     return $content;

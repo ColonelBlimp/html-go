@@ -11,19 +11,28 @@ abstract class AdminModelFactory
 
     /**
      * Create a content object (stdClass) specifically for the admin console.
-     * @param array<string> $params When populating with variable arguments, use the following
+     * @param array<mixed> $params When populating with variable arguments, use the following
      * <b>named parameters<b>:
      * <ul>
-     *   <li>title:</li>
+     *   <li>title: (required)</li>
+     *   <li>context: (required)</li>
+     *   <li>template: (required)</li>
+     *   <li>list: (optional)</li>
      * </ul>
      * @return \stdClass
      */
     public function createAdminContentObject(array $params): \stdClass {
         $contentObject = new \stdClass();
         $contentObject->site = $this->getSiteObject();
-        $contentObject->title = $this->checkSet('title', $params);
-        $contentObject->context = $this->checkSet('context', $params);
-        $contentObject->template = $this->checkSet('template', $params);
+        $contentObject->title = $this->checkSetOrFail('title', $params);
+        $contentObject->context = $this->checkSetOrFail('context', $params);
+        $contentObject->template = $this->checkSetOrFail('template', $params);
+        $list = [];
+        if (empty($params['list']) === false && \is_array($params['list'])) {
+            $list = $params['list'];
+        }
+        $contentObject->list = $list;
+
         return $contentObject;
     }
 
@@ -34,7 +43,7 @@ abstract class AdminModelFactory
      * @throws \InvalidArgumentException
      * @return string
      */
-    private function checkSet(string $key, array $params): string {
+    private function checkSetOrFail(string $key, array $params): string {
         if (empty($params[$key])) {
             throw new \InvalidArgumentException("The '$key:' parameter has not been set!");
         }
