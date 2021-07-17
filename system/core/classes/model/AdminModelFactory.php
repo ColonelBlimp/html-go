@@ -11,7 +11,7 @@ abstract class AdminModelFactory
 
     /**
      * Create a content object (stdClass) specifically for the admin console.
-     * @param array<int, string> $params When populating with variable arguments, use the following
+     * @param array<string> $params When populating with variable arguments, use the following
      * <b>named parameters<b>:
      * <ul>
      *   <li>title:</li>
@@ -21,11 +21,24 @@ abstract class AdminModelFactory
     public function createAdminContentObject(array $params): \stdClass {
         $contentObject = new \stdClass();
         $contentObject->site = $this->getSiteObject();
-        if (empty($params['title'])) {
-            throw new \InvalidArgumentException("The 'title:' parameter has not been set!");
-        }
-        $contentObject->title = $params['title'];
+        $contentObject->title = $this->checkSet('title', $params);
+        $contentObject->context = $this->checkSet('context', $params);
+        $contentObject->template = $this->checkSet('template', $params);
         return $contentObject;
+    }
+
+    /**
+     *
+     * @param string $key
+     * @param array<string> $params
+     * @throws \InvalidArgumentException
+     * @return string
+     */
+    private function checkSet(string $key, array $params): string {
+        if (empty($params[$key])) {
+            throw new \InvalidArgumentException("The '$key:' parameter has not been set!");
+        }
+        return $params[$key];
     }
 
     protected function getSiteObject(): \stdClass {
@@ -44,5 +57,4 @@ abstract class AdminModelFactory
         }
         return $site;
     }
-
 }

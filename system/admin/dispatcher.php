@@ -29,7 +29,7 @@ function admin_process_get_request(string $context, string $uri): ?\stdClass {
     $i18n = get_i18n();
     $pageTitle = $i18n->getText('admin.title.prefix').$i18n->getText('admin.dashboard.title');
     if ($resource === DASHBOARD_INDEX_KEY) {
-        $content = get_admin_content_object('dashboard.html', title: $pageTitle);
+        $content = get_admin_content_object(template: 'dashboard.html', context: $context, title: $pageTitle);
     } else {
         $content = null;
     }
