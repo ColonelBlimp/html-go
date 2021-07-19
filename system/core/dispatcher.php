@@ -16,12 +16,17 @@ function dispatch(string $uri = null, string $method = HTTP_GET): ?string {
         $method = \strtoupper($_SERVER['REQUEST_METHOD']); // @codeCoverageIgnore
     }
     $uri = strip_url_parameters($uri);
+    $uri = normalize_uri($uri);
+
+    return route($uri, $method);
+}
+
+function normalize_uri(string $uri): string {
     $uri = \trim($uri, FWD_SLASH);
     if (empty($uri)) {
         $uri = HOME_INDEX_KEY;
     }
-
-    return route($uri, $method);
+    return $uri;
 }
 
 /**
@@ -35,7 +40,7 @@ function dispatch(string $uri = null, string $method = HTTP_GET): ?string {
 function route(string $uri, string $method): ?string {
     $adminCtx = get_config()->getString(Config::KEY_ADMIN_CONTEXT);
     if (\str_starts_with($uri, $adminCtx)) {
-        $content = process_admin_request($adminCtx, $uri, $method);
+        $content = process_admin_request($method, $adminCtx, $uri);
     } else {
         $content = process_request($uri, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE));
     }
@@ -75,14 +80,15 @@ function process_request(string $uri, int $pageNum, int $perPage): ?\stdClass {
 }
 
 /**
- * Process a request for an admin page. This call bootstraps the admin console code.
- * @param string $uri
+ * Process an admin console request.
  * @param string $method
+ * @param string $context
+ * @param string $uri
  * @return \stdClass|NULL
  */
-function process_admin_request(string $context, string $uri, string $method): ?\stdClass {
+function process_admin_request(string $method, string $context, string $uri): ?\stdClass {
     require_once ADMIN_SYS_ROOT.DS.'bootstrap.php';
-    return admin_route($context, $uri, $method);
+    return admin_route($method, $context, $uri);
 }
 
 /**
