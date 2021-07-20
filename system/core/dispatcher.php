@@ -21,6 +21,10 @@ function dispatch(string $uri = null, string $method = HTTP_GET): ?string {
     return route($uri, $method);
 }
 
+/**
+ * @param string $uri
+ * @return string
+ */
 function normalize_uri(string $uri): string {
     $uri = \trim($uri, FWD_SLASH);
     if (empty($uri)) {

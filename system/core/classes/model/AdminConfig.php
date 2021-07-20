@@ -8,6 +8,7 @@ abstract class AdminConfig
 {
     public const KEY_ADMIN_CONTEXT = 'admin.context';
     public const KEY_ADMIN_THEME_NAME = 'admin.theme.name';
+    public const KEY_ADMIN_ITEMS_PER_PAGE = 'admin.items.per_page';
 
     /**
      * @var array<string, string>
@@ -55,6 +56,7 @@ abstract class AdminConfig
     protected function validateAdminConfig(array $config): array {
         $config = $this->checkSetOrDefault($config, self::KEY_ADMIN_CONTEXT, 'admin');
         $config = $this->checkSetOrDefault($config, self::KEY_ADMIN_THEME_NAME, 'default');
+        $config = $this->checkSetOrDefault($config, self::KEY_ADMIN_ITEMS_PER_PAGE, 5);
         return $config;
     }
 }

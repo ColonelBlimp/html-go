@@ -1,4 +1,9 @@
 {% extends "admin-baseof.html.twig" %}
 {% block main %}
 <p>list.html</p>
+<ul>
+{% for item in content.list %}
+  <li>{{ item.title }}</li>
+{% endfor %}
+</ul>
 {% endblock %}

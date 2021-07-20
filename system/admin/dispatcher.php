@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use html_go\exceptions\InternalException;
+use html_go\model\Config;
 require_once ADMIN_SYS_ROOT.DS.'functions.php';
 
 /**
@@ -34,19 +35,23 @@ function admin_route(string $method, string $context, string $uri): ?\stdClass {
  * @return \stdClass|NULL
  */
 function admin_get_content_object(string $method, string $context, string $uri, array $routes): ?\stdClass {
-    if (isset($routes[$method]) === false) {
-        throw new InternalException("Unsupported HTTP Method [$method]");
-    }
-
     $slug = \substr($uri, \strlen($context));
     $slug = normalize_uri($slug);
 
-    $content = null;
-    if (\array_key_exists($slug, $routes[$method])) {
-        $content = $routes[$method][$slug];
-        $content->site = get_site_object();
-        $content->context = $context;
+    switch ($method) {
+        case HTTP_GET:
+            $content = null;
+            if (\array_key_exists($slug, $routes[$method])) {
+                $content = $routes[$method][$slug];
+                $content->list = \call_user_func($content->cb, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_ADMIN_ITEMS_PER_PAGE));
+                $content->site = get_site_object();
+                $content->context = $context;
+            }
+            break;
+        case HTTP_POST:
+            break;
+        default:
+            throw new InternalException("Unsupported HTTP Method [$method]");
     }
-
     return $content;
 }
