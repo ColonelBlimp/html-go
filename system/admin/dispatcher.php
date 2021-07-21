@@ -43,7 +43,10 @@ function admin_get_content_object(string $method, string $context, string $uri, 
             $content = null;
             if (\array_key_exists($slug, $routes[$method])) {
                 $content = $routes[$method][$slug];
-                $content->list = \call_user_func($content->cb, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_ADMIN_ITEMS_PER_PAGE));
+                $content->list = [];
+                if (empty($content->cb) === false && \is_callable($content->cb)) {
+                    $content->list = \call_user_func($content->cb, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_ADMIN_ITEMS_PER_PAGE));
+                }
                 $content->site = get_site_object();
                 $content->context = $context;
             }
