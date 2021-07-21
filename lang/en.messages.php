@@ -15,5 +15,12 @@ return [
     'admin.title.prefix' => 'HTML-go Admin | ',
     'admin.dashboard.title' => 'Dashboard',
 
-    'admin.toolbar.category.title' => 'Categories'
+    'admin.toolbar.category.title' => 'Categories',
+
+    'admin.table_col.name' => 'Name',
+    'admin.table_col.desc' => 'Description',
+    'admin.table_col.usage' => 'Usage',
+    'admin.table_col.actions' => 'Actions',
+    'admin.table_col_action.edit' => 'Edit',
+    'admin.table_col_action.delete' => 'Delete'
 ];

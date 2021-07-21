@@ -11,7 +11,8 @@ return [
             return get_categories($pagenum, $perpage);
             },
             'title' => get_i18n()->getText('admin.toolbar.category.title'),
-            'template' => 'admin-list.html'
+            'template' => 'admin-list.html',
+            'section' => CATEGORY_SECTION
         ]
     ],
     HTTP_POST => []
