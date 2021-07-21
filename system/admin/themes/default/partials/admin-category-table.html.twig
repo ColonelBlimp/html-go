@@ -1,10 +1,10 @@
-<table class="">
+<table class="ml-4 table-fixed">
   <thead>
-    <tr>
-      <th>{{ i18n.getText('admin.table_col.name') }}</th>
-      <th>{{ i18n.getText('admin.table_col.desc') }}</th>
-      <th>{{ i18n.getText('admin.table_col.usage') }}</th>
-      <th>{{ i18n.getText('admin.table_col.actions') }}</th>
+    <tr class="text-left">
+      <th class="w-1/5">{{ i18n.getText('admin.table_col.name') }}</th>
+      <th class="w-2/4">{{ i18n.getText('admin.table_col.desc') }}</th>
+      <th class="w-20">{{ i18n.getText('admin.table_col.usage') }}</th>
+      <th class="w-32">{{ i18n.getText('admin.table_col.actions') }}</th>
     </tr>
   </thead>
   <tbody>
@@ -13,7 +13,7 @@
   <td>{{ item.title }}</td>
   <td>{{ item.body }}</td>
   <td>?</td>
-  <td>{{ i18n.getText('admin.table_col_action.edit') }} | {{ i18n.getText('admin.table_col_action.delete') }}</td>
+  <td><a href="{{ content.site.url }}/{{ content.context }}/category/edit?id={{ item.key }}">{{ i18n.getText('admin.table_col_action.edit') }}</a> | <a href="{{ content.site.url }}/{{ content.context }}/category/delete?id={{ item.key }}">{{ i18n.getText('admin.table_col_action.delete') }}</a></td>
 </tr>
 {% endfor %}
   </tbody>

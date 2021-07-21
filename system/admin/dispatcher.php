@@ -38,9 +38,9 @@ function admin_get_content_object(string $method, string $context, string $uri, 
     $slug = \substr($uri, \strlen($context));
     $slug = normalize_uri($slug);
 
+    $content = null;
     switch ($method) {
         case HTTP_GET:
-            $content = null;
             if (\array_key_exists($slug, $routes[$method])) {
                 $content = $routes[$method][$slug];
                 $content->list = [];

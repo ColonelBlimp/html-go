@@ -12,7 +12,17 @@ return [
             },
             'title' => get_i18n()->getText('admin.toolbar.category.title'),
             'template' => 'admin-list.html',
-            'section' => CATEGORY_SECTION
+            'section' => CATEGORY_SECTION,
+            'action' => 'view'
+        ],
+        CAT_INDEX_KEY.FWD_SLASH.'edit' => (object) [
+            'cb' => function (int $id): mixed {
+                return null;
+            },
+            'title' => get_i18n()->getText('admin.toolbar.category.title'),
+            'template' => 'admin-single.html',
+            'section' => CATEGORY_SECTION,
+            'action' => 'edit'
         ]
     ],
     HTTP_POST => []
