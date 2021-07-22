@@ -42,13 +42,32 @@ function admin_get_content_object(string $method, string $context, string $uri, 
     switch ($method) {
         case HTTP_GET:
             if (\array_key_exists($slug, $routes[$method])) {
-                $content = $routes[$method][$slug];
-                $content->list = [];
-                if (empty($content->cb) === false && \is_callable($content->cb)) {
-                    $content->list = \call_user_func($content->cb, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_ADMIN_ITEMS_PER_PAGE));
+                $object = $routes[$method][$slug];
+                $content = \call_user_func($object->cb, ['context' => $context]);
+
+                /*
+                switch ($object->action) {
+                    case 'view':
+                        if (empty($content->cb) === false && \is_callable($content->cb)) {
+                            $content->list = \call_user_func($content->cb, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_ADMIN_ITEMS_PER_PAGE));
+                        }
+                        break;
+                    case 'new':
+                        break;
+                    case 'edit':
+                        if (empty($content->cb) === false && \is_callable($content->cb)) {
+                            $content = \call_user_func($content->cb, get_query_parameter('id'));
+                        }
+                        break;
+                    case 'delete':
+                        break;
+                    default:
+                        throw new InternalException("Unknown content action [$content->action]");
                 }
+
                 $content->site = get_site_object();
                 $content->context = $context;
+                */
             }
             break;
         case HTTP_POST:

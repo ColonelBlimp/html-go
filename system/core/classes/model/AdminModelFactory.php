@@ -27,6 +27,7 @@ abstract class AdminModelFactory
         $contentObject->title = $this->checkSetOrFail('title', $params);
         $contentObject->context = $this->checkSetOrFail('context', $params);
         $contentObject->template = $this->checkSetOrFail('template', $params);
+        $contentObject->section = $this->checkSetOrFail('section', $params);
         $list = [];
         if (empty($params['list']) === false && \is_array($params['list'])) {
             $list = $params['list'];
