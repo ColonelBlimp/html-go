@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 namespace html_go\model;
 
+use html_go\exceptions\InternalException;
+
 abstract class AdminModelFactory
 {
     protected Config $config;
@@ -23,18 +25,22 @@ abstract class AdminModelFactory
      */
     public function createAdminContentObject(array $params): \stdClass {
         $contentObject = new \stdClass();
+        $this->checkSetOrFail('title', $params);
+        $this->checkSetOrFail('context', $params);
+        $this->checkSetOrFail('template', $params);
+        $this->checkSetOrFail('section', $params);
+
         $contentObject->site = $this->getSiteObject();
-        $contentObject->title = $this->checkSetOrFail('title', $params);
-        $contentObject->context = $this->checkSetOrFail('context', $params);
-        $contentObject->template = $this->checkSetOrFail('template', $params);
-        $contentObject->section = $this->checkSetOrFail('section', $params);
         $list = [];
         if (empty($params['list']) === false && \is_array($params['list'])) {
             $list = $params['list'];
         }
         $contentObject->list = $list;
 
-        return $contentObject;
+        if (($json = json_encode($contentObject)) === false) {
+            throw new InternalException('json_encode failed!');
+        }
+        return (object)\array_merge(json_decode($json, true), $params);
     }
 
     /**
@@ -42,13 +48,11 @@ abstract class AdminModelFactory
      * @param string $key
      * @param array<string> $params
      * @throws \InvalidArgumentException
-     * @return string
      */
-    private function checkSetOrFail(string $key, array $params): string {
+    private function checkSetOrFail(string $key, array $params): void {
         if (empty($params[$key])) {
             throw new \InvalidArgumentException("The '$key:' parameter has not been set!");
         }
-        return $params[$key];
     }
 
     protected function getSiteObject(): \stdClass {

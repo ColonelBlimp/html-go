@@ -1,5 +1,10 @@
+{% if content.list is not empty %}
+{% set item = content.list[0] %}
 <form>
-  <input type="text" name="title" value="{{ content.title }}">
-  <input type="text" name="description" value="{{ content.description }}">
-  <textarea>{{ content.body }}</textarea>
+  <input type="text" name="title" value="{{ item.title }}">
+  <input type="text" name="description" value="{{ item.description }}">
+  <textarea>{{ item.body }}</textarea>
 </form>
+{% else %}
+<p>ERROR</p>
+{% endif %}

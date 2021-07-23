@@ -43,7 +43,14 @@ function admin_get_content_object(string $method, string $context, string $uri, 
         case HTTP_GET:
             if (\array_key_exists($slug, $routes[$method])) {
                 $object = $routes[$method][$slug];
-                $content = \call_user_func($object->cb, ['context' => $context]);
+
+                $params = ['context' => $context];
+                $id = get_query_parameter('id');
+                if ($id !== null) {
+                    $params['id'] = $id;
+                }
+
+                $content = \call_user_func($object->cb, $params);
 
                 /*
                 switch ($object->action) {
