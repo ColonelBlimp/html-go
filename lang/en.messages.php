@@ -22,5 +22,8 @@ return [
     'admin.table_col.usage' => 'Usage',
     'admin.table_col.actions' => 'Actions',
     'admin.table_col_action.edit' => 'Edit',
-    'admin.table_col_action.delete' => 'Delete'
+    'admin.table_col_action.delete' => 'Delete',
+
+    'admin.form.label.name' => 'Name',
+    'admin.form.label.desc' => 'Description'
 ];
