@@ -25,5 +25,7 @@ return [
     'admin.table_col_action.delete' => 'Delete',
 
     'admin.form.label.name' => 'Name',
-    'admin.form.label.desc' => 'Description'
+    'admin.form.label.desc' => 'Description',
+    'admin.form.label.key' => 'URI',
+    'admin.form.label.body' => 'Text'
 ];
