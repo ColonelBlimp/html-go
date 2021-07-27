@@ -24,8 +24,13 @@ return [
     'admin.table_col_action.edit' => 'Edit',
     'admin.table_col_action.delete' => 'Delete',
 
+    'admin.form.label.save' => 'Save',
+    'admin.form.label.cancel' => 'Cancel',
+    'admin.form.label.delete' => 'Delete',
+    'admin.form.label.update' => 'Update',
     'admin.form.label.name' => 'Name',
     'admin.form.label.desc' => 'Description',
     'admin.form.label.key' => 'URI',
-    'admin.form.label.body' => 'Text'
+    'admin.form.label.body' => 'Body',
+    'admin.form.label.template' => 'Template'
 ];
