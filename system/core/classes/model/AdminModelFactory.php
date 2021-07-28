@@ -29,6 +29,7 @@ abstract class AdminModelFactory
         $this->checkSetOrFail('context', $params);
         $this->checkSetOrFail('template', $params);
         $this->checkSetOrFail('section', $params);
+        $this->checkSetOrFail('action', $params);
 
         $contentObject->site = $this->getSiteObject();
         $list = [];
@@ -36,7 +37,33 @@ abstract class AdminModelFactory
             $list = $params['list'];
         }
         $contentObject->list = $list;
+        return $this->mergeStdClassAndArray($contentObject, $params);
+    }
 
+    /**
+     * Create a content object (stdClass) which has all the basic admin related properties, but
+     * nothing for the specific request.
+     * @param array<mixed> $params
+     * @return \stdClass
+     */
+    public function createAdminContentObjectEmpty(array $params): \stdClass {
+        $contentObject = new \stdClass();
+        $this->checkSetOrFail('context', $params);
+        $this->checkSetOrFail('section', $params);
+        $this->checkSetOrFail('action', $params);
+        $contentObject->site = $this->getSiteObject();
+        $contentObject->list = [];
+        $obj = $this->mergeStdClassAndArray($contentObject, $params);
+        return $obj;
+    }
+
+    /**
+     * @param \stdClass $contentObject
+     * @param array<mixed> $params
+     * @throws InternalException
+     * @return \stdClass
+     */
+    private function mergeStdClassAndArray(\stdClass $contentObject, array $params): \stdClass {
         if (($json = json_encode($contentObject)) === false) {
             throw new InternalException('json_encode failed!');
         }

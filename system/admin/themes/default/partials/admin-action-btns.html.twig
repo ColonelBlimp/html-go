@@ -1,0 +1,12 @@
+{% if content.action == 'edit' %}
+{% set action = 'update' %}
+{% set label = i18n.getText('admin.form.label.update') %}
+{% elseif content.action == 'delete' %}
+{% else %}
+{% set action = 'save' %}
+{% set label = i18n.getText('admin.form.label.save') %}
+{% endif %}
+    <div>
+      <input type="submit" name="{{ action }}" id="{{ action }}" value="{{ label }}">
+      <input type="submit" name="cancel" id="cancel" value="{{ i18n.getText('admin.form.label.cancel') }}">
+    </div>

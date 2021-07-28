@@ -52,6 +52,11 @@ function admin_get_content_object(string $method, string $context, string $uri, 
             }
             break;
         case HTTP_POST:
+            if (\array_key_exists($slug, $routes[$method])) {
+                $object = $routes[$method][$slug];
+                $content = \call_user_func($object->cb, ['context' => $context]);
+                exit;
+            }
             break;
         default:
             throw new InternalException("Unsupported HTTP Method [$method]");
