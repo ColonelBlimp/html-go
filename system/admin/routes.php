@@ -1,13 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 
 use html_go\model\Config;
-use html_go\exceptions\InternalException;
 
-/*
- * All the anon funcs might need to be changed to real as they will need to be reproduced tohandle
- * a 'cancel'. Depending on the action, the sdtClass returned will be different for each type of action.
- * Thus the need for the anon functions to be real and also input fields to be populated.
- */
 return [
     HTTP_GET => [
         ADMIN_DASHBOARD_KEY => (object) [
@@ -29,14 +23,24 @@ return [
     HTTP_POST => [
         CAT_INDEX_KEY => (object) [
             'cb' => function (array $data): \stdClass {
-                if (empty($data['cancel']) === false) {
+                if (empty($data[ADMIN_ACTION_CANCEL]) === false) {
                     header('Location: '.get_config()->getString(Config::KEY_SITE_URL).FWD_SLASH.$data['context'].FWD_SLASH.'category');
                     return new \stdClass();
                 }
-                if (empty($data['action'])) {
+                if (empty($data[ADMIN_ACTION_STR])) {
                     return new \stdClass(); // Force not-found 404
                 }
-                $action = $data['action'];
+                $action = $data[ADMIN_ACTION_STR];
+                switch ($action) {
+                    case ADMIN_ACTION_ADD:
+                        break;
+                    case ADMIN_ACTION_EDIT:
+                        break;
+                    case ADMIN_ACTION_DELETE:
+                        break;
+                    default:
+                        break;
+                }
                 print_r($data);
                 exit;
                 return new \stdClass();

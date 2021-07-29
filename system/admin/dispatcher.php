@@ -43,7 +43,7 @@ function admin_get_content_object(string $method, string $context, string $uri, 
         case HTTP_GET:
             if (\array_key_exists($slug, $routes[$method])) {
                 $object = $routes[$method][$slug];
-                $params = ['context' => $context];
+                $params = [ADMIN_CONTEXT_STR => $context];
                 $id = get_query_parameter('id');
                 if ($id !== null) {
                     $params['id'] = $id;
@@ -54,8 +54,10 @@ function admin_get_content_object(string $method, string $context, string $uri, 
         case HTTP_POST:
             if (\array_key_exists($slug, $routes[$method])) {
                 $object = $routes[$method][$slug];
-                $formData = $_POST;
-                $formData['context'] = $context;
+                if (($formData = \filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING)) === false) {
+                    throw new InternalException("filter_input_array function failed!");
+                }
+                $formData[ADMIN_CONTEXT_STR] = $context;
                 $content = \call_user_func($object->cb, $formData);
                 exit;
             }

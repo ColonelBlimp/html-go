@@ -18,6 +18,8 @@
 \define('ADMIN_ACTION_EDIT', 'edit');
 \define('ADMIN_ACTION_DELETE', 'delete');
 \define('ADMIN_ACTION_CANCEL', 'cancel');
+\define('ADMIN_CONTEXT_STR', 'context');
+\define('ADMIN_ACTION_STR', 'action');
 
 // General constants
 \define('FWD_SLASH', '/');
