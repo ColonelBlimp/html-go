@@ -34,16 +34,38 @@ function get_category_view_object(array $args): \stdClass {
     return $content;
 }
 
+function get_category_add_object(array $args): \stdClass {
+    $params = [
+        'title' => get_i18n()->getText('admin.dashboard.title'),
+        'template' => 'admin-action.html',
+        'section' => CATEGORY_SECTION,
+        'action' => ADMIN_ACTION_ADD,
+    ];
+    return get_model_factory()->createAdminContentObjectEmpty(\array_merge($args, $params));
+}
+
+function get_category_edit_object(array $args): \stdClass {
+    return get_category_editdelete_object(ADMIN_ACTION_EDIT, $args);
+}
+
+function get_category_delete_object(array $args): \stdClass {
+    return get_category_editdelete_object(ADMIN_ACTION_DELETE, $args);
+}
+
 /**
- * Return an admin content <b>edit</b> object for <i>categories</i>.
+ * Return an admin content <b>edit/delete</b> object for <i>categories</i>.
+ * @param string $action Must be either <code>edit</code> or <code>delete</code>
  * @param array<mixed> $args
  * @throws InvalidArgumentException
  * @throws InternalException
  * @return \stdClass
  */
-function get_category_edit_object(array $args): \stdClass {
+function get_category_editdelete_object(string $action, array $args): \stdClass {
+    if (\strpos($action, ADMIN_ACTION_EDIT) === false && \strpos($action, ADMIN_ACTION_DELETE) === false) {
+        throw new InvalidArgumentException("Unknown action value [$action]");
+    }
     if (empty($args['id'])) {
-        throw new InvalidArgumentException("The args array must contain an id parameter.");
+        throw new InvalidArgumentException("The args array must contain an 'id' key.");
     }
     $manager = get_index_manager();
     if ($manager->elementExists($args['id']) === false) {
@@ -56,7 +78,7 @@ function get_category_edit_object(array $args): \stdClass {
         'template' => 'admin-action.html',
         'section' => CATEGORY_SECTION,
         'list' => [$element],
-        'action' => ADMIN_ACTION_EDIT,
+        'action' => $action,
     ];
     return get_model_factory()->createAdminContentObject(\array_merge($args, $params));
 }

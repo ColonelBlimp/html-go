@@ -2,6 +2,8 @@
 {% set action = 'update' %}
 {% set label = i18n.getText('admin.form.label.update') %}
 {% elseif content.action == 'delete' %}
+{% set action = 'delete' %}
+{% set label = i18n.getText('admin.form.label.delete') %}
 {% else %}
 {% set action = 'save' %}
 {% set label = i18n.getText('admin.form.label.save') %}
