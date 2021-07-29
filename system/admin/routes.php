@@ -36,14 +36,7 @@ return [
                 if (empty($data['action'])) {
                     return new \stdClass(); // Force not-found 404
                 }
-
-                switch ($data['action']) {
-                    case 'cancel':
-                        break;
-                    default:
-                        echo 'ACTION: '.$data['action'];
-                        break;
-                }
+                $action = $data['action'];
                 print_r($data);
                 exit;
                 return new \stdClass();

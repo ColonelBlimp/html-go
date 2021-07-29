@@ -26,7 +26,7 @@ class AdminModelFactoryTest extends TestCase
         $manager = new IndexManager(TEST_DATA_ROOT);
         $factory = new ModelFactory($cfg, $parser, $manager);
         $content = $factory->createAdminContentObject(
-            ['template' => 'dashboard.html', 'context' => 'admin', 'title' => 'Test Title', 'section' => CATEGORY_SECTION]);
+            ['template' => 'dashboard.html', 'context' => 'admin', 'title' => 'Test Title', 'section' => CATEGORY_SECTION, 'action' => ADMIN_ACTION_ADD]);
         $this->assertNotNull($content);
         $this->assertEmpty($content->list);
         $this->assertIsArray($content->list);
@@ -38,7 +38,7 @@ class AdminModelFactoryTest extends TestCase
         $manager = new IndexManager(TEST_DATA_ROOT);
         $factory = new ModelFactory($cfg, $parser, $manager);
         $content = $factory->createAdminContentObject(
-            ['template' => 'dashboard.html', 'context' => 'admin', 'title' => 'Test Title', 'list' => ['a', 'b'], 'section' => CATEGORY_SECTION]);
+            ['template' => 'dashboard.html', 'context' => 'admin', 'title' => 'Test Title', 'list' => ['a', 'b'], 'section' => CATEGORY_SECTION, 'action' => ADMIN_ACTION_CANCEL]);
         $this->assertNotNull($content);
         $this->assertNotEmpty($content->list);
         $this->assertIsArray($content->list);
