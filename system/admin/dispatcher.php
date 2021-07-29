@@ -59,7 +59,6 @@ function admin_get_content_object(string $method, string $context, string $uri, 
                 }
                 $formData[ADMIN_CONTEXT_STR] = $context;
                 $content = \call_user_func($object->cb, $formData);
-                exit;
             }
             break;
         default:

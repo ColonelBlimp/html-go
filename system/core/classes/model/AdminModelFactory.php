@@ -53,8 +53,7 @@ abstract class AdminModelFactory
         $this->checkSetOrFail('action', $params);
         $contentObject->site = $this->getSiteObject();
         $contentObject->list = [];
-        $obj = $this->mergeStdClassAndArray($contentObject, $params);
-        return $obj;
+        return $this->mergeStdClassAndArray($contentObject, $params);
     }
 
     /**

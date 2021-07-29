@@ -113,3 +113,9 @@ function get_category_editdelete_object(string $action, array $args): \stdClass 
     ];
     return get_model_factory()->createAdminContentObject(\array_merge($args, $params));
 }
+
+function save_category(array $formData): bool {
+
+
+    return false;
+}
