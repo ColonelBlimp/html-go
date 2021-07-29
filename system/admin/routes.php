@@ -66,6 +66,7 @@ return [
         CAT_INDEX_KEY => (object) [
             'cb' => function (array $data): \stdClass {
                 print_r($data);
+                exit;
                 return new \stdClass();
             }
         ]
