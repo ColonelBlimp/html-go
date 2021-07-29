@@ -17,18 +17,30 @@ function get_site_object(): \stdClass {
     return $site;
 }
 
+/**
+ * Returns an admin content <b>view</b> object for <i>categories</i>.
+ * @param array<mixed> $args
+ * @return \stdClass
+ */
 function get_category_view_object(array $args): \stdClass {
     $params = [
         'title' => get_i18n()->getText('admin.dashboard.title'),
         'template' => 'admin-list.html',
         'section' => CATEGORY_SECTION,
-        'action' => 'view'
+        'action' => ADMIN_ACTION_VIEW
     ];
     $content = get_model_factory()->createAdminContentObject(\array_merge($args, $params));
     $content->list = get_categories(get_pagination_pagenumber(), get_config()->getInt(Config::KEY_ADMIN_ITEMS_PER_PAGE));
     return $content;
 }
 
+/**
+ * Return an admin content <b>edit</b> object for <i>categories</i>.
+ * @param array<mixed> $args
+ * @throws InvalidArgumentException
+ * @throws InternalException
+ * @return \stdClass
+ */
 function get_category_edit_object(array $args): \stdClass {
     if (empty($args['id'])) {
         throw new InvalidArgumentException("The args array must contain an id parameter.");
@@ -44,7 +56,7 @@ function get_category_edit_object(array $args): \stdClass {
         'template' => 'admin-action.html',
         'section' => CATEGORY_SECTION,
         'list' => [$element],
-        'action' => 'edit',
+        'action' => ADMIN_ACTION_EDIT,
     ];
     return get_model_factory()->createAdminContentObject(\array_merge($args, $params));
 }

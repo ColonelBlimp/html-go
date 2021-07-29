@@ -10,9 +10,14 @@
 \define('AUTHOR_ROOT', CONFIG_ROOT.DS.'users');
 \define('TEMPLATE_CACHE_ROOT', CACHE_ROOT.DS.'template_cache');
 
-// Admin Console paths
+// Admin Console constants
 \define('ADMIN_SYS_ROOT', APP_ROOT.DS.'system'.DS.'admin');
 \define('ADMIN_THEMES_ROOT', ADMIN_SYS_ROOT.DS.'themes');
+\define('ADMIN_ACTION_VIEW', 'view');
+\define('ADMIN_ACTION_ADD', 'add');
+\define('ADMIN_ACTION_EDIT', 'edit');
+\define('ADMIN_ACTION_DELETE', 'delete');
+\define('ADMIN_ACTION_CANCEL', 'cancel');
 
 // General constants
 \define('FWD_SLASH', '/');

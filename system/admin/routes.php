@@ -38,7 +38,7 @@ return [
             },
             */
         ],
-        CAT_INDEX_KEY.FWD_SLASH.'edit' => (object) [
+        CAT_INDEX_KEY.FWD_SLASH.ADMIN_ACTION_EDIT => (object) [
             'cb' => 'get_category_edit_object'
 
             /*
@@ -63,13 +63,13 @@ return [
             },
             */
         ],
-        CAT_INDEX_KEY.FWD_SLASH.'add' => (object) [
+        CAT_INDEX_KEY.FWD_SLASH.ADMIN_ACTION_ADD => (object) [
             'cb' => function (array $args): \stdClass {
                 $params = [
                     'title' => get_i18n()->getText('admin.dashboard.title'),
                     'template' => 'admin-action.html',
                     'section' => CATEGORY_SECTION,
-                    'action' => 'add',
+                    'action' => ADMIN_ACTION_ADD,
                 ];
                 return get_model_factory()->createAdminContentObjectEmpty(\array_merge($args, $params));
             },
