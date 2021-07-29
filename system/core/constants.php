@@ -42,6 +42,7 @@
 \define('CAT_INDEX_KEY', CATEGORY_SECTION);
 \define('TAG_INDEX_KEY', TAG_SECTION);
 \define('NOT_FOUND_KEY', 'not-found');
+\define('ADMIN_DASHBOARD_KEY', HOME_INDEX_KEY);
 
 // dispatcher.php constants
 \define('HTTP_GET', 'GET');

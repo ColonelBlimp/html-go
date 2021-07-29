@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use html_go\exceptions\InternalException;
 use html_go\model\Config;
 
 function get_site_object(): \stdClass {
@@ -15,6 +16,21 @@ function get_site_object(): \stdClass {
     $site->theme = $config->getString(Config::KEY_THEME_NAME);
     $site->tpl_engine = $config->getString(Config::KEY_TPL_ENGINE);
     return $site;
+}
+
+/**
+ * Returns the admin content <b>view</b> object for <i>dashboard</i>.
+ * @param array<mixed> $args
+ * @return \stdClass
+ */
+function get_dashboard_view_object(array $args): \stdClass {
+    $params = [
+        'title' => get_i18n()->getText('admin.dashboard.title'),
+        'template' => 'dashboard.html',
+        'section' => CATEGORY_SECTION,
+        'action' => ADMIN_ACTION_VIEW
+    ];
+    return get_model_factory()->createAdminContentObject(\array_merge($args, $params));
 }
 
 /**
@@ -34,6 +50,11 @@ function get_category_view_object(array $args): \stdClass {
     return $content;
 }
 
+/**
+ * Returns an admin content <b>add</b> object for <i>categories</i>.
+ * @param array<mixed> $args
+ * @return \stdClass
+ */
 function get_category_add_object(array $args): \stdClass {
     $params = [
         'title' => get_i18n()->getText('admin.dashboard.title'),
@@ -44,10 +65,20 @@ function get_category_add_object(array $args): \stdClass {
     return get_model_factory()->createAdminContentObjectEmpty(\array_merge($args, $params));
 }
 
+/**
+ * Edit wrapper for <code>get_category_editdelete_object</code> function.
+ * @param array<mixed> $args
+ * @return \stdClass
+ */
 function get_category_edit_object(array $args): \stdClass {
     return get_category_editdelete_object(ADMIN_ACTION_EDIT, $args);
 }
 
+/**
+ * Delete wrapper for <code>get_category_editdelete_object</code> function.
+ * @param array<mixed> $args
+ * @return \stdClass
+ */
 function get_category_delete_object(array $args): \stdClass {
     return get_category_editdelete_object(ADMIN_ACTION_DELETE, $args);
 }

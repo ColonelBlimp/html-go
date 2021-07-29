@@ -10,16 +10,8 @@ use html_go\exceptions\InternalException;
  */
 return [
     HTTP_GET => [
-        '/' => (object) [
-            'cb' => function (array $args): \stdClass {
-                $params = [
-                    'title' => get_i18n()->getText('admin.dashboard.title'),
-                    'template' => 'dashboard.html',
-                    'section' => CATEGORY_SECTION,
-                    'action' => 'view'
-                ];
-                return get_model_factory()->createAdminContentObject(\array_merge($args, $params));
-            },
+        ADMIN_DASHBOARD_KEY => (object) [
+            'cb' => 'get_dashboard_view_object'
         ],
         CAT_INDEX_KEY => (object) [
             'cb' => 'get_category_view_object'
