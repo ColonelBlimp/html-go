@@ -121,7 +121,7 @@ function get_category_editdelete_object(string $action, array $args): \stdClass 
         $id = $args[ID_STR];
         throw new InternalException("Element does not exist [$id]");
     }
-    $element = get_model_factory()->createContentObject($manager->getElementFromSlugIndex($args['id']));
+    $element = get_model_factory()->createContentObject($manager->getElementFromSlugIndex($args[ID_STR]));
     $params = [
         'title' => get_i18n()->getText('admin.dashboard.title'),
         'template' => 'admin-action.html',
@@ -133,9 +133,49 @@ function get_category_editdelete_object(string $action, array $args): \stdClass 
     return get_model_factory()->createAdminContentObject(\array_merge($args, $params));
 }
 
-function save_category(array $formData): bool {
+function save_category(array &$formData): bool {
 
-    print_r($formData);
+    $formData['errorKey'] = '';
+    if (empty($formData['title'])) {
+        $formData['errorfield'] = 'title';
+        return false;
+    }
+    if (empty($formData['description'])) {
+        $desc = \substr($formData['body'], 0, get_config()->getInt(Config::KEY_DESCRIPTION_LEN));
+        $pos = \strpos($desc, '.', -1);
+        if ($pos === false) {
+            $pos = get_config()->getInt(Config::KEY_DESCRIPTION_LEN);
+        }
+        $formData['description'] = \substr($desc, 0, $pos + 1);
+    }
+    if (empty($formData['key']) || $formData['key'] === 'category/') {
+        $formData['key'] = 'category/'.URLify::slug($formData['title']);
+    }
+    if (get_index_manager()->elementExists( $formData['key'])) {
+        $formData['fielderror'] = 'key';
+        return false;
+    }
 
-    return false;
+    save_content(CATEGORY_SECTION, $formData);
+    return true;
+}
+
+function save_content(string $section, array $data): void {
+    switch ($section) {
+        case CATEGORY_SECTION:
+            $filename = URLify::slug(\strtolower($data['title']));
+            $filePath = CATEGORY_ROOT.DS.$filename.CONTENT_FILE_EXT;
+            break;
+        default:
+            throw new InternalException("Unknown section [$section]");
+    }
+
+    unset($data['key'], $data['action'], $data['save'], $data['context'], $data['errorKey']);
+
+    $json = \json_encode($data, JSON_PRETTY_PRINT);
+    if (\file_put_contents($filePath, $json) === false) {
+        throw new InternalException("file_put_contents function failed!");
+    }
+
+    get_index_manager()->reindex();
 }

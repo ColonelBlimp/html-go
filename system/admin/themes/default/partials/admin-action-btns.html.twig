@@ -14,5 +14,5 @@
   <div>
     <input type="hidden" name="action" id="action" value="{{ content.action }}">
     <input type="submit" name="{{ action }}" id="{{ action }}" value="{{ label }}"{{ disabled }}>
-    <input type="submit" name="cancel" id="cancel" value="{{ i18n.getText('admin.form.label.cancel') }}">
+    <input type="submit" name="cancel" id="cancel" value="{{ i18n.getText('admin.form.label.cancel') }}" formnovalidate="formnovalidate">
   </div>

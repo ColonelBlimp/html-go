@@ -3,6 +3,7 @@ namespace html_go\model;
 
 use InvalidArgumentException;
 use html_go\exceptions\InternalException;
+use phpDocumentor\Reflection\Types\This;
 
 final class Config extends AdminConfig
 {
@@ -21,6 +22,7 @@ final class Config extends AdminConfig
     public const KEY_THEME_NAME = 'theme.name';
     public const KEY_POSTS_PERPAGE = 'blog.posts_per_page';
     public const KEY_POST_DATE_FMT = 'blog.post_date_format';
+    public const KEY_DESCRIPTION_LEN = 'description.length';
 
     /**
      * Config constructor.
@@ -81,6 +83,7 @@ final class Config extends AdminConfig
         $config = $this->checkSetOrDefault($config, self::KEY_STATIC_INDEX, true);
         $config = $this->checkSetOrDefault($config, self::KEY_POSTS_PERPAGE, 5);
         $config = $this->checkSetOrDefault($config, self::KEY_POST_DATE_FMT, 'F d, Y');
+        $config = $this->checkSetOrDefault($config, self::KEY_DESCRIPTION_LEN, 150);
 
         return $config;
     }

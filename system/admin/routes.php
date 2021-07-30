@@ -40,6 +40,7 @@ return [
                         } else {
                             $content = get_category_add_content_object();
                             $content->list[0] = (object)$data;
+                            print_r($data);
                         }
                         break;
                     case ADMIN_ACTION_EDIT:
