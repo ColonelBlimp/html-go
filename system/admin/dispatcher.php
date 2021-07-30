@@ -8,7 +8,6 @@ require_once ADMIN_SYS_ROOT.DS.'functions.php';
  * Main entry point for admin console requests.  This is call from there <code>route(...)</code>
  * function in the 'core/dispatcher.php' file.
  * @param string $method
- * @param string $context
  * @param string $uri
  * @throws InternalException If the HTTP Method is not supported.
  * @return \stdClass|NULL
@@ -28,7 +27,6 @@ function admin_route(string $method, string $uri): ?\stdClass {
 /**
  * Returns the content object for the given URI (if there is one), otherwise returns <code>null</code>.
  * @param string $method
- * @param string $context
  * @param string $uri
  * @param array<mixed> $routes
  * @throws InternalException

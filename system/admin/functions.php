@@ -133,8 +133,13 @@ function get_category_editdelete_object(string $action, array $args): \stdClass 
     return get_model_factory()->createAdminContentObject(\array_merge($args, $params));
 }
 
+/**
+ * Persist a new category.
+ * @param array<mixed> $formData Passed by reference, as the form data will be modified
+ * and should maintain the modifications in case of validation failure.
+ * @return bool <code>true</code> if the successful, otherwise <code>false</code>.
+ */
 function save_category(array &$formData): bool {
-
     $formData['errorKey'] = '';
     if (empty($formData['title'])) {
         $formData['errorfield'] = 'title';
@@ -160,6 +165,12 @@ function save_category(array &$formData): bool {
     return true;
 }
 
+/**
+ * Persist content.
+ * @param string $section
+ * @param array<mixed> $data
+ * @throws InternalException
+ */
 function save_content(string $section, array $data): void {
     switch ($section) {
         case CATEGORY_SECTION:
@@ -172,7 +183,9 @@ function save_content(string $section, array $data): void {
 
     unset($data['key'], $data['action'], $data['save'], $data['context'], $data['errorKey']);
 
-    $json = \json_encode($data, JSON_PRETTY_PRINT);
+    if (($json = \json_encode($data, JSON_PRETTY_PRINT)) === false) {
+        throw new InternalException("json_encode function failed!");
+    }
     if (\file_put_contents($filePath, $json) === false) {
         throw new InternalException("file_put_contents function failed!");
     }
