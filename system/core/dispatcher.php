@@ -44,7 +44,7 @@ function normalize_uri(string $uri): string {
 function route(string $uri, string $method): ?string {
     $adminCtx = get_config()->getString(Config::KEY_ADMIN_CONTEXT);
     if (\str_starts_with($uri, $adminCtx)) {
-        $content = process_admin_request($method, $adminCtx, $uri);
+        $content = process_admin_request($method, $uri);
     } else {
         $content = process_request($uri, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE));
     }
@@ -86,13 +86,12 @@ function process_request(string $uri, int $pageNum, int $perPage): ?\stdClass {
 /**
  * Process an admin console request.
  * @param string $method
- * @param string $context
  * @param string $uri
  * @return \stdClass|NULL
  */
-function process_admin_request(string $method, string $context, string $uri): ?\stdClass {
+function process_admin_request(string $method, string $uri): ?\stdClass {
     require_once ADMIN_SYS_ROOT.DS.'bootstrap.php';
-    return admin_route($method, $context, $uri);
+    return admin_route($method, $uri);
 }
 
 /**

@@ -13,11 +13,11 @@ require_once ADMIN_SYS_ROOT.DS.'functions.php';
  * @throws InternalException If the HTTP Method is not supported.
  * @return \stdClass|NULL
  */
-function admin_route(string $method, string $context, string $uri): ?\stdClass {
+function admin_route(string $method, string $uri): ?\stdClass {
     $routes = require_once __DIR__.DS.'routes.php';
 
     if (isset($routes[$method])) {
-        $content = admin_get_content_object($method, $context, $uri, $routes);
+        $content = admin_get_content_object($method, $uri, $routes);
     } else {
        throw new InternalException("Unsupported HTTP Method [$method]");
     }
@@ -34,8 +34,8 @@ function admin_route(string $method, string $context, string $uri): ?\stdClass {
  * @throws InternalException
  * @return \stdClass|NULL
  */
-function admin_get_content_object(string $method, string $context, string $uri, array $routes): ?\stdClass {
-    $slug = \substr($uri, \strlen($context));
+function admin_get_content_object(string $method, string $uri, array $routes): ?\stdClass {
+    $slug = \substr($uri, \strlen(get_config()->getString(Config::KEY_ADMIN_CONTEXT)));
     $slug = normalize_uri($slug);
 
     $content = null;
@@ -43,7 +43,7 @@ function admin_get_content_object(string $method, string $context, string $uri, 
         case HTTP_GET:
             if (\array_key_exists($slug, $routes[$method])) {
                 $object = $routes[$method][$slug];
-                $params = [ADMIN_CONTEXT_STR => $context];
+                $params = [];
                 $id = get_query_parameter('id');
                 if ($id !== null) {
                     $params['id'] = $id;
@@ -57,7 +57,7 @@ function admin_get_content_object(string $method, string $context, string $uri, 
                 if (($formData = \filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING)) === false) {
                     throw new InternalException("filter_input_array function failed!");
                 }
-                $formData[ADMIN_CONTEXT_STR] = $context;
+                $formData['context'] = get_config()->getString(Config::KEY_ADMIN_CONTEXT);
                 $content = \call_user_func($object->cb, $formData);
             }
             break;

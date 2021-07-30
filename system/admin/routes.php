@@ -38,7 +38,8 @@ return [
                         if (save_category($data)) {
                             header('Location: '.get_config()->getString(Config::KEY_SITE_URL).FWD_SLASH.$data['context'].FWD_SLASH.'category');
                         } else {
-                            $content = get_category_add_object($data);
+                            $content = get_category_add_object();
+                            $content->list[0] = (object)$data;
                         }
                         break;
                     case ADMIN_ACTION_EDIT:

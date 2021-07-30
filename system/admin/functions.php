@@ -27,6 +27,7 @@ function get_dashboard_view_object(array $args): \stdClass {
     $params = [
         'title' => get_i18n()->getText('admin.dashboard.title'),
         'template' => 'dashboard.html',
+        'context' => get_config()->getString(Config::KEY_ADMIN_CONTEXT),
         'section' => CATEGORY_SECTION,
         'action' => ADMIN_ACTION_VIEW
     ];
@@ -42,6 +43,7 @@ function get_category_view_object(array $args): \stdClass {
     $params = [
         'title' => get_i18n()->getText('admin.dashboard.title'),
         'template' => 'admin-list.html',
+        'context' => get_config()->getString(Config::KEY_ADMIN_CONTEXT),
         'section' => CATEGORY_SECTION,
         'action' => ADMIN_ACTION_VIEW
     ];
@@ -55,10 +57,11 @@ function get_category_view_object(array $args): \stdClass {
  * @param array<mixed> $args
  * @return \stdClass
  */
-function get_category_add_object(array $args): \stdClass {
+function get_category_add_object(array $args = []): \stdClass {
     $params = [
         'title' => get_i18n()->getText('admin.dashboard.title'),
         'template' => 'admin-action.html',
+        'context' => get_config()->getString(Config::KEY_ADMIN_CONTEXT),
         'section' => CATEGORY_SECTION,
         'action' => ADMIN_ACTION_ADD,
     ];
@@ -107,6 +110,7 @@ function get_category_editdelete_object(string $action, array $args): \stdClass 
     $params = [
         'title' => get_i18n()->getText('admin.dashboard.title'),
         'template' => 'admin-action.html',
+        'context' => get_config()->getString(Config::KEY_ADMIN_CONTEXT),
         'section' => CATEGORY_SECTION,
         'list' => [$element],
         'action' => $action,
