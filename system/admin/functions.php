@@ -67,19 +67,6 @@ function get_category_listview_content_object(array $args): \stdClass {
         ADMIN_ACTION_VIEW,
         $args,
         get_categories(get_pagination_pagenumber(), get_config()->getInt(Config::KEY_ADMIN_ITEMS_PER_PAGE)));
-
-    /*
-    $params = [
-        'title' => get_i18n()->getText('admin.dashboard.title'),
-        'template' => 'admin-list.html',
-        'context' => get_config()->getString(Config::KEY_ADMIN_CONTEXT),
-        'section' => CATEGORY_SECTION,
-        'action' => ADMIN_ACTION_VIEW
-    ];
-    $content = get_model_factory()->createAdminContentObject(\array_merge($args, $params));
-    $content->list = get_categories(get_pagination_pagenumber(), get_config()->getInt(Config::KEY_ADMIN_ITEMS_PER_PAGE));
-    return $content;
-    */
 }
 
 /**
@@ -94,17 +81,6 @@ function get_category_add_content_object(array $args = []): \stdClass {
         CATEGORY_SECTION,
         ADMIN_ACTION_ADD,
         $args);
-
-    /*
-    $params = [
-        'title' => get_i18n()->getText('admin.dashboard.title'),
-        'template' => 'admin-action.html',
-        'context' => get_config()->getString(Config::KEY_ADMIN_CONTEXT),
-        'section' => CATEGORY_SECTION,
-        'action' => ADMIN_ACTION_ADD,
-    ];
-    return get_model_factory()->createAdminContentObjectEmpty(\array_merge($args, $params));
-    */
 }
 
 /**
@@ -137,12 +113,12 @@ function get_category_editdelete_object(string $action, array $args): \stdClass 
     if (\strpos($action, ADMIN_ACTION_EDIT) === false && \strpos($action, ADMIN_ACTION_DELETE) === false) {
         throw new InvalidArgumentException("Unknown action value [$action]");
     }
-    if (empty($args['id'])) {
+    if (empty($args[ID_STR])) {
         throw new InvalidArgumentException("The args array must contain an 'id' key.");
     }
     $manager = get_index_manager();
-    if ($manager->elementExists($args['id']) === false) {
-        $id = $args['id'];
+    if ($manager->elementExists($args[ID_STR]) === false) {
+        $id = $args[ID_STR];
         throw new InternalException("Element does not exist [$id]");
     }
     $element = get_model_factory()->createContentObject($manager->getElementFromSlugIndex($args['id']));
@@ -159,6 +135,7 @@ function get_category_editdelete_object(string $action, array $args): \stdClass 
 
 function save_category(array $formData): bool {
 
+    print_r($formData);
 
     return false;
 }

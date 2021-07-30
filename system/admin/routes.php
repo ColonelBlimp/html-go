@@ -25,7 +25,7 @@ return [
         CAT_INDEX_KEY => (object) [
             'cb' => function (array $data): \stdClass {
                 if (empty($data[ADMIN_ACTION_CANCEL]) === false) {
-                    header('Location: '.get_config()->getString(Config::KEY_SITE_URL).FWD_SLASH.$data['context'].FWD_SLASH.'category');
+                    header('Location: '.get_config()->getString(Config::KEY_SITE_URL).FWD_SLASH.$data[ADMIN_CONTEXT_STR].FWD_SLASH.'category');
                     return new \stdClass();
                 }
                 if (empty($data[ADMIN_ACTION_STR])) {
@@ -36,7 +36,7 @@ return [
                 switch ($action) {
                     case ADMIN_ACTION_ADD:
                         if (save_category($data)) {
-                            header('Location: '.get_config()->getString(Config::KEY_SITE_URL).FWD_SLASH.$data['context'].FWD_SLASH.'category');
+                            header('Location: '.get_config()->getString(Config::KEY_SITE_URL).FWD_SLASH.$data[ADMIN_CONTEXT_STR].FWD_SLASH.'category');
                         } else {
                             $content = get_category_add_content_object();
                             $content->list[0] = (object)$data;

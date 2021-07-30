@@ -44,9 +44,9 @@ function admin_get_content_object(string $method, string $uri, array $routes): ?
             if (\array_key_exists($slug, $routes[$method])) {
                 $object = $routes[$method][$slug];
                 $params = [];
-                $id = get_query_parameter('id');
+                $id = get_query_parameter(ID_STR);
                 if ($id !== null) {
-                    $params['id'] = $id;
+                    $params[ID_STR] = $id;
                 }
                 $content = \call_user_func($object->cb, $params);
             }
@@ -57,7 +57,7 @@ function admin_get_content_object(string $method, string $uri, array $routes): ?
                 if (($formData = \filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING)) === false) {
                     throw new InternalException("filter_input_array function failed!");
                 }
-                $formData['context'] = get_config()->getString(Config::KEY_ADMIN_CONTEXT);
+                $formData[ADMIN_CONTEXT_STR] = get_config()->getString(Config::KEY_ADMIN_CONTEXT);
                 $content = \call_user_func($object->cb, $formData);
             }
             break;
