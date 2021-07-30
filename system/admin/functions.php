@@ -19,19 +19,39 @@ function get_site_object(): \stdClass {
 }
 
 /**
- * Returns the admin content <b>view</b> object for <i>dashboard</i>.
+ *
+ * @param string $titleLangKey
+ * @param string $template
+ * @param string $section
+ * @param string $action
+ * @param array<mixed> $params
+ * @param array<\stdClass> $list
+ * @return \stdClass
+ */
+function get_admin_content_object(string $titleLangKey, string $template, string $section, string $action, array $params = [], array $list = []): \stdClass {
+    $data = [
+        'title' => get_i18n()->getText($titleLangKey),
+        'template' => $template,
+        'context' => get_config()->getString(Config::KEY_ADMIN_CONTEXT),
+        'section' => $section,
+        'action' => $action,
+        'list' => $list
+    ];
+    return get_model_factory()->createAdminContentObject(\array_merge($data, $params));
+}
+
+/**
+ * Returns the admin dashboard view content object.
  * @param array<mixed> $args
  * @return \stdClass
  */
-function get_dashboard_view_object(array $args): \stdClass {
-    $params = [
-        'title' => get_i18n()->getText('admin.dashboard.title'),
-        'template' => 'dashboard.html',
-        'context' => get_config()->getString(Config::KEY_ADMIN_CONTEXT),
-        'section' => CATEGORY_SECTION,
-        'action' => ADMIN_ACTION_VIEW
-    ];
-    return get_model_factory()->createAdminContentObject(\array_merge($args, $params));
+function get_dashboard_view_content_object(array $args): \stdClass {
+    return get_admin_content_object(
+        'admin.dashboard.title',
+        'dashboard.html',
+        CATEGORY_SECTION,
+        ADMIN_ACTION_VIEW,
+        $args);
 }
 
 /**
@@ -39,7 +59,16 @@ function get_dashboard_view_object(array $args): \stdClass {
  * @param array<mixed> $args
  * @return \stdClass
  */
-function get_category_view_object(array $args): \stdClass {
+function get_category_listview_content_object(array $args): \stdClass {
+    return get_admin_content_object(
+        'admin.dashboard.title',
+        'admin-list.html',
+        CATEGORY_SECTION,
+        ADMIN_ACTION_VIEW,
+        $args,
+        get_categories(get_pagination_pagenumber(), get_config()->getInt(Config::KEY_ADMIN_ITEMS_PER_PAGE)));
+
+    /*
     $params = [
         'title' => get_i18n()->getText('admin.dashboard.title'),
         'template' => 'admin-list.html',
@@ -50,6 +79,7 @@ function get_category_view_object(array $args): \stdClass {
     $content = get_model_factory()->createAdminContentObject(\array_merge($args, $params));
     $content->list = get_categories(get_pagination_pagenumber(), get_config()->getInt(Config::KEY_ADMIN_ITEMS_PER_PAGE));
     return $content;
+    */
 }
 
 /**
@@ -57,7 +87,15 @@ function get_category_view_object(array $args): \stdClass {
  * @param array<mixed> $args
  * @return \stdClass
  */
-function get_category_add_object(array $args = []): \stdClass {
+function get_category_add_content_object(array $args = []): \stdClass {
+    return get_admin_content_object(
+        'admin.dashboard.title',
+        'admin-action.html',
+        CATEGORY_SECTION,
+        ADMIN_ACTION_ADD,
+        $args);
+
+    /*
     $params = [
         'title' => get_i18n()->getText('admin.dashboard.title'),
         'template' => 'admin-action.html',
@@ -66,6 +104,7 @@ function get_category_add_object(array $args = []): \stdClass {
         'action' => ADMIN_ACTION_ADD,
     ];
     return get_model_factory()->createAdminContentObjectEmpty(\array_merge($args, $params));
+    */
 }
 
 /**

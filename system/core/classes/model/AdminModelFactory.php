@@ -19,6 +19,8 @@ abstract class AdminModelFactory
      *   <li>title: (required)</li>
      *   <li>context: (required)</li>
      *   <li>template: (required)</li>
+     *   <li>section: (required)</li>
+     *   <li>action: (required)</li>
      *   <li>list: (optional)</li>
      * </ul>
      * @return \stdClass

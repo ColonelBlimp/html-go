@@ -17,7 +17,7 @@ return [
 
     'admin.toolbar.category.title' => 'Categories',
 
-    'admin.table_col.name' => 'Name',
+    'admin.table_col.title' => 'Name',
     'admin.table_col.desc' => 'Description',
     'admin.table_col.usage' => 'Usage',
     'admin.table_col.actions' => 'Actions',
@@ -28,7 +28,7 @@ return [
     'admin.form.label.cancel' => 'Cancel',
     'admin.form.label.delete' => 'Delete',
     'admin.form.label.update' => 'Update',
-    'admin.form.label.name' => 'Name',
+    'admin.form.label.title' => 'Name',
     'admin.form.label.desc' => 'Description',
     'admin.form.label.key' => 'URI',
     'admin.form.label.body' => 'Body',

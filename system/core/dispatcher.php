@@ -42,8 +42,7 @@ function normalize_uri(string $uri): string {
  * done by t
  */
 function route(string $uri, string $method): ?string {
-    $adminCtx = get_config()->getString(Config::KEY_ADMIN_CONTEXT);
-    if (\str_starts_with($uri, $adminCtx)) {
+    if (\str_starts_with($uri, get_config()->getString(Config::KEY_ADMIN_CONTEXT))) {
         $content = process_admin_request($method, $uri);
     } else {
         $content = process_request($uri, get_pagination_pagenumber(), get_config()->getInt(Config::KEY_POSTS_PERPAGE));
