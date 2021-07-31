@@ -70,7 +70,7 @@ function save_content(string $section, array $data): void {
             throw new InternalException("Unknown section [$section]");
     }
 
-    unset($data[ADMIn_KEY_STR], $data[ADMIN_ACTION_STR], $data['save'], $data[ADMIN_CONTEXT_STR], $data['errorKey']);
+    unset($data[ADMIN_KEY_STR], $data[ADMIN_ACTION_STR], $data['save'], $data[ADMIN_CONTEXT_STR], $data['errorKey']);
 
     if (($json = \json_encode($data, JSON_PRETTY_PRINT)) === false) {
         throw new InternalException("json_encode function failed!");

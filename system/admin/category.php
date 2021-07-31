@@ -102,11 +102,11 @@ function save_category(array &$formData): bool {
         }
         $formData['description'] = \substr($desc, 0, $pos + 1);
     }
-    if (empty($formData[ADMIn_KEY_STR]) || $formData[ADMIn_KEY_STR] === 'category/') {
-        $formData[ADMIn_KEY_STR] = 'category/'.URLify::slug($formData['title']);
+    if (empty($formData[ADMIN_KEY_STR]) || $formData[ADMIN_KEY_STR] === 'category/') {
+        $formData[ADMIN_KEY_STR] = 'category/'.URLify::slug($formData['title']);
     }
-    if (get_index_manager()->elementExists( $formData[ADMIn_KEY_STR])) {
-        $formData['fielderror'] = ADMIn_KEY_STR;
+    if (get_index_manager()->elementExists( $formData[ADMIN_KEY_STR])) {
+        $formData['fielderror'] = ADMIN_KEY_STR;
         return false;
     }
 
