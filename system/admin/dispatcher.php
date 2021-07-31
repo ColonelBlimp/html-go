@@ -2,7 +2,6 @@
 
 use html_go\exceptions\InternalException;
 use html_go\model\Config;
-require_once ADMIN_SYS_ROOT.DS.'functions.php';
 
 /**
  * Main entry point for admin console requests.  This is call from there <code>route(...)</code>

@@ -22,6 +22,7 @@
 \define('ADMIN_ACTION_CANCEL', 'cancel');
 \define('ADMIN_CONTEXT_STR', 'context');
 \define('ADMIN_ACTION_STR', 'action');
+\define('ADMIn_KEY_STR', 'key');
 
 // General constants
 \define('FWD_SLASH', '/');
