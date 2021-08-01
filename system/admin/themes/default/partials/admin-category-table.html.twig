@@ -5,8 +5,9 @@
   <thead>
     <tr class="text-left">
       <th class="w-1/5">{{ i18n.getText('admin.table_col.title') }}</th>
-      <th class="w-2/4">{{ i18n.getText('admin.table_col.desc') }}</th>
-      <th class="w-20">{{ i18n.getText('admin.table_col.usage') }}</th>
+      <th class="w-1/4">{{ i18n.getText('admin.table_col.desc') }}</th>
+      <th class="w-20">{{ i18n.getText('admin.table_col.template') }}</th>
+      <th class="w-10">{{ i18n.getText('admin.table_col.usage') }}</th>
       <th class="w-32">{{ i18n.getText('admin.table_col.actions') }}</th>
     </tr>
   </thead>
@@ -15,8 +16,9 @@
 <tr>
   <td>{{ item.title }}</td>
   <td>{{ item.body }}</td>
+  <td>{{ item.template }}</td>
   <td>?</td>
-  <td><a href="{{ content.site.url }}/{{ content.context }}/category/edit?id={{ item.key }}">{{ i18n.getText('admin.table_col_action.edit') }}</a> | <a href="{{ content.site.url }}/{{ content.context }}/category/delete?id={{ item.key }}">{{ i18n.getText('admin.table_col_action.delete') }}</a></td>
+  <td><a class="text-gray-500 font-semibold hover:text-purple-500 transition duration-300" href="{{ content.site.url }}/{{ content.context }}/category/edit?id={{ item.key }}">{{ i18n.getText('admin.table_col_action.edit') }}</a> | <a class="text-gray-500 font-semibold hover:text-purple-500 transition duration-300" href="{{ content.site.url }}/{{ content.context }}/category/delete?id={{ item.key }}">{{ i18n.getText('admin.table_col_action.delete') }}</a></td>
 </tr>
 {% endfor %}
   </tbody>

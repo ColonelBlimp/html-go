@@ -23,6 +23,7 @@ return [
     'admin.table_col.actions' => 'Actions',
     'admin.table_col_action.edit' => 'Edit',
     'admin.table_col_action.delete' => 'Delete',
+    'admin.table_col.template' => 'Template',
 
     'admin.form.label.save' => 'Save',
     'admin.form.label.cancel' => 'Cancel',
