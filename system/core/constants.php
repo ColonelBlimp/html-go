@@ -41,6 +41,7 @@
 \define('TAG_SECTION', 'tag');
 \define('PAGE_SECTION', 'page');
 \define('POST_SECTION', 'post');
+\define('ADMIN_CONSOLE_SECTION', 'admin');
 
 // Landing Page constants for posts and homepage
 \define('HOME_INDEX_KEY', '/');

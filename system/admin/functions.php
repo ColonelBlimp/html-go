@@ -49,7 +49,7 @@ function get_dashboard_view_content_object(array $args): \stdClass {
     return get_admin_content_object(
         'admin.dashboard.title',
         'dashboard.html',
-        CATEGORY_SECTION,
+        ADMIN_CONSOLE_SECTION,
         ADMIN_ACTION_VIEW,
         $args);
 }

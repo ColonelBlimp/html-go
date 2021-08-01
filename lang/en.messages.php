@@ -32,5 +32,7 @@ return [
     'admin.form.label.desc' => 'Description',
     'admin.form.label.key' => 'URI',
     'admin.form.label.body' => 'Body',
-    'admin.form.label.template' => 'Template'
+    'admin.form.label.template' => 'Template',
+
+    'admin.action.new_category' => 'New Category'
 ];
