@@ -11,8 +11,8 @@
 {% if key == 'category/uncategorized' %}
 {% set disabled = ' disabled' %}
 {% endif %}
-  <div>
+  <div class="float-right">
     <input type="hidden" name="action" id="action" value="{{ content.action }}">
-    <input type="submit" name="{{ action }}" id="{{ action }}" value="{{ label }}"{{ disabled }}>
-    <input type="submit" name="cancel" id="cancel" value="{{ i18n.getText('admin.form.label.cancel') }}" formnovalidate="formnovalidate">
+    <input class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" type="submit" name="{{ action }}" id="{{ action }}" value="{{ label }}"{{ disabled }}>
+    <input class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" type="submit" name="cancel" id="cancel" value="{{ i18n.getText('admin.form.label.cancel') }}" formnovalidate="formnovalidate">
   </div>
