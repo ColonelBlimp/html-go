@@ -44,6 +44,7 @@ return [
                         }
                         break;
                     case ADMIN_ACTION_EDIT:
+                        exit('Update');
                         break;
                     case ADMIN_ACTION_DELETE:
                         break;

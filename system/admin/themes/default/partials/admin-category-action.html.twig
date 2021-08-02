@@ -5,6 +5,8 @@
 {% set body = '' %}
 {% set errorKey = '' %}
 {% set errorTemplate = '' %}
+{% set disabled = '' %}
+{% set uncDisabled = '' %}
 
 {% if content.action == 'edit' or content.action == 'delete' or content.list[0]|default %}
 {% set item = content.list[0] %}
@@ -22,10 +24,10 @@
 {% endif %}
 {% endif %}
 
-{% if key == 'category/uncategorized' or content.action == 'delete' %}
+{% if key == 'category/uncategorized' %}
+{% set uncDisabled = ' disabled' %}
+{% elseif content.action == 'delete' %}
 {% set disabled = ' disabled' %}
-{% else %}
-{% set disabled = '' %}
 {% endif %}
 
 <form class="w-full max-w-sm" method="post" action="{{ content.site.url }}/{{ content.context }}/category">
@@ -42,7 +44,7 @@
       <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="key">{{ i18n.getText('admin.form.label.key') }}</label>
     </div>
     <div class="md:w-2/3">
-      <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500{{ errorKey }}" id="key" name="key" type="text" value="{{ key }}"{{ disabled }}>
+      <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500{{ errorKey }}" id="key" name="key" type="text" value="{{ key }}"{{ uncDisabled }}>
     </div>
   </div>
   <div class="md:flex md:items-center mb-2">
@@ -50,7 +52,7 @@
       <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="template">{{ i18n.getText('admin.form.label.template') }}</label>
     </div>
     <div class="md:w-2/3">
-      <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500{{ errorTemplate }}" id="template" name="template" type="text" value="{{ template }}" placeholder="single.html" {{ disabled }}>
+      <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500{{ errorTemplate }}" id="template" name="template" type="text" value="{{ template }}" placeholder="single.html"{{ disabled }}>
     </div>
   </div>
   <div class="md:flex md:items-center mb-2">
