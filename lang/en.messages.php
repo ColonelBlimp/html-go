@@ -18,6 +18,7 @@ return [
     'admin.toolbar.category.title' => 'Categories',
 
     'admin.table_col.title' => 'Name',
+    'admin.table_col.key' => 'Slug',
     'admin.table_col.desc' => 'Description',
     'admin.table_col.usage' => 'Usage',
     'admin.table_col.actions' => 'Actions',
