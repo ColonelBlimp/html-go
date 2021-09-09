@@ -2,41 +2,64 @@
 
 use html_go\exceptions\InternalException;
 use html_go\model\Config;
-require_once ADMIN_SYS_ROOT.DS.'functions.php';
 
-function admin_route(string $uri, string $method = HTTP_GET): ?\stdClass {
-    $context = get_config()->getString(Config::KEY_ADMIN_CONTEXT);
-    if (\str_starts_with($uri, $context) === false) {
-        return null;
+/**
+ * Main entry point for admin console requests.  This is call from there <code>route(...)</code>
+ * function in the 'core/dispatcher.php' file.
+ * @param string $method
+ * @param string $uri
+ * @throws InternalException If the HTTP Method is not supported.
+ * @return \stdClass|NULL
+ */
+function admin_route(string $method, string $uri): ?\stdClass {
+    $routes = require_once __DIR__.DS.'routes.php';
+
+    if (isset($routes[$method])) {
+        $content = admin_get_content_object($method, $uri, $routes);
+    } else {
+       throw new InternalException("Unsupported HTTP Method [$method]");
     }
 
+    return $content;
+}
+
+/**
+ * Returns the content object for the given URI (if there is one), otherwise returns <code>null</code>.
+ * @param string $method
+ * @param string $uri
+ * @param array<mixed> $routes
+ * @throws InternalException
+ * @return \stdClass|NULL
+ */
+function admin_get_content_object(string $method, string $uri, array $routes): ?\stdClass {
+    $slug = \substr($uri, \strlen(get_config()->getString(Config::KEY_ADMIN_CONTEXT)));
+    $slug = normalize_uri($slug);
+
+    $content = null;
     switch ($method) {
         case HTTP_GET:
-            $content = admin_process_get_request($context, $uri);
+            if (\array_key_exists($slug, $routes[$method])) {
+                $object = $routes[$method][$slug];
+                $params = [];
+                $id = get_query_parameter(ID_STR);
+                if ($id !== null) {
+                    $params[ID_STR] = $id;
+                }
+                $content = \call_user_func($object->cb, $params);
+            }
             break;
         case HTTP_POST:
-            $content = admin_process_post_request($uri);
+            if (\array_key_exists($slug, $routes[$method])) {
+                $object = $routes[$method][$slug];
+                if (($formData = \filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING)) === false) {
+                    throw new InternalException("filter_input_array function failed!");
+                }
+                $formData[ADMIN_CONTEXT_STR] = get_config()->getString(Config::KEY_ADMIN_CONTEXT);
+                $content = \call_user_func($object->cb, $formData);
+            }
             break;
         default:
             throw new InternalException("Unsupported HTTP Method [$method]");
     }
-
     return $content;
-}
-
-function admin_process_get_request(string $context, string $uri): ?\stdClass {
-    $resource = \substr($uri, \strlen($context));
-    $i18n = get_i18n();
-    $pageTitle = $i18n->getText('admin.title.prefix').$i18n->getText('admin.dashboard.title');
-    if ($resource === DASHBOARD_INDEX_KEY) {
-        $content = get_admin_content_object('dashboard.html', title: $pageTitle);
-    } else {
-        $content = null;
-    }
-
-    return $content;
-}
-
-function admin_process_post_request(string $uri): ?\stdClass {
-    return null;
 }

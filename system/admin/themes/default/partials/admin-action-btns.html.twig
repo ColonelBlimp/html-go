@@ -1,0 +1,15 @@
+{% if content.action == 'edit' %}
+{% set action = 'update' %}
+{% set label = i18n.getText('admin.form.label.update') %}
+{% elseif content.action == 'delete' %}
+{% set action = 'delete' %}
+{% set label = i18n.getText('admin.form.label.delete') %}
+{% else %}
+{% set action = 'save' %}
+{% set label = i18n.getText('admin.form.label.save') %}
+{% endif %}
+  <div class="float-right">
+    <input type="hidden" name="action" id="action" value="{{ content.action }}">
+    <input class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" type="submit" name="{{ action }}" id="{{ action }}" value="{{ label }}">
+    <input class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" type="submit" name="cancel" id="cancel" value="{{ i18n.getText('admin.form.label.cancel') }}" formnovalidate="formnovalidate">
+  </div>

@@ -1,0 +1,9 @@
+{% extends "admin-baseof.html.twig" %}
+{% block main %}
+<p>action.html</p>
+{% if content.section == 'category' %}
+{% include "partials/admin-category-action.html.twig" %}
+{% else %}
+
+{% endif %}
+{% endblock %}

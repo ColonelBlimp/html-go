@@ -101,6 +101,10 @@ final class ModelFactory extends AdminModelFactory
         if (empty($indexElement->path)) {
             throw new InvalidArgumentException("Object does not have 'path' property "./** @scrutinizer ignore-type */print_r($indexElement, true)); // @codeCoverageIgnore
         }
+        if (\file_exists($indexElement->path) === false) {
+            $key = $indexElement->key;
+            throw new InternalException("File for index element [$key]does not exist! Please reindex the system.");
+        }
         if (($data = \file_get_contents($indexElement->path)) === false) {
             throw new InternalException("file_get_contents() failed opening [$indexElement->path]"); // @codeCoverageIgnore
         }

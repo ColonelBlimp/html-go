@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="{{ content.site.language }}" class="bg-white h-screen">
 {% include "partials/admin-head.html.twig" %}
-  <body class="h-full w-full md:flex md:flex-col">
-    <div class="p-4 md:flex md:flex-auto border-t-4 border-red-500">
-      <main class="md:w-2/3 pr-4">
+  <body class="">
+    <div class="">
+      <main class="">
+{% include "partials/admin-toolbar.html.twig" %}
 {% block main %}{% endblock %}
       </main>
     </div>

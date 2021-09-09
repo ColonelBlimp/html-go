@@ -13,7 +13,8 @@
 	"require" : {
 		"php" : ">=8.0",
 		"twig/twig" : "~3.3",
-		"erusev/parsedown" : "~1.7"
+		"erusev/parsedown" : "~1.7",
+		"jbroadway/urlify" : "~1.2"
 	},
 	"config" : {
 		"vendor-dir" : "system/vendor"
@@ -30,7 +31,10 @@
 	},
 	"autoload-dev" : {
 		"psr-4" : {
-			"html_go\\" : "tests/core"
+			"html_go\\" : [
+				"tests/admin",
+				"tests/core"
+			]
 		}
 	},
 	"require-dev" : {

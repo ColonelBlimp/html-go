@@ -14,10 +14,14 @@ final class TwigTemplateEngine implements TemplateEngine
      * @param array<mixed> $templateDirs
      * @param array<mixed> $options
      * @param string $ext the template file extension. Default is <code>twig</code>.
+     * @param array<mixed> $globals
      */
-    public function __construct(array $templateDirs, array $options, string $ext = 'twig') {
+    public function __construct(array $templateDirs, array $options, string $ext = 'twig', array $globals = []) {
         $loader = new FilesystemLoader($templateDirs);
         $this->engine = new Environment($loader, $options);
+        foreach ($globals as $name => $value) {
+            $this->engine->addGlobal($name, $value);
+        }
         $this->ext = $ext;
     }
 

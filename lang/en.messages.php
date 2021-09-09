@@ -13,5 +13,28 @@ return [
     'header.tag.prefix' => 'Tag: ',
 
     'admin.title.prefix' => 'HTML-go Admin | ',
-    'admin.dashboard.title' => 'Dashboard'
+    'admin.dashboard.title' => 'Dashboard',
+
+    'admin.toolbar.category.title' => 'Categories',
+
+    'admin.table_col.title' => 'Name',
+    'admin.table_col.key' => 'Slug',
+    'admin.table_col.desc' => 'Description',
+    'admin.table_col.usage' => 'Usage',
+    'admin.table_col.actions' => 'Actions',
+    'admin.table_col_action.edit' => 'Edit',
+    'admin.table_col_action.delete' => 'Delete',
+    'admin.table_col.template' => 'Template',
+
+    'admin.form.label.save' => 'Save',
+    'admin.form.label.cancel' => 'Cancel',
+    'admin.form.label.delete' => 'Delete',
+    'admin.form.label.update' => 'Update',
+    'admin.form.label.title' => 'Name',
+    'admin.form.label.desc' => 'Description',
+    'admin.form.label.key' => 'URI',
+    'admin.form.label.body' => 'Body',
+    'admin.form.label.template' => 'Template',
+
+    'admin.action.new_category' => 'New Category'
 ];

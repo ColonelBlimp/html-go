@@ -9,10 +9,20 @@
 \define('LANG_ROOT', APP_ROOT.DS.'lang');
 \define('AUTHOR_ROOT', CONFIG_ROOT.DS.'users');
 \define('TEMPLATE_CACHE_ROOT', CACHE_ROOT.DS.'template_cache');
+\define('CONTENT_ROOT', APP_ROOT.DS.'content');
+\define('CATEGORY_ROOT', CONTENT_ROOT.DS.'common'.DS.'category');
 
-// Admin Console paths
+// Admin Console constants
 \define('ADMIN_SYS_ROOT', APP_ROOT.DS.'system'.DS.'admin');
 \define('ADMIN_THEMES_ROOT', ADMIN_SYS_ROOT.DS.'themes');
+\define('ADMIN_ACTION_VIEW', 'view');
+\define('ADMIN_ACTION_ADD', 'add');
+\define('ADMIN_ACTION_EDIT', 'edit');
+\define('ADMIN_ACTION_DELETE', 'delete');
+\define('ADMIN_ACTION_CANCEL', 'cancel');
+\define('ADMIN_CONTEXT_STR', 'context');
+\define('ADMIN_ACTION_STR', 'action');
+\define('ADMIN_KEY_STR', 'key');
 
 // General constants
 \define('FWD_SLASH', '/');
@@ -24,12 +34,14 @@
 \define('SUMMARY_MARKER', '<!--more-->');
 \define('SINGLE_POST_REQUEST', 1);
 \define('TIMESTAMP_LEN', 14);
+\define('ID_STR', 'id');
 
 // Section constants
 \define('CATEGORY_SECTION', 'category');
 \define('TAG_SECTION', 'tag');
 \define('PAGE_SECTION', 'page');
 \define('POST_SECTION', 'post');
+\define('ADMIN_CONSOLE_SECTION', 'admin');
 
 // Landing Page constants for posts and homepage
 \define('HOME_INDEX_KEY', '/');
@@ -37,6 +49,7 @@
 \define('CAT_INDEX_KEY', CATEGORY_SECTION);
 \define('TAG_INDEX_KEY', TAG_SECTION);
 \define('NOT_FOUND_KEY', 'not-found');
+\define('ADMIN_DASHBOARD_KEY', HOME_INDEX_KEY);
 
 // dispatcher.php constants
 \define('HTTP_GET', 'GET');

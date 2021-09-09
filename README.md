@@ -15,6 +15,7 @@ HTML-go is a databaseless, flat-file blogging platform, which is very simple, fa
 - Multiple menus defined through front matter
 - Nested static pages
 - i18n support
+- Admin console (work-in-progress)
 
 # Landing Pages
 HTML-go has four editable landing pages for **blog**, **category**, **tag** and the **index** or

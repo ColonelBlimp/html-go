@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 namespace html_go\model;
 
+use html_go\exceptions\InternalException;
+
 abstract class AdminModelFactory
 {
     protected Config $config;
@@ -11,21 +13,74 @@ abstract class AdminModelFactory
 
     /**
      * Create a content object (stdClass) specifically for the admin console.
-     * @param array<int, string> $params When populating with variable arguments, use the following
+     * @param array<mixed> $params When populating with variable arguments, use the following
      * <b>named parameters<b>:
      * <ul>
-     *   <li>title:</li>
+     *   <li>title: (required)</li>
+     *   <li>context: (required)</li>
+     *   <li>template: (required)</li>
+     *   <li>section: (required)</li>
+     *   <li>action: (required)</li>
+     *   <li>list: (optional)</li>
      * </ul>
      * @return \stdClass
      */
     public function createAdminContentObject(array $params): \stdClass {
         $contentObject = new \stdClass();
+        $this->checkSetOrFail('title', $params);
+        $this->checkSetOrFail('context', $params);
+        $this->checkSetOrFail('template', $params);
+        $this->checkSetOrFail('section', $params);
+        $this->checkSetOrFail('action', $params);
+
         $contentObject->site = $this->getSiteObject();
-        if (empty($params['title'])) {
-            throw new \InvalidArgumentException("The 'title:' parameter has not been set!");
+        $list = [];
+        if (empty($params['list']) === false && \is_array($params['list'])) {
+            $list = $params['list'];
         }
-        $contentObject->title = $params['title'];
-        return $contentObject;
+        $contentObject->list = $list;
+        return $this->mergeStdClassAndArray($contentObject, $params);
+    }
+
+    /**
+     * Create a content object (stdClass) which has all the basic admin related properties, but
+     * nothing for the specific request.
+     * @param array<mixed> $params
+     * @return \stdClass
+     */
+    public function createAdminContentObjectEmpty(array $params): \stdClass {
+        $contentObject = new \stdClass();
+        $this->checkSetOrFail('context', $params);
+        $this->checkSetOrFail('section', $params);
+        $this->checkSetOrFail('action', $params);
+        $contentObject->site = $this->getSiteObject();
+        $contentObject->list = [];
+        return $this->mergeStdClassAndArray($contentObject, $params);
+    }
+
+    /**
+     * @param \stdClass $contentObject
+     * @param array<mixed> $params
+     * @throws InternalException
+     * @return \stdClass
+     */
+    private function mergeStdClassAndArray(\stdClass $contentObject, array $params): \stdClass {
+        if (($json = json_encode($contentObject)) === false) {
+            throw new InternalException('json_encode failed!');
+        }
+        return (object)\array_merge(json_decode($json, true), $params);
+    }
+
+    /**
+     *
+     * @param string $key
+     * @param array<string> $params
+     * @throws \InvalidArgumentException
+     */
+    private function checkSetOrFail(string $key, array $params): void {
+        if (empty($params[$key])) {
+            throw new \InvalidArgumentException("The '$key:' parameter has not been set!");
+        }
     }
 
     protected function getSiteObject(): \stdClass {
@@ -44,5 +99,4 @@ abstract class AdminModelFactory
         }
         return $site;
     }
-
 }

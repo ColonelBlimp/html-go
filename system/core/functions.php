@@ -327,3 +327,7 @@ function get_posts_for_section(string $section, string $uri, int $pageNum = 1, i
     $posts = \array_slice($posts, ($pageNum - 1) * $perPage, $perPage);
     return get_model_list_from_uris($posts);
 }
+
+function exception_handler(mixed $exception): void {
+    echo $exception->getMessage();
+}

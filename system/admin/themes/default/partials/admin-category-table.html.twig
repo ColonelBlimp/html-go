@@ -1,0 +1,27 @@
+<div class="mt-4">
+  <a class="py-4 px-2 text-gray-500 font-semibold hover:text-purple-500 transition duration-300" href="{{ content.site.url }}/{{ content.context }}/category/add">{{ i18n.getText('admin.action.new_category') }}</a>
+</div>
+<table class="ml-4 table-fixed">
+  <thead>
+    <tr class="text-left">
+      <th class="w-32">{{ i18n.getText('admin.table_col.title') }}</th>
+      <th class="w-44">{{ i18n.getText('admin.table_col.key') }}</th>
+      <th class="w-52">{{ i18n.getText('admin.table_col.desc') }}</th>
+      <th class="w-32">{{ i18n.getText('admin.table_col.template') }}</th>
+      <th class="w-20">{{ i18n.getText('admin.table_col.usage') }}</th>
+      <th class="w-32">{{ i18n.getText('admin.table_col.actions') }}</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for item in content.list %}
+    <tr>
+      <td><p class="text-gray-500 w-28 truncate">{{ item.title }}</p></td>
+      <td><p class="text-gray-500 w-40 truncate">{{ item.key }}</p></td>
+      <td><p class="text-gray-500 w-48 truncate">{{ item.body }}</p></td>
+      <td><p class="text-gray-500 w-32 truncate">{{ item.template }}</p></td>
+      <td><p class="text-gray-500">?</p></td>
+      <td><a class="text-gray-500 font-semibold hover:text-purple-500 transition duration-300" href="{{ content.site.url }}/{{ content.context }}/category/edit?id={{ item.key }}">{{ i18n.getText('admin.table_col_action.edit') }}</a> | <a class="text-gray-500 font-semibold hover:text-purple-500 transition duration-300" href="{{ content.site.url }}/{{ content.context }}/category/delete?id={{ item.key }}">{{ i18n.getText('admin.table_col_action.delete') }}</a></td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>

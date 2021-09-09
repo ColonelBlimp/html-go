@@ -1,0 +1,20 @@
+{% set active =  'py-4 px-2 text-purple-500 border-b-4 border-purple-500 font-semibold' %}
+{% set inactive = 'py-4 px-2 text-gray-500 font-semibold hover:text-purple-500 transition duration-300' %}
+{% set dashboardClass = active %}
+{% set categoryClass = inactive %}
+{% if content.section == 'category' %}
+  {% set categoryClass = active %}
+  {% set dashboardClass = inactive %}
+{% endif %}
+        <nav class="bg-white shadow-lg" id="toolbar">
+          <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between">
+              <div class="flex space-x-7">
+                <div class="hidden md:flex items-center space-x-1">
+                  <a href="{{ content.site.url }}/{{ content.context }}" class="{{ dashboardClass }}">{{ i18n.getText('admin.dashboard.title') }}</a>
+                  <a href="{{ content.site.url }}/{{ content.context }}/category" class="{{ categoryClass }}">{{ i18n.getText('admin.toolbar.category.title') }}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
