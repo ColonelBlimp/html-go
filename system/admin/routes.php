@@ -44,7 +44,11 @@ return [
                         }
                         break;
                     case ADMIN_ACTION_EDIT:
-                        exit('Update');
+                        if (update_category($data)) {
+                            header('Location: '.get_config()->getString(Config::KEY_SITE_URL).FWD_SLASH.$data[ADMIN_CONTEXT_STR].FWD_SLASH.'category');
+                        } else {
+                            exit('Update: validation failed');
+                        }
                         break;
                     case ADMIN_ACTION_DELETE:
                         break;

@@ -113,3 +113,7 @@ function save_category(array &$formData): bool {
     save_content(CATEGORY_SECTION, $formData);
     return true;
 }
+
+function update_category(array &$formData): bool {
+    return true;
+}
